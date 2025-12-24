@@ -5,8 +5,6 @@ import VueDevTools from "vite-plugin-vue-devtools";
 
 // https://vite.dev/config/
 export default defineConfig({
-  // Base path for GitHub Pages deployment
-  base: "/fking-forge/",
   plugins: [vue(), VueDevTools()],
   resolve: {
     alias: {

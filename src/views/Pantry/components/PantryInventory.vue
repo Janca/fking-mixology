@@ -64,6 +64,7 @@ async function removeFromPantry(ingredientId: number) {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .inventory {
@@ -90,7 +91,7 @@ async function removeFromPantry(ingredientId: number) {
   &__empty {
     text-align: center;
     padding: $space-2xl $space-lg;
-    background: rgba(white, 0.5);
+    background: color.change(white, $alpha: 0.5);
     border-radius: $radius-xl;
     color: $text-dark-muted;
 
@@ -119,12 +120,12 @@ async function removeFromPantry(ingredientId: number) {
   align-items: center;
   gap: $space-md;
   padding: $space-sm $space-md;
-  background: rgba(white, 0.7);
+  background: color.change(white, $alpha: 0.7);
   border-radius: $radius-lg;
   transition: background $transition-fast;
 
   &:hover {
-    background: rgba(white, 0.9);
+    background: color.change(white, $alpha: 0.9);
   }
 
   &__visual {
@@ -185,7 +186,7 @@ async function removeFromPantry(ingredientId: number) {
     transition: all $transition-fast;
 
     &:hover {
-      background: rgba($accent-coral, 0.15);
+      background: color.change($surface-light-100, $alpha: 0.15);
       color: $accent-coral;
     }
   }

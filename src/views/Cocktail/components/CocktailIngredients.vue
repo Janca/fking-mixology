@@ -152,6 +152,7 @@ function formatQuantityHtml(
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .recipe-section {
@@ -267,8 +268,8 @@ function formatQuantityHtml(
 .garnish-section {
   margin-top: $space-lg;
   padding: $space-md;
-  background: rgba($accent-teal, 0.1);
-  border: 1px dashed rgba($accent-teal, 0.3);
+  background: color.change($surface-light-100, $alpha: 0.1);
+  border: 1px dashed color.change($surface-light-100, $alpha: 0.3);
   border-radius: $radius-lg;
 
   &__title {
@@ -296,7 +297,7 @@ function formatQuantityHtml(
   align-items: center;
   gap: $space-xs;
   padding: $space-xs $space-sm;
-  background: rgba($surface-dark-300, 0.5);
+  background: color.change($surface-light-100, $alpha: 0.5);
   border-radius: $radius-full;
   font-size: $font-size-body-sm;
   color: $text-light-primary;
@@ -306,13 +307,13 @@ function formatQuantityHtml(
     cursor: pointer;
 
     &:hover {
-      background: rgba($surface-dark-300, 0.8);
+      background: color.change($surface-light-100, $alpha: 0.8);
     }
   }
 
   &--done {
     opacity: 0.6;
-    background: rgba($accent-teal, 0.2);
+    background: color.change($surface-light-100, $alpha: 0.2);
     color: $accent-teal;
     text-decoration: line-through;
   }

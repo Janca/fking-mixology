@@ -291,6 +291,7 @@ function toggleMobileMenu() {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .the-header {
@@ -306,10 +307,10 @@ function toggleMobileMenu() {
   min-height: 60px;
   // Reduced mobile padding as requested
   padding: $space-sm $space-sm;
-  background: rgba($surface-light-100, 0.92);
+  background: color.change($surface-light-100, $alpha: 0.92);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba($surface-light-400, 0.5);
+  border-bottom: 1px solid color.change($surface-light-100, $alpha: 0.5);
 
   @include desktop-up {
     height: 72px;
@@ -530,7 +531,7 @@ function toggleMobileMenu() {
   &:focus-within {
     background: $surface-light-100;
     border-color: $accent-coral;
-    box-shadow: 0 0 0 3px rgba($accent-coral, 0.15);
+    box-shadow: 0 0 0 3px color.change($surface-light-100, $alpha: 0.15);
   }
 
   &__icon {
@@ -592,7 +593,7 @@ function toggleMobileMenu() {
   right: 0;
   background: $surface-light-100;
   border-radius: $radius-lg;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px color.change(#000, $alpha: 0.12), 0 2px 8px color.change(#000, $alpha: 0.08);
   max-height: 320px;
   overflow-y: auto;
   z-index: $z-dropdown;
@@ -655,7 +656,7 @@ function toggleMobileMenu() {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: color.change(#000, $alpha: 0.5);
   backdrop-filter: blur(4px);
   z-index: $z-modal-backdrop;
 }
@@ -666,15 +667,15 @@ function toggleMobileMenu() {
   right: 0;
   bottom: 0;
   width: 85%; // 85% of screen width - no max-width to allow full 85%
-  background: rgba($surface-light-100, 0.85); // Light glass panel
+  background: color.change($surface-light-100, $alpha: 0.85); // Light glass panel
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.2);
+  box-shadow: -8px 0 32px color.change(#000, $alpha: 0.2);
   z-index: $z-modal;
   padding: $space-lg;
   display: flex;
   flex-direction: column;
-  border-left: 1px solid rgba($surface-light-400, 0.3);
+  border-left: 1px solid color.change($surface-light-100, $alpha: 0.3);
 
   // Light theme text
   color: $text-dark-primary;
@@ -686,7 +687,7 @@ function toggleMobileMenu() {
   align-items: center;
   margin-bottom: $space-xl;
   padding-bottom: $space-md;
-  border-bottom: 1px solid rgba($surface-light-400, 0.4);
+  border-bottom: 1px solid color.change($surface-light-100, $alpha: 0.4);
 }
 
 .mobile-menu-title {
@@ -750,7 +751,7 @@ function toggleMobileMenu() {
   }
 
   &.router-link-exact-active {
-    background: rgba($accent-coral, 0.15);
+    background: color.change($surface-light-100, $alpha: 0.15);
     color: $accent-coral;
     font-weight: $font-weight-semibold;
   }

@@ -92,6 +92,7 @@ function handleClick() {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .app-toast {
@@ -106,10 +107,10 @@ function handleClick() {
   border-radius: $radius-lg;
 
   // Acrylic / Fluent Design Base
-  background: rgba(255, 255, 255, 0.75); // High transparency
+  background: color.change(#fff, $alpha: 0.75); // High transparency
   backdrop-filter: blur(20px) saturate(180%); // Strong blur and saturation boost
-  border: 1px solid rgba(255, 255, 255, 0.6); // Subtle light border
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.05); // Deep, soft shadow
+  border: 1px solid color.change(#fff, $alpha: 0.6); // Subtle light border
+  box-shadow: 0 8px 32px color.change(#000, $alpha: 0.12), 0 2px 4px color.change(#000, $alpha: 0.05); // Deep, soft shadow
 
   overflow: hidden;
   pointer-events: auto;
@@ -176,7 +177,7 @@ function handleClick() {
     width: 36px;
     height: 36px;
     border: none;
-    background: rgba($surface-light-100, 0.5); // Subtle background
+    background: color.change($surface-light-100, $alpha: 0.5); // Subtle background
     border-radius: $radius-full;
     color: $text-dark-primary;
     cursor: pointer;
@@ -184,15 +185,15 @@ function handleClick() {
     border: 1px solid transparent;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: color.change(#fff, $alpha: 0.9);
+      box-shadow: 0 2px 8px color.change(#000, $alpha: 0.1);
       transform: translateY(-1px);
     }
 
     &--danger {
       color: #ef4444;
       &:hover {
-        background: rgba(#ef4444, 0.1);
+        background: color.change(#ef4444, $alpha: 0.1);
         box-shadow: none;
       }
     }
@@ -200,7 +201,7 @@ function handleClick() {
     &--primary {
       color: $accent-blue;
       &:hover {
-        background: rgba($accent-blue, 0.1);
+        background: color.change($surface-light-100, $alpha: 0.1);
         box-shadow: none;
       }
     }
@@ -222,7 +223,7 @@ function handleClick() {
 
     &:hover {
       opacity: 1;
-      background: rgba(0, 0, 0, 0.05);
+      background: color.change(#000, $alpha: 0.05);
     }
   }
 
@@ -232,7 +233,7 @@ function handleClick() {
     left: 0;
     right: 0;
     height: 3px;
-    background: rgba(0, 0, 0, 0.05);
+    background: color.change(#000, $alpha: 0.05);
   }
 
   &__progress-fill {

@@ -154,6 +154,7 @@ function getDuration(): string {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .session-card {
@@ -173,12 +174,12 @@ function getDuration(): string {
 
   &--selected {
     border-color: $accent-coral;
-    background: rgba($accent-coral, 0.1);
+    background: color.change($surface-light-100, $alpha: 0.1);
   }
 
   &--active {
     border-color: $accent-teal;
-    background: rgba($accent-teal, 0.08);
+    background: color.change($surface-light-100, $alpha: 0.08);
   }
 
   &--select-mode {
@@ -226,7 +227,7 @@ function getDuration(): string {
   align-items: center;
   gap: $space-xs;
   padding: $space-2xs $space-sm;
-  background: rgba($accent-teal, 0.15);
+  background: color.change($surface-light-100, $alpha: 0.15);
   color: $accent-teal-dark;
   border-radius: $radius-full;
   font-size: $font-size-caption;

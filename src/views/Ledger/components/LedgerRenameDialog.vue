@@ -84,12 +84,13 @@ function handleConfirm() {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .dialog-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: color.change(#000, $alpha: 0.7);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -100,12 +101,12 @@ function handleConfirm() {
 
 .dialog-content {
   background: $surface-dark-200;
-  border: 1px solid rgba($accent-coral, 0.3);
+  border: 1px solid color.change($surface-light-100, $alpha: 0.3);
   border-radius: $radius-2xl;
   width: 100%;
   max-width: 400px;
   position: relative;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 40px color.change(#000, $alpha: 0.5);
 }
 
 .dialog-close {
@@ -126,7 +127,7 @@ function handleConfirm() {
   transition: all $transition-fast;
 
   &:hover {
-    background: rgba(white, 0.1);
+    background: color.change(white, $alpha: 0.1);
     color: white;
   }
 }

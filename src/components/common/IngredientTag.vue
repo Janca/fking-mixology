@@ -45,6 +45,7 @@ const emit = defineEmits<{
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .ingredient-tag {
@@ -59,7 +60,7 @@ const emit = defineEmits<{
   font-weight: $font-weight-semibold;
   white-space: nowrap;
   animation: pop-in 0.3s $spring-bounce forwards;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px color.change(#000, $alpha: 0.1);
 
   // Color variants
   &--coral {
@@ -123,7 +124,7 @@ const emit = defineEmits<{
     height: 28px;
     margin-left: $space-2xs;
     padding: 0;
-    background: rgba(255, 255, 255, 0.25);
+    background: color.change(#fff, $alpha: 0.25);
     border: none;
     border-radius: $radius-full;
     color: white;
@@ -136,7 +137,7 @@ const emit = defineEmits<{
     }
 
     &:hover {
-      background: rgba(255, 255, 255, 0.4);
+      background: color.change(#fff, $alpha: 0.4);
       transform: scale(1.15) rotate(90deg);
     }
   }

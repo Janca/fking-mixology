@@ -91,6 +91,21 @@ export class MixologyDatabase extends Dexie {
       userAchievements: "++id, achievementId, unlockedAt",
       achievementMetrics: "key", // key-value store for counters
     });
+
+    // Version 6: Use source IDs from JSON files for cocktails and ingredients
+    this.version(6).stores({
+      categories: "++id, name, slug",
+      cocktails: "id, name, slug, categoryId", // Removed ++ to use JSON source IDs
+      ingredients: "id, name, normalizedName", // Removed ++ to use JSON source IDs
+      recipeIngredients: "++id, cocktailId, ingredientId, sortOrder",
+      pantryItems: "++id, ingredientId, updatedAt",
+      metadata: "key",
+      ledgerSessions: "++id, createdAt, isActive",
+      ledgerEntries: "++id, sessionId, cocktailId, createdAt",
+      favorites: "++id, cocktailId, addedAt",
+      userAchievements: "++id, achievementId, unlockedAt",
+      achievementMetrics: "key",
+    });
   }
 }
 

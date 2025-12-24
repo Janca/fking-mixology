@@ -39,6 +39,7 @@ const emit = defineEmits<{
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .browse-header {

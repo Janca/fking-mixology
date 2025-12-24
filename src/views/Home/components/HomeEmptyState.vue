@@ -27,6 +27,7 @@ const router = useRouter();
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .empty-state {
@@ -47,7 +48,7 @@ const router = useRouter();
       content: ""; // Circle bg
       position: absolute;
       inset: 0;
-      background: rgba(white, 0.05);
+      background: color.change(white, $alpha: 0.05);
       border-radius: $radius-full;
     }
   }
@@ -69,7 +70,7 @@ const router = useRouter();
 
   .bubble {
     position: absolute;
-    color: rgba($accent-teal, 0.5);
+    color: color.change($surface-light-100, $alpha: 0.5);
     font-size: 10px;
     animation: bubble-float 4s infinite ease-in;
 

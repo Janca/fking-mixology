@@ -112,6 +112,7 @@ function handleCocktailClick(slug: string) {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .results-content {
@@ -126,7 +127,7 @@ function handleCocktailClick(slug: string) {
   gap: $space-3xl;
   margin-bottom: $space-2xl;
   padding-bottom: $space-xl;
-  border-bottom: 1px solid rgba(white, 0.1);
+  border-bottom: 1px solid color.change(white, $alpha: 0.1);
 }
 
 .results-stat {

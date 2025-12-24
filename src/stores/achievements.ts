@@ -99,44 +99,50 @@ export const useAchievementsStore = defineStore("achievements", () => {
     await checkAchievements();
   }
 
+  let checkTimeout: any = null;
+
   async function checkAchievements() {
-    const toUnlock: Achievement[] = [];
+    if (checkTimeout) clearTimeout(checkTimeout);
 
-    for (const ach of ACHIEVEMENTS) {
-      if (unlockedIds.value.has(ach.id)) continue;
+    checkTimeout = setTimeout(async () => {
+      const toUnlock: Achievement[] = [];
 
-      let shouldUnlock = false;
+      for (const ach of ACHIEVEMENTS) {
+        if (unlockedIds.value.has(ach.id)) continue;
 
-      // Check automated condition
-      if (ach.condition) {
-        const val = metrics.value.get(ach.condition.metric) || 0;
-        const target = ach.condition.threshold;
-        const op = ach.condition.operator || ">=";
+        let shouldUnlock = false;
 
-        if (op === ">=" && val >= target) shouldUnlock = true;
-        else if (op === "<=" && val <= target) shouldUnlock = true;
-        else if (op === "==" && val === target) shouldUnlock = true;
+        // Check automated condition
+        if (ach.condition) {
+          const val = metrics.value.get(ach.condition.metric) || 0;
+          const target = ach.condition.threshold;
+          const op = ach.condition.operator || ">=";
+
+          if (op === ">=" && val >= target) shouldUnlock = true;
+          else if (op === "<=" && val <= target) shouldUnlock = true;
+          else if (op === "==" && val === target) shouldUnlock = true;
+        }
+
+        // Custom checks
+        if (ach.id === "night_owl") {
+          const hour = new Date().getHours();
+          if (hour >= 3 && hour < 5) shouldUnlock = true;
+        }
+        if (ach.id === "early_bird") {
+          const hour = new Date().getHours();
+          if (hour >= 6 && hour < 9) shouldUnlock = true;
+        }
+
+        if (shouldUnlock) {
+          toUnlock.push(ach);
+        }
       }
 
-      // Custom checks could go here (e.g. time of day)
-      // For time based:
-      if (ach.id === "night_owl") {
-        const hour = new Date().getHours();
-        if (hour >= 3 && hour < 5) shouldUnlock = true;
+      if (toUnlock.length > 0) {
+        console.log("Unlocking achievements:", toUnlock);
+        await unlockAchievements(toUnlock);
       }
-      if (ach.id === "early_bird") {
-        const hour = new Date().getHours();
-        if (hour >= 6 && hour < 9) shouldUnlock = true;
-      }
-
-      if (shouldUnlock) {
-        toUnlock.push(ach);
-      }
-    }
-
-    if (toUnlock.length > 0) {
-      await unlockAchievements(toUnlock);
-    }
+    }, 100);
   }
 
   async function unlockAchievements(achievements: Achievement[]) {
@@ -144,39 +150,53 @@ export const useAchievementsStore = defineStore("achievements", () => {
     const toastStore = useToastStore();
 
     for (const ach of achievements) {
+      // Optimistic lock: immediately mark as handled to prevent race conditions
+      if (unlockedIds.value.has(ach.id)) continue;
+      unlockedIds.value.add(ach.id);
+
       const userAch: UserAchievement = {
         achievementId: ach.id,
         unlockedAt: now,
       };
 
-      await db.userAchievements.add(userAch);
-      unlockedAchievements.value.push(userAch);
-      unlockedIds.value.add(ach.id);
-      recentUnlocks.value.push(ach);
+      try {
+        await db.userAchievements.add(userAch);
+        unlockedAchievements.value.push(userAch);
+        recentUnlocks.value.push(ach);
 
-      // Notification
-      toastStore.addToast({
-        title: "Achievement Unlocked!",
-        message: ach.name,
-        badge: ach.icon || "🏆",
-        sticky: true,
-        onDismiss: (e) => {
-          const origin = e
-            ? {
-                x: e.clientX / window.innerWidth,
-                y: e.clientY / window.innerHeight,
-              }
-            : undefined;
-          triggerBurst(origin);
-        },
-        onClick: () => {
-          router.push({ name: "achievements", hash: `#ach-${ach.id}` });
-        },
-      });
+        // Notification
+        toastStore.addToast({
+          title: "Achievement Unlocked!",
+          message: ach.name,
+          badge: ach.icon || "🏆",
+          sticky: true,
+          onDismiss: (e) => {
+            const origin = e
+              ? {
+                  x: e.clientX / window.innerWidth,
+                  y: e.clientY / window.innerHeight,
+                }
+              : undefined;
+            triggerBurst(origin);
+          },
+          onClick: () => {
+            router.push({ name: "achievements", hash: `#ach-${ach.id}` });
+          },
+        });
 
-      // Track total unlocked as a metric for meta-achievements
-      // Use 'add' to increment the counter
-      await trackEvent("cheevos_unlocked", 1, "add");
+        // Track total unlocked as a metric for meta-achievements
+        await trackEvent("cheevos_unlocked", 1, "add");
+      } catch (error) {
+        console.error("Failed to unlock achievement", error);
+        // Rollback optimistic lock if it was a genuine error (not duplicate)
+        // Check if error is constraint violation?
+        // For now, if DB fails, we assume it might be locked next time or is already there.
+        // If we remove from unlockedIds, it might re-toast on refresh.
+        // Safest is to leave it 'locked' in memory to suppress noise?
+        // Or remove it so it tries again?
+        // Let's remove it to allow retry.
+        unlockedIds.value.delete(ach.id);
+      }
     }
   }
 

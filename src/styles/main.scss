@@ -2,6 +2,7 @@
 // Mixology Matcher - Main Stylesheet (Modern Neumorphic)
 // ============================================
 
+@use "sass:color";
 @use "variables" as *;
 
 // --------------------------------------------
@@ -109,7 +110,7 @@ a {
 // --------------------------------------------
 
 ::selection {
-  background-color: rgba($accent-coral, 0.25);
+  background-color: color.change($accent-coral, $alpha: 0.25);
   color: $text-dark-primary;
 }
 
@@ -150,7 +151,7 @@ a {
 
 :focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba($accent-blue, 0.4);
+  box-shadow: 0 0 0 3px color.change($accent-blue, $alpha: 0.4);
 }
 
 // --------------------------------------------
@@ -222,7 +223,7 @@ a {
   }
   50% {
     transform: scale(1.1);
-    box-shadow: 0 12px 40px rgba($accent-coral, 0.5);
+    box-shadow: 0 12px 40px color.change($accent-coral, $alpha: 0.5);
   }
 }
 

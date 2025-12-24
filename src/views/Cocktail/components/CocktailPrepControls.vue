@@ -72,6 +72,7 @@ function togglePrepMode() {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .controls-card {
@@ -106,12 +107,12 @@ function togglePrepMode() {
   left: 0;
   right: 0;
   height: 4px;
-  background: rgba(0, 0, 0, 0.2);
+  background: color.change(#000, $alpha: 0.2);
 
   &__fill {
     height: 100%;
     background: $accent-teal;
-    box-shadow: 0 0 10px rgba($accent-teal, 0.5);
+    box-shadow: 0 0 10px color.change($surface-light-100, $alpha: 0.5);
     transition: width $transition-normal;
   }
 }

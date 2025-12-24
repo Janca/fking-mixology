@@ -142,6 +142,7 @@ function toggleFavorite() {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .cocktail-card {
@@ -353,15 +354,15 @@ function toggleFavorite() {
   }
 
   &--dark &__favorite {
-    color: rgba($text-light-primary, 0.3);
+    color: color.change($surface-light-100, $alpha: 0.3);
 
     &:hover {
-      color: rgba($text-light-primary, 0.7);
+      color: color.change($surface-light-100, $alpha: 0.7);
     }
 
     &--active {
       color: $accent-coral;
-      text-shadow: 0 0 10px rgba($accent-coral, 0.5);
+      text-shadow: 0 0 10px color.change($surface-light-100, $alpha: 0.5);
     }
   }
 
@@ -372,7 +373,7 @@ function toggleFavorite() {
     left: 0;
     right: 0;
     height: 4px;
-    background: rgba(0, 0, 0, 0.1);
+    background: color.change(#000, $alpha: 0.1);
     border-radius: 0 0 $radius-xl $radius-xl;
     overflow: hidden;
   }
@@ -380,19 +381,19 @@ function toggleFavorite() {
   &__progress-fill {
     height: 100%;
     background: $accent-teal;
-    box-shadow: 0 0 8px rgba($accent-teal, 0.5);
+    box-shadow: 0 0 8px color.change($surface-light-100, $alpha: 0.5);
     transition: width $transition-normal;
     border-radius: 0 4px 4px 0;
   }
 
   // Dark variant progress
   &--dark &__progress {
-    background: rgba(0, 0, 0, 0.3);
+    background: color.change(#000, $alpha: 0.3);
   }
 
   &--dark &__progress-fill {
     background: $accent-coral;
-    box-shadow: 0 0 8px rgba($accent-coral, 0.5);
+    box-shadow: 0 0 8px color.change($surface-light-100, $alpha: 0.5);
   }
 }
 

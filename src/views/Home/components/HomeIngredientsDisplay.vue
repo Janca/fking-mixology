@@ -115,6 +115,7 @@ function handleRemoveIngredient(id: number) {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .ingredients-display {
@@ -122,10 +123,10 @@ function handleRemoveIngredient(id: number) {
   margin: 0 auto;
   text-align: center;
   padding: $space-lg;
-  background: rgba(white, 0.6);
+  background: color.change(white, $alpha: 0.6);
   backdrop-filter: blur(10px);
   border-radius: $radius-xl;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 24px color.change(#000, $alpha: 0.06);
 
   &__header {
     display: flex;
@@ -188,7 +189,7 @@ function handleRemoveIngredient(id: number) {
   &--active {
     background: white;
     color: $accent-coral;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px color.change(#000, $alpha: 0.1);
   }
 }
 
@@ -216,11 +217,11 @@ function handleRemoveIngredient(id: number) {
 
   &:hover {
     color: $text-dark-primary;
-    background: darken($surface-light-300, 5%);
+    background: color.adjust($surface-light-100, $lightness: -5%);
   }
 
   &--active {
-    background: rgba($accent-teal, 0.1);
+    background: color.change($surface-light-100, $alpha: 0.1);
     color: $accent-teal;
     box-shadow: 0 0 0 1px $accent-teal inset;
 

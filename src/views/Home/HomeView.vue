@@ -140,6 +140,7 @@ watch(
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 // Transitions

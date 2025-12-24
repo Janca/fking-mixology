@@ -66,6 +66,7 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .pantry-header {

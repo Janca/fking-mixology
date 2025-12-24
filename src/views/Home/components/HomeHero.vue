@@ -16,6 +16,7 @@ import AppEmoji from "@/components/common/AppEmoji.vue";
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .hero {

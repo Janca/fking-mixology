@@ -63,6 +63,7 @@ const emit = defineEmits<{
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .ledger-header {
@@ -133,6 +134,7 @@ const emit = defineEmits<{
   @include mobile-only {
     width: 100%;
     flex-wrap: wrap;
+    justify-content: flex-end;
   }
 }
 

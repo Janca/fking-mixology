@@ -73,6 +73,14 @@ export const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: "/user-data",
+    name: "user-data",
+    component: () => import("@/views/UserData/UserDataView.vue"),
+    meta: {
+      title: "Data Management",
+    },
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "not-found",
     component: () => import("@/views/NotFound"),

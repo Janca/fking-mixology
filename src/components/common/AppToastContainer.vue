@@ -18,6 +18,7 @@ const toastStore = useToastStore();
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .app-toast-container {
@@ -32,18 +33,21 @@ const toastStore = useToastStore();
   max-width: 100%;
   width: 400px;
 
-  // Mobile adjustments
+  // Mobile adjustments - center the toasts
   @media (max-width: 768px) {
     bottom: $space-md;
-    right: $space-md;
-    left: $space-md;
-    width: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: calc(100% - #{$space-md * 2});
+    max-width: 400px;
   }
 }
 
 // Transition styles
 .toast-enter-active,
-.toast-leave-active {
+.toast-leave-active,
+.toast-move {
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -58,6 +62,6 @@ const toastStore = useToastStore();
 }
 
 .toast-leave-active {
-  position: absolute; // Ensure smooth removal from flow
+  position: absolute;
 }
 </style>

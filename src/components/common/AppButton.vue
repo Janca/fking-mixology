@@ -62,6 +62,7 @@ function handleClick(event: MouseEvent) {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .app-btn {
@@ -113,12 +114,12 @@ function handleClick(event: MouseEvent) {
 
     &:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba($accent-coral, 0.45);
+      box-shadow: 0 12px 40px color.change($accent-coral, $alpha: 0.45);
     }
 
     &:active:not(:disabled) {
       transform: translateY(0);
-      box-shadow: 0 4px 20px rgba($accent-coral, 0.3);
+      box-shadow: 0 4px 20px color.change($accent-coral, $alpha: 0.3);
     }
   }
 
@@ -144,7 +145,7 @@ function handleClick(event: MouseEvent) {
     color: $text-dark-secondary;
 
     &:hover:not(:disabled) {
-      background: rgba($surface-dark-300, 0.08);
+      background: color.adjust($surface-dark-300, $alpha: 0.08);
       color: $text-dark-primary;
     }
   }
@@ -181,14 +182,14 @@ function handleClick(event: MouseEvent) {
     box-shadow: $glow-teal;
 
     &:hover:not(:disabled) {
-      background: darken($accent-teal, 5%);
+      background: color.adjust($accent-teal, $lightness: -5%);
       transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba($accent-teal, 0.45);
+      box-shadow: 0 12px 40px color.change($accent-teal, $alpha: 0.45);
     }
 
     &:active:not(:disabled) {
       transform: translateY(0);
-      box-shadow: 0 4px 20px rgba($accent-teal, 0.3);
+      box-shadow: 0 4px 20px color.change($accent-teal, $alpha: 0.3);
     }
   }
 

@@ -227,6 +227,7 @@ function getHourLabel(hour: number): string {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .analytics-dashboard {
@@ -341,7 +342,7 @@ function getHourLabel(hour: number): string {
     }
 
     .no-data {
-      color: rgba(white, 0.7);
+      color: color.change(white, $alpha: 0.7);
     }
   }
 }

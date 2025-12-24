@@ -33,6 +33,7 @@ const emit = defineEmits<{
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .category-tabs {
@@ -82,7 +83,7 @@ const emit = defineEmits<{
     box-shadow: $glow-coral;
 
     &:hover {
-      box-shadow: 0 12px 40px rgba($accent-coral, 0.4);
+      box-shadow: 0 12px 40px color.change($surface-light-100, $alpha: 0.4);
     }
   }
 

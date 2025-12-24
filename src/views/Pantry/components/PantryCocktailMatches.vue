@@ -49,6 +49,7 @@ function handleCocktailClick(slug: string) {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .cocktail-matches {
@@ -104,7 +105,7 @@ function handleCocktailClick(slug: string) {
   font-family: $font-mono;
   font-size: $font-size-caption;
   color: $text-light-muted;
-  background: rgba(white, 0.1);
+  background: color.change(white, $alpha: 0.1);
   padding: $space-xs $space-sm;
   border-radius: $radius-full;
 }

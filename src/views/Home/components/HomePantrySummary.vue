@@ -85,6 +85,7 @@ function handleCocktailClick(slug: string) {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .pantry-summary {
@@ -94,13 +95,13 @@ function handleCocktailClick(slug: string) {
   padding: 0 $space-md;
 
   &__glass {
-    background: rgba(white, 0.7);
+    background: color.change(white, $alpha: 0.7);
     backdrop-filter: blur(20px);
     border-radius: $radius-2xl;
     padding: $space-lg;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04),
-      inset 0 1px 0 rgba(white, 0.8);
-    border: 1px solid rgba(white, 0.5);
+    box-shadow: 0 8px 32px color.change(#000, $alpha: 0.08), 0 2px 8px color.change(#000, $alpha: 0.04),
+      inset 0 1px 0 color.change(white, $alpha: 0.8);
+    border: 1px solid color.change(white, $alpha: 0.5);
   }
 
   &__header {
@@ -139,7 +140,7 @@ function handleCocktailClick(slug: string) {
     transition: color $transition-fast;
 
     &:hover {
-      color: darken($accent-coral, 10%);
+      color: color.adjust($surface-light-100, $lightness: -10%);
     }
   }
 
@@ -152,7 +153,7 @@ function handleCocktailClick(slug: string) {
 
   &__matches {
     padding-top: $space-lg;
-    border-top: 1px solid rgba($surface-dark-200, 0.15);
+    border-top: 1px solid color.change($surface-light-100, $alpha: 0.15);
 
     h3 {
       display: flex;
@@ -175,7 +176,7 @@ function handleCocktailClick(slug: string) {
   align-items: center;
   gap: $space-sm;
   padding: $space-xs $space-sm;
-  background: rgba($surface-dark-200, 0.1);
+  background: color.change($surface-light-100, $alpha: 0.1);
   border-radius: $radius-full;
   font-size: $font-size-caption;
 
@@ -214,11 +215,11 @@ function handleCocktailClick(slug: string) {
   font-weight: $font-weight-semibold;
   cursor: pointer;
   transition: all $transition-fast;
-  box-shadow: 0 4px 12px rgba($accent-coral, 0.3);
+  box-shadow: 0 4px 12px color.change($surface-light-100, $alpha: 0.3);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba($accent-coral, 0.4);
+    box-shadow: 0 6px 16px color.change($surface-light-100, $alpha: 0.4);
   }
 
   &__arrow {

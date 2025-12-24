@@ -2,6 +2,8 @@
 // Mixology Matcher - Design Tokens (Modern Neumorphic)
 // ============================================
 
+@use "sass:color";
+
 // --------------------------------------------
 // Color Palette - Dual Tone System
 // --------------------------------------------
@@ -41,6 +43,8 @@ $accent-teal-dark: #2eb8af;
 $accent-gold: #ffb347;
 $accent-gold-light: #ffc875;
 $accent-gold-dark: #e09530;
+
+$accent-warning: #f59e0b;
 
 // Gradient Definitions
 $gradient-coral: linear-gradient(
@@ -167,6 +171,8 @@ $shadow-dark-raised: 8px 8px 24px rgba(0, 0, 0, 0.5),
 $shadow-dark-raised-sm: 4px 4px 12px rgba(0, 0, 0, 0.4),
   -2px -2px 8px rgba(60, 65, 90, 0.1);
 
+$shadow-dark-lg: 0 20px 50px rgba(0, 0, 0, 0.6);
+
 // Pressed/inset elements on dark surface
 $shadow-dark-inset: inset 4px 4px 12px rgba(0, 0, 0, 0.5),
   inset -2px -2px 8px rgba(60, 65, 90, 0.1);
@@ -175,10 +181,10 @@ $shadow-dark-inset-sm: inset 2px 2px 8px rgba(0, 0, 0, 0.4),
   inset -1px -1px 4px rgba(60, 65, 90, 0.08);
 
 // Glow effects
-$glow-coral: 0 8px 32px rgba($accent-coral, 0.35);
-$glow-blue: 0 8px 32px rgba($accent-blue, 0.35);
-$glow-teal: 0 8px 32px rgba($accent-teal, 0.35);
-$glow-purple: 0 8px 32px rgba($accent-purple, 0.35);
+$glow-coral: 0 8px 32px color.change($accent-coral, $alpha: 0.35);
+$glow-blue: 0 8px 32px color.change($accent-blue, $alpha: 0.35);
+$glow-teal: 0 8px 32px color.change($accent-teal, $alpha: 0.35);
+$glow-purple: 0 8px 32px color.change($accent-purple, $alpha: 0.35);
 
 // --------------------------------------------
 // Transitions

@@ -11,6 +11,8 @@ defineProps<{
   /** Optional class for the content section */
   contentClass?: string;
 }>();
+
+import TheFooter from "@/components/layout/TheFooter.vue";
 </script>
 
 <template>
@@ -57,11 +59,16 @@ defineProps<{
     <!-- Dark Content Section -->
     <section class="wave-layout__content" :class="contentClass">
       <slot></slot>
+
+      <slot name="footer">
+        <TheFooter />
+      </slot>
     </section>
   </div>
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .wave-layout {

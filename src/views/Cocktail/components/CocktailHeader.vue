@@ -88,6 +88,7 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .cocktail-header-wrapper {
@@ -188,7 +189,7 @@ onUnmounted(() => {
   height: 48px;
   border-radius: 50%;
   background: $surface-light-100;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid color.change(#fff, $alpha: 0.5);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -197,8 +198,8 @@ onUnmounted(() => {
   transition: all $transition-normal;
 
   // Neumorphic Shadow
-  box-shadow: 6px 6px 12px rgba(166, 180, 200, 0.4),
-    -6px -6px 12px rgba(255, 255, 255, 1);
+  box-shadow: 6px 6px 12px color.change(#a6b4c8, $alpha: 0.4),
+    -6px -6px 12px color.change(#fff, $alpha: 1);
 
   &:hover {
     transform: translateY(-2px);
@@ -206,8 +207,8 @@ onUnmounted(() => {
   }
 
   &:active {
-    box-shadow: inset 4px 4px 8px rgba(166, 180, 200, 0.4),
-      inset -4px -4px 8px rgba(255, 255, 255, 1);
+    box-shadow: inset 4px 4px 8px color.change(#a6b4c8, $alpha: 0.4),
+      inset -4px -4px 8px color.change(#fff, $alpha: 1);
     transform: translateY(0) scale(0.95);
   }
 

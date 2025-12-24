@@ -181,16 +181,17 @@ async function addToPantry() {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .add-form {
   &__glass {
-    background: rgba(white, 0.8);
+    background: color.change(white, $alpha: 0.8);
     backdrop-filter: blur(20px);
     border-radius: $radius-xl;
     padding: $space-lg;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(white, 0.9);
-    border: 1px solid rgba(white, 0.6);
+    box-shadow: 0 8px 32px color.change(#000, $alpha: 0.08), inset 0 1px 0 color.change(white, $alpha: 0.9);
+    border: 1px solid color.change(white, $alpha: 0.6);
     width: 100%;
     min-width: 0;
 
@@ -239,7 +240,7 @@ async function addToPantry() {
   right: 0;
   background: white;
   border-radius: $radius-lg;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 32px color.change(#000, $alpha: 0.12);
   max-height: 200px;
   overflow-y: auto;
   z-index: $z-dropdown;
@@ -302,7 +303,7 @@ async function addToPantry() {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(white, 0.2);
+    background: color.change(white, $alpha: 0.2);
     border: none;
     border-radius: $radius-full;
     color: white;
@@ -310,7 +311,7 @@ async function addToPantry() {
     font-size: 12px;
 
     &:hover {
-      background: rgba(white, 0.3);
+      background: color.change(white, $alpha: 0.3);
     }
   }
 }

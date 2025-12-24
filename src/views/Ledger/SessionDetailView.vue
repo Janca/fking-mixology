@@ -292,6 +292,7 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .session-header {
@@ -369,7 +370,7 @@ onMounted(async () => {
   .spinner {
     width: 48px;
     height: 48px;
-    border: 4px solid rgba($accent-coral, 0.2);
+    border: 4px solid color.change($surface-light-100, $alpha: 0.2);
     border-top-color: $accent-coral;
     border-radius: $radius-full;
     animation: spin 1s linear infinite;
@@ -448,7 +449,7 @@ onMounted(async () => {
     inset: 0;
     background: radial-gradient(
       circle at 30% 30%,
-      rgba(white, 0.1) 0%,
+      color.change(white, $alpha: 0.1) 0%,
       transparent 60%
     );
   }
@@ -457,7 +458,7 @@ onMounted(async () => {
 .highlight-badge {
   display: inline-block;
   padding: $space-2xs $space-sm;
-  background: rgba(white, 0.2);
+  background: color.change(white, $alpha: 0.2);
   border-radius: $radius-full;
   font-size: $font-size-caption;
   font-weight: $font-weight-bold;
@@ -476,7 +477,7 @@ onMounted(async () => {
 .highlight-count {
   font-size: $font-size-h2;
   font-weight: $font-weight-bold;
-  color: rgba(white, 0.8);
+  color: color.change(white, $alpha: 0.8);
 }
 
 // Session Analytics

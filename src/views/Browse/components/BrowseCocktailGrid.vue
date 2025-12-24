@@ -48,6 +48,7 @@ async function handleCocktailClick(cocktail: CocktailWithDetails) {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .cocktails-grid {

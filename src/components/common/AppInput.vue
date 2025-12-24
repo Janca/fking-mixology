@@ -117,6 +117,7 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .app-input {
@@ -137,7 +138,8 @@ defineExpose({
   }
 
   &--light.app-input--focused &__wrapper {
-    box-shadow: $shadow-light-inset, 0 0 0 3px rgba($accent-blue, 0.2);
+    box-shadow: $shadow-light-inset,
+      0 0 0 3px color.change($accent-blue, $alpha: 0.2);
   }
 
   // Dark variant (for dark backgrounds)
@@ -147,7 +149,8 @@ defineExpose({
   }
 
   &--dark.app-input--focused &__wrapper {
-    box-shadow: $shadow-dark-inset, 0 0 0 3px rgba($accent-coral, 0.3);
+    box-shadow: $shadow-dark-inset,
+      0 0 0 3px color.change($accent-coral, $alpha: 0.3);
   }
 
   &--dark &__field {

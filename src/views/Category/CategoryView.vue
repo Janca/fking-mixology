@@ -15,6 +15,7 @@ const route = useRoute();
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .category-view {

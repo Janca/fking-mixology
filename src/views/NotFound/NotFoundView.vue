@@ -33,6 +33,7 @@ function goHome() {
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .not-found-container {

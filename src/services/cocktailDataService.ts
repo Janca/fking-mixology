@@ -212,6 +212,9 @@ export async function importCocktailData(): Promise<void> {
   // Maps to track IDs
   const categoryMap = new Map<string, number>();
   const ingredientMap = new Map<string, number>();
+  // Counter for dynamically created ingredients (not in detailed JSON)
+  // Start at 10000 to avoid conflicts with source IDs (max is 579)
+  let nextDynamicIngredientId = 10000;
 
   await db.transaction(
     "rw",
@@ -251,7 +254,11 @@ export async function importCocktailData(): Promise<void> {
           imageUrl = mod.default || mod;
         }
 
-        const id = (await db.ingredients.add({
+        // Use the ID from the JSON source file
+        const id = parseInt(detailedIng.idIngredient, 10);
+
+        await db.ingredients.put({
+          id: id, // Explicitly set ID from source
           name: name,
           normalizedName: normalized,
           description: detailedIng.strDescription || undefined,
@@ -259,7 +266,7 @@ export async function importCocktailData(): Promise<void> {
           isAlcoholic: detailedIng.strAlcohol === "Yes",
           abv: detailedIng.strABV ? parseFloat(detailedIng.strABV) : undefined,
           imageUrl: imageUrl,
-        })) as number;
+        });
 
         ingredientMap.set(normalized, id);
       }
@@ -283,7 +290,11 @@ export async function importCocktailData(): Promise<void> {
         }
 
         // Add Cocktail
-        const cocktailId = (await db.cocktails.add({
+        // Use the ID from the JSON source file
+        const cocktailId = parseInt(rawCocktail.idDrink, 10);
+
+        await db.cocktails.put({
+          id: cocktailId, // Explicitly set ID from source
           name: rawCocktail.strDrink,
           slug: slugify(rawCocktail.strDrink),
           categoryId: catId,
@@ -296,7 +307,7 @@ export async function importCocktailData(): Promise<void> {
             : [],
           isAlcoholic: rawCocktail.strAlcoholic === "Alcoholic",
           ibaCategory: rawCocktail.strIBA || undefined,
-        })) as number;
+        });
 
         // Process Ingredients
         // strIngredient1 ... strIngredient15
@@ -309,15 +320,22 @@ export async function importCocktailData(): Promise<void> {
           const normalizedIng = normalizeIngredientName(ingName);
           let ingId = ingredientMap.get(normalizedIng);
 
-          // If ingredient not found from detailed list, create it on the fly
+          // If ingredient not found from detailed list, this indicates a data inconsistency
+          // All ingredients should be in the source JSON
           if (!ingId) {
-            ingId = (await db.ingredients.add({
+            console.warn(
+              `Data inconsistency: Ingredient "${ingName}" in cocktail "${rawCocktail.strDrink}" not found in ingredients_detailed.json`
+            );
+            // Create it anyway to maintain data integrity for the cocktail
+            ingId = nextDynamicIngredientId++;
+            await db.ingredients.put({
+              id: ingId, // Explicitly set ID to avoid conflicts with source IDs
               name: ingName,
               normalizedName: normalizedIng,
               description: undefined,
               type: undefined,
               isAlcoholic: undefined, // unknown
-            })) as number;
+            });
             ingredientMap.set(normalizedIng, ingId);
           }
 
@@ -342,7 +360,7 @@ export async function importCocktailData(): Promise<void> {
 }
 
 // Data version - Increment this when JSON data changes to force client-side DB refresh
-const DATA_VERSION = "1.1";
+const DATA_VERSION = "2.0"; // Updated to use source IDs from JSON files
 
 /**
  * Initialize the database with cocktail data if not already populated

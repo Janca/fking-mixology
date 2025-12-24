@@ -17,7 +17,7 @@ const isSelectionClear = ref(false);
 
 // Check if we should show back button (not on main pages)
 const showBackButton = computed(() => {
-  const mainPages = ["home", "browse", "pantry"];
+  const mainPages = ["home", "browse", "pantry", "ledger"];
   return !mainPages.includes(route.name as string);
 });
 
@@ -216,6 +216,9 @@ function toggleMobileMenu() {
         <RouterLink to="/pantry" class="the-header__nav-link"
           >Pantry</RouterLink
         >
+        <RouterLink to="/ledger" class="the-header__nav-link"
+          >Ledger</RouterLink
+        >
       </nav>
 
       <!-- Hamburger Menu Button (Visible on Mobile) -->
@@ -262,6 +265,10 @@ function toggleMobileMenu() {
           <RouterLink to="/pantry" class="mobile-menu-link">
             <span class="mobile-menu-icon">🥫</span>
             Pantry
+          </RouterLink>
+          <RouterLink to="/ledger" class="mobile-menu-link">
+            <span class="mobile-menu-icon">📒</span>
+            Ledger
           </RouterLink>
         </nav>
       </aside>

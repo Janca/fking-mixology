@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { useCocktailsStore } from "@/stores/cocktails";
+import { useNavigationStore } from "@/stores/navigation";
 import CocktailCard from "@/components/common/CocktailCard.vue";
 
 const props = defineProps<{
@@ -9,8 +10,8 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
-const route = useRoute();
 const cocktailsStore = useCocktailsStore();
+const navigationStore = useNavigationStore();
 
 const matches = computed(() =>
   props.mode === "search"
@@ -46,9 +47,9 @@ const sectionEmoji = computed(() => ({
 }));
 
 function handleCocktailClick(slug: string) {
-  router.replace({ query: route.query, hash: `#${slug}` }).then(() => {
-    router.push({ name: "cocktail", params: { slug } });
-  });
+  // Save scroll target to navigation store before navigating
+  navigationStore.setScrollTarget("home", slug);
+  router.push({ name: "cocktail", params: { slug } });
 }
 </script>
 

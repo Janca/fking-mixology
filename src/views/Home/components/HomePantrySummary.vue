@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { usePantryStore } from "@/stores/pantry";
 import { useCocktailsStore } from "@/stores/cocktails";
+import { useNavigationStore } from "@/stores/navigation";
 import { usePantryFormatter } from "@/composables/usePantryFormatter";
 
 const router = useRouter();
-const route = useRoute();
 const pantryStore = usePantryStore();
 const cocktailsStore = useCocktailsStore();
+const navigationStore = useNavigationStore();
 const { formatPantryQuantity } = usePantryFormatter();
 
 const perfectPantryMatches = computed(() =>
@@ -16,7 +17,8 @@ const perfectPantryMatches = computed(() =>
 );
 
 function handleCocktailClick(slug: string) {
-  router.replace({ query: route.query, hash: `#${slug}` });
+  // Save scroll target to navigation store before navigating
+  navigationStore.setScrollTarget("home", slug);
   router.push({ name: "cocktail", params: { slug } });
 }
 </script>

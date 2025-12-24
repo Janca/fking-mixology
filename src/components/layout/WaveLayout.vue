@@ -69,6 +69,8 @@ defineProps<{
   display: flex;
   flex-direction: column;
 
+  overflow: hidden;
+
   &__header {
     position: relative;
     background: $gradient-light;

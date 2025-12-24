@@ -10,6 +10,8 @@ import type {
   Ingredient,
   RecipeIngredient,
   PantryItem,
+  LedgerSession,
+  LedgerEntry,
 } from "@/types";
 
 // ============================================
@@ -23,6 +25,8 @@ export class MixologyDatabase extends Dexie {
   recipeIngredients!: EntityTable<RecipeIngredient, "id">;
   pantryItems!: EntityTable<PantryItem, "id">;
   metadata!: EntityTable<{ key: string; value: any }, "key">;
+  ledgerSessions!: EntityTable<LedgerSession, "id">;
+  ledgerEntries!: EntityTable<LedgerEntry, "id">;
 
   constructor() {
     super("MixologyMatcherDB");
@@ -52,6 +56,18 @@ export class MixologyDatabase extends Dexie {
       recipeIngredients: "++id, cocktailId, ingredientId, sortOrder",
       pantryItems: "++id, ingredientId, updatedAt",
       metadata: "key", // key-value store
+    });
+
+    // Version 4: Add ledger for session tracking
+    this.version(4).stores({
+      categories: "++id, name, slug",
+      cocktails: "++id, name, slug, categoryId",
+      ingredients: "++id, name, normalizedName",
+      recipeIngredients: "++id, cocktailId, ingredientId, sortOrder",
+      pantryItems: "++id, ingredientId, updatedAt",
+      metadata: "key",
+      ledgerSessions: "++id, createdAt, isActive",
+      ledgerEntries: "++id, sessionId, cocktailId, createdAt",
     });
   }
 }

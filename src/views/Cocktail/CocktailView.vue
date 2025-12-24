@@ -10,7 +10,9 @@ import { db } from "@/services/database";
 import { getCocktailWithDetails } from "@/composables/useCocktailMatcher";
 import { usePrepMode } from "@/composables/usePrepMode";
 import { usePantryStore } from "@/stores/pantry";
-import { isConvertibleUnit } from "@/utils/unitConversions";
+import { useLedgerStore } from "@/stores/ledger";
+import { isConvertibleUnit, toMl } from "@/utils/unitConversions";
+import type { LedgerIngredientUsage } from "@/types";
 import WaveLayout from "@/components/layout/WaveLayout.vue";
 import type { CocktailWithDetails } from "@/types";
 
@@ -24,6 +26,7 @@ import CocktailCompletionDialog from "./components/CocktailCompletionDialog.vue"
 const route = useRoute();
 const router = useRouter();
 const pantryStore = usePantryStore();
+const ledgerStore = useLedgerStore();
 
 const cocktail = ref<CocktailWithDetails | null>(null);
 const isLoading = ref(true);
@@ -94,6 +97,9 @@ async function completeDrink() {
   isCompleting.value = true;
 
   try {
+    // Build ingredient usage list for ledger
+    const ingredientsUsed: LedgerIngredientUsage[] = [];
+
     // Use ingredients from pantry (scaled)
     for (const ingredient of cocktail.value.ingredients) {
       if (ingredient.quantity && isConvertibleUnit(ingredient.unit)) {
@@ -103,8 +109,20 @@ async function completeDrink() {
           scaledQuantity,
           ingredient.unit
         );
+
+        // Track for ledger
+        ingredientsUsed.push({
+          ingredientId: ingredient.ingredientId,
+          ingredientName: ingredient.ingredient.name,
+          quantityMl: toMl(scaledQuantity, ingredient.unit),
+          originalUnit: ingredient.unit,
+          originalQuantity: scaledQuantity,
+        });
       }
     }
+
+    // Record drink in ledger (creates session if needed)
+    await ledgerStore.recordDrink(cocktail.value, scale.value, ingredientsUsed);
 
     // Fire confetti! 🎉
     confetti({

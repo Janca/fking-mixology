@@ -48,6 +48,23 @@ export const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: "/ledger",
+    name: "ledger",
+    component: () => import("@/views/Ledger"),
+    meta: {
+      title: "Drink Ledger",
+    },
+  },
+  {
+    path: "/ledger/:id",
+    name: "session-detail",
+    component: () => import("@/views/Ledger/SessionDetailView.vue"),
+    props: true,
+    meta: {
+      title: "Session Details",
+    },
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "not-found",
     component: () => import("@/views/NotFound"),

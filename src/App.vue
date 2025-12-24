@@ -2,13 +2,22 @@
 /**
  * App.vue - Root Application Component
  */
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { RouterView } from "vue-router";
 import { useAppStore } from "@/stores/app";
 import TheHeader from "@/components/layout/TheHeader.vue";
 import AppButton from "@/components/common/AppButton.vue";
 
 const appStore = useAppStore();
+const isTransitioning = ref(false);
+
+function onBeforeLeave() {
+  document.body.style.overflow = "hidden";
+}
+
+function onAfterEnter() {
+  document.body.style.overflow = "auto";
+}
 
 onMounted(() => {
   appStore.initialize();
@@ -16,7 +25,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="app-root">
+  <div class="app-root" :class="{ 'app-root--transitioning': isTransitioning }">
     <!-- Loading Screen -->
     <Transition name="fade">
       <div v-if="appStore.isLoading" class="loading-screen">
@@ -45,7 +54,12 @@ onMounted(() => {
     <template v-if="appStore.isReady">
       <TheHeader />
       <RouterView v-slot="{ Component }">
-        <Transition name="page" mode="out-in">
+        <Transition
+          name="page"
+          mode="out-in"
+          @before-leave="onBeforeLeave"
+          @after-enter="onAfterEnter"
+        >
           <KeepAlive include="BrowseView,HomeView">
             <component :is="Component" />
           </KeepAlive>
@@ -63,8 +77,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   background: $surface-light-200;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 // Page Transition
@@ -81,6 +94,12 @@ onMounted(() => {
 .page-leave-to {
   opacity: 0;
   transform: translateY(-12px);
+}
+
+.page-leave-active {
+  position: absolute;
+  width: 100%;
+  overflow: hidden;
 }
 
 // Fade Transition

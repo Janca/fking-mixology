@@ -16,6 +16,7 @@ import HomeIngredientsDisplay from "./components/HomeIngredientsDisplay.vue";
 import HomePantrySummary from "./components/HomePantrySummary.vue";
 import HomeResults from "./components/HomeResults.vue";
 import HomeEmptyState from "./components/HomeEmptyState.vue";
+import LedgerResumeCard from "./components/LedgerResumeCard.vue";
 import { useScrollRestoration } from "@/composables/useScrollRestoration";
 import { storeToRefs } from "pinia";
 
@@ -78,7 +79,11 @@ function checkItemExists(slug: string): boolean {
   return false;
 }
 
-const { checkAndScroll } = useScrollRestoration(isViewLoading, checkItemExists);
+const { checkAndScroll } = useScrollRestoration(
+  "home",
+  isViewLoading,
+  checkItemExists
+);
 
 // Watch for manual mode switches (search vs pantry) that might not trigger "loading"
 watch(
@@ -99,6 +104,9 @@ watch(
     <template #header>
       <!-- Hero Section -->
       <HomeHero />
+
+      <!-- Resume Session Prompt -->
+      <LedgerResumeCard />
 
       <!-- Selected Ingredients Display -->
       <div v-if="ingredientsStore.hasSelection">

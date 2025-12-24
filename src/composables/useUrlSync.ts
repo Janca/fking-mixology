@@ -2,12 +2,14 @@ import { ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useIngredientsStore } from "@/stores/ingredients";
 import { useCocktailsStore } from "@/stores/cocktails";
+import { useNavigationStore } from "@/stores/navigation";
 
 export function useUrlSync() {
   const router = useRouter();
   const route = useRoute();
   const ingredientsStore = useIngredientsStore();
   const cocktailsStore = useCocktailsStore();
+  const navigationStore = useNavigationStore();
 
   const isSyncingFromUrl = ref(false);
 
@@ -23,9 +25,6 @@ export function useUrlSync() {
     // Ensure unique IDs in URL
     const uniqueIds = Array.from(new Set(ids));
 
-    // Always clear hash when updating query params driven by user interaction
-    const hash = "";
-
     if (ids.length > 0) {
       const query: Record<string, string> = {
         ingredients: uniqueIds.join(","),
@@ -38,9 +37,9 @@ export function useUrlSync() {
       if (!cocktailsStore.allowSubstitution) {
         query.exact = "true";
       }
-      router.replace({ query, hash });
+      router.replace({ query });
     } else {
-      router.replace({ query: {}, hash });
+      router.replace({ query: {} });
     }
   }
 
@@ -104,6 +103,9 @@ export function useUrlSync() {
   watch(
     () => ingredientsStore.selectedIds,
     async (ids) => {
+      // Clear scroll target when ingredients change (invalidates previous scroll position)
+      navigationStore.clearScrollTarget("home");
+
       // Update cocktail matches local logic (kept from original)
       // Note: IngredientsStore updates usually don't trigger search automatically?
       // The original code had findMatches call here.
@@ -135,6 +137,9 @@ export function useUrlSync() {
   watch(
     [() => cocktailsStore.matchMode, () => cocktailsStore.allowSubstitution],
     () => {
+      // Clear scroll target when match settings change
+      navigationStore.clearScrollTarget("home");
+
       if (!isSyncingFromUrl.value) {
         // Only update URL if we have active ingredients, otherwise settings don't matter in URL
         if (ingredientsStore.selectedIds.length > 0) {

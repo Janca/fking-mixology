@@ -19,34 +19,9 @@
       content="black-translucent"
     />
     <title>Mixology Matcher</title>
-    <!-- GitHub Pages SPA routing handler -->
-    <script>
-      // Restores clean URLs from query-encoded paths (from 404.html redirect)
-      // Example: /?p=%2Fcocktail%2Fmargarita&foo=bar#hash -> /cocktail/margarita?foo=bar#hash
-      (function() {
-        var params = new URLSearchParams(window.location.search);
-        var encodedPath = params.get('p');
-        
-        if (encodedPath) {
-          // Remove the 'p' param from query string
-          params.delete('p');
-          var remainingQuery = params.toString();
-          
-          // Build the clean URL
-          var cleanUrl = decodeURIComponent(encodedPath);
-          if (remainingQuery) {
-            cleanUrl += '?' + remainingQuery;
-          }
-          cleanUrl += window.location.hash;
-          
-          // Replace URL without reload - Vue Router will pick this up
-          history.replaceState(null, '', cleanUrl);
-        }
-      })();
-    </script>
   </head>
-  <body>
-    <div id="app"></div>
+  <body style="overflow-y: scroll;">
+    <div id="app" style="overflow: hidden;"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

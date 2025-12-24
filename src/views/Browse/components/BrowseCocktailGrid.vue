@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import CocktailCard from "@/components/common/CocktailCard.vue";
+import { useNavigationStore } from "@/stores/navigation";
 import type { CocktailWithDetails } from "@/types";
 
 defineProps<{
@@ -9,10 +10,11 @@ defineProps<{
 }>();
 
 const router = useRouter();
+const navigationStore = useNavigationStore();
 
 async function handleCocktailClick(cocktail: CocktailWithDetails) {
-  // Silent hash update prevents losing scroll position on back
-  //await router.replace({ query: route.query, hash: `#drink-${cocktail.slug}` });
+  // Save scroll target to navigation store before navigating
+  navigationStore.setScrollTarget("browse", `drink-${cocktail.slug}`);
   router.push({ name: "cocktail", params: { slug: cocktail.slug } });
 }
 </script>

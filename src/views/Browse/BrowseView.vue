@@ -17,6 +17,7 @@ import BrowseCategoryTabs from "./components/BrowseCategoryTabs.vue";
 import BrowseCocktailGrid from "./components/BrowseCocktailGrid.vue";
 import type { Category, CocktailWithDetails } from "@/types";
 import { useScrollRestoration } from "@/composables/useScrollRestoration";
+import { useNavigationStore } from "@/stores/navigation";
 
 defineOptions({
   name: "BrowseView",
@@ -24,6 +25,7 @@ defineOptions({
 
 const router = useRouter();
 const route = useRoute();
+const navigationStore = useNavigationStore();
 
 const categories = ref<Category[]>([]);
 const selectedCategory = ref<Category | null>(null);
@@ -41,12 +43,14 @@ const filteredCocktails = computed(() => {
   return [...list].sort((a, b) => a.name.localeCompare(b.name));
 });
 
-function checkItemExists(slug: string): boolean {
+function checkItemExists(elementId: string): boolean {
+  // The elementId is in format "drink-{slug}", extract the slug
+  const slug = elementId.replace(/^drink-/, "");
   return filteredCocktails.value.some((c) => c.slug === slug);
 }
 
 // Scroll restoration logic
-useScrollRestoration(isLoading, checkItemExists);
+useScrollRestoration("browse", isLoading, checkItemExists);
 
 onMounted(async () => {
   const fetchedCategories = await getAllCategories();
@@ -66,7 +70,7 @@ onMounted(async () => {
     }
   }
 
-  // Select category without modifying URL (preserves hash for scroll)
+  // Select category without modifying URL (preserves scroll target for restoration)
   await selectCategory(startCategory, false);
 });
 
@@ -91,7 +95,8 @@ watch(
 
 async function selectCategory(category: Category, updateUrl = true) {
   if (updateUrl) {
-    // When manually selecting a category, we do not preserve hash from previous view/state
+    // When manually selecting a category, clear scroll target and update URL
+    navigationStore.clearScrollTarget("browse");
     await router.replace({ query: { category: category.slug } });
   }
 

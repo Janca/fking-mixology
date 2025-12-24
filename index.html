@@ -19,6 +19,22 @@
       content="black-translucent"
     />
     <title>Mixology Matcher</title>
+    <!-- GitHub Pages SPA redirect handler -->
+    <script>
+      (function() {
+        var redirect = sessionStorage.getItem('spa-redirect');
+        if (redirect) {
+          sessionStorage.removeItem('spa-redirect');
+          try {
+            var data = JSON.parse(redirect);
+            var newUrl = '/' + data.path + data.query + data.hash;
+            history.replaceState(null, '', newUrl);
+          } catch (e) {
+            console.error('SPA redirect parse error:', e);
+          }
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>

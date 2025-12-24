@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mixology Matcher</title>
+    <script>
+      // GitHub Pages SPA redirect
+      // This 404.html captures all routes and redirects to index.html
+      // preserving the path in sessionStorage so Vue Router can handle it
+      (function() {
+        var pathSegmentsToKeep = 0; // For custom domain, keep 0; for /repo-name/ use 1
+        var l = window.location;
+        var path = l.pathname.slice(1); // Remove leading slash
+        var query = l.search;
+        var hash = l.hash;
+        
+        // Store the redirect path
+        sessionStorage.setItem('spa-redirect', JSON.stringify({
+          path: path,
+          query: query,
+          hash: hash
+        }));
+        
+        // Redirect to root
+        l.replace(
+          l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + '/'
+        );
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>

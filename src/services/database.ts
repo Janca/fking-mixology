@@ -1,0 +1,117 @@
+/**
+ * Dexie-based IndexedDB database for Mixology Matcher
+ * Stores cocktail data locally for offline use
+ */
+
+import Dexie, { type EntityTable } from "dexie";
+import type {
+  Category,
+  Cocktail,
+  Ingredient,
+  RecipeIngredient,
+  PantryItem,
+} from "@/types";
+
+// ============================================
+// Database Schema Definition
+// ============================================
+
+export class MixologyDatabase extends Dexie {
+  categories!: EntityTable<Category, "id">;
+  cocktails!: EntityTable<Cocktail, "id">;
+  ingredients!: EntityTable<Ingredient, "id">;
+  recipeIngredients!: EntityTable<RecipeIngredient, "id">;
+  pantryItems!: EntityTable<PantryItem, "id">;
+  metadata!: EntityTable<{ key: string; value: any }, "key">;
+
+  constructor() {
+    super("MixologyMatcherDB");
+
+    // Version 1: Initial schema
+    this.version(1).stores({
+      categories: "++id, name, slug",
+      cocktails: "++id, name, slug, categoryId",
+      ingredients: "++id, name, normalizedName",
+      recipeIngredients: "++id, cocktailId, ingredientId, sortOrder",
+    });
+
+    // Version 2: Add pantry
+    this.version(2).stores({
+      categories: "++id, name, slug",
+      cocktails: "++id, name, slug, categoryId",
+      ingredients: "++id, name, normalizedName",
+      recipeIngredients: "++id, cocktailId, ingredientId, sortOrder",
+      pantryItems: "++id, ingredientId, updatedAt",
+    });
+
+    // Version 3: Add metadata for version tracking
+    this.version(3).stores({
+      categories: "++id, name, slug",
+      cocktails: "++id, name, slug, categoryId",
+      ingredients: "++id, name, normalizedName",
+      recipeIngredients: "++id, cocktailId, ingredientId, sortOrder",
+      pantryItems: "++id, ingredientId, updatedAt",
+      metadata: "key", // key-value store
+    });
+  }
+}
+
+// Singleton database instance
+export const db = new MixologyDatabase();
+
+// ============================================
+// Database Helper Functions
+// ============================================
+
+/**
+ * Check if the database has been populated with data
+ */
+export async function isDatabasePopulated(): Promise<boolean> {
+  const cocktailCount = await db.cocktails.count();
+  return cocktailCount > 0;
+}
+
+/**
+ * Clear all data from the database (preserves pantry)
+ */
+export async function clearDatabase(): Promise<void> {
+  await db.transaction(
+    "rw",
+    [db.categories, db.cocktails, db.ingredients, db.recipeIngredients],
+    async () => {
+      await db.recipeIngredients.clear();
+      await db.cocktails.clear();
+      await db.ingredients.clear();
+      await db.categories.clear();
+    }
+  );
+}
+
+/**
+ * Clear pantry only
+ */
+export async function clearPantry(): Promise<void> {
+  await db.pantryItems.clear();
+}
+
+/**
+ * Get database statistics
+ */
+export async function getDatabaseStats(): Promise<{
+  categories: number;
+  cocktails: number;
+  ingredients: number;
+  recipeIngredients: number;
+  pantryItems: number;
+}> {
+  const [categories, cocktails, ingredients, recipeIngredients, pantryItems] =
+    await Promise.all([
+      db.categories.count(),
+      db.cocktails.count(),
+      db.ingredients.count(),
+      db.recipeIngredients.count(),
+      db.pantryItems.count(),
+    ]);
+
+  return { categories, cocktails, ingredients, recipeIngredients, pantryItems };
+}

@@ -1,0 +1,404 @@
+// ============================================
+// Mixology Matcher - Main Stylesheet (Modern Neumorphic)
+// ============================================
+
+@use "variables" as *;
+
+// --------------------------------------------
+// Font Imports
+// --------------------------------------------
+
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap");
+
+// --------------------------------------------
+// CSS Reset & Base Styles
+// --------------------------------------------
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// Global responsive safe-guards
+img,
+video,
+svg,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+
+  @include mobile-only {
+    font-size: 15px;
+  }
+}
+
+body {
+  font-family: $font-body;
+  font-optical-sizing: auto;
+  font-size: $font-size-body;
+  font-weight: $font-weight-regular;
+  line-height: $line-height-normal;
+  color: $text-dark-primary;
+  background: $surface-light-200;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  font-variation-settings: "slnt" 0, "wdth" 100, "GRAD" 0, "ROND" 0;
+}
+
+// --------------------------------------------
+// Typography Base
+// --------------------------------------------
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-display;
+  font-weight: $font-weight-bold;
+  color: $text-dark-primary;
+  line-height: $line-height-snug;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: $font-size-h1;
+  font-weight: $font-weight-extrabold;
+}
+
+h2 {
+  font-size: $font-size-h2;
+  font-weight: $font-weight-bold;
+}
+
+h3 {
+  font-size: $font-size-h3;
+  font-weight: $font-weight-semibold;
+}
+
+p {
+  margin-bottom: $space-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+a {
+  color: $accent-blue;
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $accent-blue-dark;
+  }
+}
+
+// --------------------------------------------
+// Selection Styles
+// --------------------------------------------
+
+::selection {
+  background-color: rgba($accent-coral, 0.25);
+  color: $text-dark-primary;
+}
+
+// --------------------------------------------
+// Scrollbar Styles (Subtle)
+// --------------------------------------------
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $surface-light-500;
+  border-radius: $radius-full;
+
+  &:hover {
+    background: $text-dark-muted;
+  }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $surface-light-500 transparent;
+}
+
+// --------------------------------------------
+// Focus Styles (Modern ring)
+// --------------------------------------------
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba($accent-blue, 0.4);
+}
+
+// --------------------------------------------
+// App Container
+// --------------------------------------------
+
+#app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: $surface-light-200;
+  padding-top: 0; // Handled by layout components
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+
+  @include desktop-up {
+    padding-top: 0;
+  }
+}
+
+// --------------------------------------------
+// Loading & Error States (Modern)
+// --------------------------------------------
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $gradient-light;
+  z-index: $z-modal;
+  gap: $space-lg;
+
+  &__spinner {
+    width: 56px;
+    height: 56px;
+    border-radius: $radius-full;
+    background: $gradient-coral;
+    position: relative;
+    animation: pulse-scale 1.5s ease-in-out infinite;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      background: $surface-light-100;
+      border-radius: $radius-full;
+    }
+  }
+
+  &__text {
+    font-family: $font-display;
+    font-size: $font-size-body-lg;
+    font-weight: $font-weight-medium;
+    color: $text-dark-secondary;
+    letter-spacing: 0.01em;
+  }
+}
+
+@keyframes pulse-scale {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: $glow-coral;
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 12px 40px rgba($accent-coral, 0.5);
+  }
+}
+
+.error-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $gradient-light;
+  z-index: $z-modal;
+  gap: $space-md;
+  padding: $space-xl;
+  text-align: center;
+
+  &__icon {
+    font-size: 4rem;
+    margin-bottom: $space-sm;
+  }
+
+  &__title {
+    font-family: $font-display;
+    font-size: $font-size-h2;
+    font-weight: $font-weight-bold;
+    color: $accent-coral;
+  }
+
+  &__message {
+    color: $text-dark-secondary;
+    max-width: 400px;
+  }
+}
+
+// --------------------------------------------
+// Utility Classes
+// --------------------------------------------
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-gradient {
+  background: $gradient-coral;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// --------------------------------------------
+// Organic Curved Divider
+// --------------------------------------------
+
+.curved-divider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  &--top {
+    margin-top: -60px;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 60px;
+    }
+  }
+
+  &--bottom {
+    margin-bottom: -60px;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: 60px;
+      transform: rotate(180deg);
+    }
+  }
+}
+
+// --------------------------------------------
+// Dark Section Styles
+// --------------------------------------------
+
+.dark-section {
+  background: $gradient-dark;
+  color: $text-light-primary;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: $text-light-primary;
+  }
+
+  p {
+    color: $text-light-secondary;
+  }
+}
+
+// --------------------------------------------
+// Light Section Styles
+// --------------------------------------------
+
+.light-section {
+  background: $gradient-light;
+  color: $text-dark-primary;
+}
+
+// --------------------------------------------
+// Animations
+// --------------------------------------------
+
+@keyframes float-gentle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float-gentle 3s ease-in-out infinite;
+}
+
+.animate-pop {
+  animation: pop-in 0.4s $spring-bounce forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s $spring-bounce forwards;
+}

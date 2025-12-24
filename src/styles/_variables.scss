@@ -1,0 +1,255 @@
+// ============================================
+// Mixology Matcher - Design Tokens (Modern Neumorphic)
+// ============================================
+
+// --------------------------------------------
+// Color Palette - Dual Tone System
+// --------------------------------------------
+
+// Light Surface Colors (Cream/White)
+$surface-light-100: #fafbff;
+$surface-light-200: #f2f4fa;
+$surface-light-300: #e8ecf5;
+$surface-light-400: #dde3ef;
+$surface-light-500: #c8d1e5;
+
+// Dark Surface Colors (Deep Navy/Purple)
+$surface-dark-100: #3d4260;
+$surface-dark-200: #2e3250;
+$surface-dark-300: #252842;
+$surface-dark-400: #1c1f35;
+$surface-dark-500: #14162a;
+$surface-dark-600: #0e0f1f;
+
+// Accent Colors - Vibrant & Playful
+$accent-coral: #ff7a5c;
+$accent-coral-light: #ff9b82;
+$accent-coral-dark: #e65a3e;
+
+$accent-blue: #5b7fff;
+$accent-blue-light: #8ba3ff;
+$accent-blue-dark: #3d5fe0;
+
+$accent-purple: #9b6dff;
+$accent-purple-light: #b894ff;
+$accent-purple-dark: #7b4de0;
+
+$accent-teal: #4ecdc4;
+$accent-teal-light: #7eded8;
+$accent-teal-dark: #2eb8af;
+
+$accent-gold: #ffb347;
+$accent-gold-light: #ffc875;
+$accent-gold-dark: #e09530;
+
+// Gradient Definitions
+$gradient-coral: linear-gradient(
+  135deg,
+  $accent-coral 0%,
+  $accent-coral-dark 100%
+);
+$gradient-blue: linear-gradient(135deg, $accent-blue 0%, $accent-purple 100%);
+$gradient-sunset: linear-gradient(135deg, $accent-coral 0%, $accent-gold 100%);
+$gradient-ocean: linear-gradient(135deg, $accent-teal 0%, $accent-blue 100%);
+$gradient-dark: linear-gradient(
+  180deg,
+  $surface-dark-300 0%,
+  $surface-dark-500 100%
+);
+$gradient-light: linear-gradient(
+  180deg,
+  $surface-light-100 0%,
+  $surface-light-300 100%
+);
+
+// Text Colors
+$text-dark-primary: #1a1c2e;
+$text-dark-secondary: #4a4d65;
+$text-dark-muted: #8a8da5;
+
+$text-light-primary: #ffffff;
+$text-light-secondary: rgba(255, 255, 255, 0.8);
+$text-light-muted: rgba(255, 255, 255, 0.5);
+
+// --------------------------------------------
+// Typography
+// --------------------------------------------
+
+$font-display: "Google Sans Flex", sans-serif;
+$font-body: "Google Sans Flex", sans-serif;
+$font-mono: "Google Sans Code", monospace;
+
+// Font Sizes - More dramatic scale
+$font-size-hero: 3.5rem;
+$font-size-display: 2.75rem;
+$font-size-h1: 2rem;
+$font-size-h2: 1.5rem;
+$font-size-h3: 1.25rem;
+$font-size-body-lg: 1.125rem;
+$font-size-body: 1rem;
+$font-size-body-sm: 0.875rem;
+$font-size-caption: 0.75rem;
+$font-size-tiny: 0.625rem;
+
+// Font Weights
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-extrabold: 800;
+
+// Line Heights
+$line-height-tight: 1.1;
+$line-height-snug: 1.25;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.6;
+
+// --------------------------------------------
+// Spacing
+// --------------------------------------------
+
+$space-2xs: 4px;
+$space-xs: 8px;
+$space-sm: 12px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+$space-2xl: 48px;
+$space-3xl: 64px;
+$space-4xl: 80px;
+
+// --------------------------------------------
+// Border Radius - Very Rounded
+// --------------------------------------------
+
+$radius-sm: 8px;
+$radius-md: 16px;
+$radius-lg: 24px;
+$radius-xl: 32px;
+$radius-2xl: 40px;
+$radius-3xl: 56px;
+$radius-full: 9999px;
+
+// Organic shapes
+$radius-organic: 40% 60% 55% 45% / 55% 45% 60% 40%;
+
+// --------------------------------------------
+// Neumorphic Shadows - Light Mode
+// --------------------------------------------
+
+// Raised elements on light surface
+$shadow-light-raised: 8px 8px 24px rgba(166, 180, 200, 0.35),
+  -8px -8px 24px rgba(255, 255, 255, 0.9);
+
+$shadow-light-raised-sm: 4px 4px 12px rgba(166, 180, 200, 0.25),
+  -4px -4px 12px rgba(255, 255, 255, 0.85);
+
+// Pressed/inset elements on light surface
+$shadow-light-inset: inset 4px 4px 12px rgba(166, 180, 200, 0.3),
+  inset -4px -4px 12px rgba(255, 255, 255, 0.8);
+
+$shadow-light-inset-sm: inset 2px 2px 6px rgba(166, 180, 200, 0.25),
+  inset -2px -2px 6px rgba(255, 255, 255, 0.7);
+
+// --------------------------------------------
+// Neumorphic Shadows - Dark Mode
+// --------------------------------------------
+
+// Raised elements on dark surface
+$shadow-dark-raised: 8px 8px 24px rgba(0, 0, 0, 0.5),
+  -4px -4px 16px rgba(60, 65, 90, 0.15);
+
+$shadow-dark-raised-sm: 4px 4px 12px rgba(0, 0, 0, 0.4),
+  -2px -2px 8px rgba(60, 65, 90, 0.1);
+
+// Pressed/inset elements on dark surface
+$shadow-dark-inset: inset 4px 4px 12px rgba(0, 0, 0, 0.5),
+  inset -2px -2px 8px rgba(60, 65, 90, 0.1);
+
+$shadow-dark-inset-sm: inset 2px 2px 8px rgba(0, 0, 0, 0.4),
+  inset -1px -1px 4px rgba(60, 65, 90, 0.08);
+
+// Glow effects
+$glow-coral: 0 8px 32px rgba($accent-coral, 0.35);
+$glow-blue: 0 8px 32px rgba($accent-blue, 0.35);
+$glow-teal: 0 8px 32px rgba($accent-teal, 0.35);
+
+// --------------------------------------------
+// Transitions
+// --------------------------------------------
+
+$transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+$transition-smooth: 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
+$transition-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+// Spring animation
+$spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+// --------------------------------------------
+// Z-Index Scale
+// --------------------------------------------
+
+$z-base: 0;
+$z-raised: 10;
+$z-dropdown: 100;
+$z-sticky: 200;
+$z-modal-backdrop: 400;
+$z-modal: 500;
+$z-tooltip: 700;
+$z-toast: 800;
+
+// --------------------------------------------
+// Breakpoints
+// --------------------------------------------
+
+$breakpoint-mobile: 640px;
+$breakpoint-tablet: 1024px;
+$breakpoint-desktop: 1440px;
+
+// Breakpoint mixins
+@mixin mobile-only {
+  @media (max-width: #{$breakpoint-mobile - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet-up {
+  @media (min-width: $breakpoint-mobile) {
+    @content;
+  }
+}
+
+@mixin desktop-up {
+  @media (min-width: $breakpoint-tablet) {
+    @content;
+  }
+}
+
+@mixin wide-up {
+  @media (min-width: $breakpoint-desktop) {
+    @content;
+  }
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+// --------------------------------------------
+// Utility Mixins
+// --------------------------------------------
+
+@mixin glass-light {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+@mixin glass-dark {
+  background: rgba(30, 35, 55, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}

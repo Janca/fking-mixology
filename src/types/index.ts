@@ -4,6 +4,8 @@
 
 export * from "./cocktails";
 export * from "./ledger";
+export * from "./user";
+export * from "./achievements";
 
 // ============================================
 // App-level Types

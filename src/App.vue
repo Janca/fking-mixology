@@ -5,22 +5,40 @@
 import { ref, onMounted } from "vue";
 import { RouterView } from "vue-router";
 import { useAppStore } from "@/stores/app";
+import { useAchievementsStore } from "@/stores/achievements";
 import TheHeader from "@/components/layout/TheHeader.vue";
 import AppButton from "@/components/common/AppButton.vue";
+import AppToastContainer from "@/components/common/AppToastContainer.vue";
 
 const appStore = useAppStore();
+const achievementsStore = useAchievementsStore();
 const isTransitioning = ref(false);
 
 function onBeforeLeave() {
-  document.body.style.overflow = "hidden";
+  //document.body.style.overflow = "hidden";
 }
 
 function onAfterEnter() {
-  document.body.style.overflow = "auto";
+  //document.body.style.overflow = "auto";
 }
 
-onMounted(() => {
+const handleFirstInteraction = () => {
+  achievementsStore.trackEvent("app_opens");
+  window.removeEventListener("click", handleFirstInteraction);
+  window.removeEventListener("keydown", handleFirstInteraction);
+  window.removeEventListener("touchstart", handleFirstInteraction);
+};
+
+onMounted(async () => {
   appStore.initialize();
+
+  // Initialize achievements
+  await achievementsStore.loadData();
+
+  // Trigger First Sip on first interaction
+  window.addEventListener("click", handleFirstInteraction);
+  window.addEventListener("keydown", handleFirstInteraction);
+  window.addEventListener("touchstart", handleFirstInteraction);
 });
 </script>
 
@@ -66,6 +84,8 @@ onMounted(() => {
         </Transition>
       </RouterView>
     </template>
+
+    <AppToastContainer />
   </div>
 </template>
 
@@ -76,7 +96,7 @@ onMounted(() => {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: $surface-light-200;
+  background: transparent;
   overflow: hidden;
 }
 
@@ -99,6 +119,7 @@ onMounted(() => {
 .page-leave-active {
   position: absolute;
   width: 100%;
+  height: 120%;
   overflow: hidden;
 }
 

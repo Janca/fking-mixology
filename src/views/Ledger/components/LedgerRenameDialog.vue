@@ -5,6 +5,7 @@
 import { ref, watch } from "vue";
 import type { LedgerSession } from "@/types";
 import AppButton from "@/components/common/AppButton.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 const props = defineProps<{
   show: boolean;
@@ -41,7 +42,7 @@ function handleConfirm() {
         <div class="dialog-content">
           <button class="dialog-close" @click="emit('close')">✕</button>
           <div class="dialog-body">
-            <div class="dialog-icon">✏️</div>
+            <AppEmoji class="dialog-icon">✏️</AppEmoji>
             <h2 class="dialog-title">Rename Session</h2>
 
             <div class="input-group">

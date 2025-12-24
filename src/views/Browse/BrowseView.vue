@@ -18,6 +18,7 @@ import BrowseCocktailGrid from "./components/BrowseCocktailGrid.vue";
 import type { Category, CocktailWithDetails } from "@/types";
 import { useScrollRestoration } from "@/composables/useScrollRestoration";
 import { useNavigationStore } from "@/stores/navigation";
+import { useFavoritesStore } from "@/stores/favorites";
 
 defineOptions({
   name: "BrowseView",
@@ -26,6 +27,7 @@ defineOptions({
 const router = useRouter();
 const route = useRoute();
 const navigationStore = useNavigationStore();
+const favoritesStore = useFavoritesStore();
 
 const categories = ref<Category[]>([]);
 const selectedCategory = ref<Category | null>(null);
@@ -54,8 +56,13 @@ useScrollRestoration("browse", isLoading, checkItemExists);
 
 onMounted(async () => {
   const fetchedCategories = await getAllCategories();
+
+  // Initialize favorites
+  await favoritesStore.loadFavorites();
+
   categories.value = [
     { id: 0, name: "All", slug: "all" },
+    { id: -1, name: "Favorites", slug: "favorites" },
     ...fetchedCategories,
   ];
 
@@ -105,7 +112,11 @@ async function selectCategory(category: Category, updateUrl = true) {
   searchQuery.value = "";
 
   try {
-    if (category.id === 0) {
+    if (category.slug === "favorites") {
+      // Load favorites with details
+      await favoritesStore.loadDetails();
+      cocktails.value = favoritesStore.favoriteCocktailsDetails;
+    } else if (category.id === 0) {
       cocktails.value = await getAllCocktailsWithDetails();
     } else if (category.id) {
       cocktails.value = await getCocktailsByCategory(category.id);

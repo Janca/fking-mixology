@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppEmoji from "@/components/common/AppEmoji.vue";
 /**
  * LedgerHeader - Header section for ledger with view toggle and actions
  */
@@ -20,7 +21,7 @@ const emit = defineEmits<{
     <div class="header-content">
       <div class="header-title-section">
         <h1 class="header-title">
-          <span class="title-icon">📒</span>
+          <AppEmoji class="title-icon">📒</AppEmoji>
           <span class="title-text">Drink Ledger</span>
         </h1>
         <p class="header-subtitle">Track your cocktail sessions</p>
@@ -44,7 +45,7 @@ const emit = defineEmits<{
             :class="{ 'toggle-pill--active': viewMode === 'sessions' }"
             @click="emit('toggleView')"
           >
-            <span class="pill-icon">📋</span>
+            <AppEmoji class="pill-icon">📋</AppEmoji>
             Sessions
           </button>
           <button
@@ -52,7 +53,7 @@ const emit = defineEmits<{
             :class="{ 'toggle-pill--active': viewMode === 'analytics' }"
             @click="emit('toggleView')"
           >
-            <span class="pill-icon">📊</span>
+            <AppEmoji class="pill-icon">📊</AppEmoji>
             Analytics
           </button>
         </div>

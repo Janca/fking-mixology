@@ -73,7 +73,7 @@ defineProps<{
 
   &__header {
     position: relative;
-    background: $gradient-light;
+    background: $surface-light-200;
     padding: 80px $space-sm $space-xl;
     padding-bottom: 200px; // Space for wave
 

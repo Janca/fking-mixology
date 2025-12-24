@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 import { useRouter } from "vue-router";
 import { usePantryStore } from "@/stores/pantry";
 import { useCocktailsStore } from "@/stores/cocktails";
@@ -27,7 +28,7 @@ function handleCocktailClick(slug: string) {
   <div class="pantry-summary">
     <div class="pantry-summary__glass">
       <div class="pantry-summary__header">
-        <div class="pantry-summary__icon">🍾</div>
+        <AppEmoji class="pantry-summary__icon">🍾</AppEmoji>
         <div class="pantry-summary__title">
           <h2>Your Pantry</h2>
           <p>{{ pantryStore.itemCount }} ingredients stocked</p>
@@ -63,7 +64,7 @@ function handleCocktailClick(slug: string) {
         class="pantry-summary__matches"
       >
         <h3>
-          <span class="match-icon">✨</span>
+          <AppEmoji class="match-icon">✨</AppEmoji>
           {{ perfectPantryMatches.length }} drinks you can make now
         </h3>
         <div class="pantry-drinks">

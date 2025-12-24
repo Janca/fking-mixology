@@ -4,6 +4,7 @@
  */
 import { useRouter } from "vue-router";
 import AppButton from "@/components/common/AppButton.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 const router = useRouter();
 
@@ -14,7 +15,7 @@ function goHome() {
 
 <template>
   <div class="empty-state">
-    <div class="empty-icon">📒</div>
+    <AppEmoji class="empty-icon">📒</AppEmoji>
     <h2 class="empty-title">No Sessions Yet</h2>
     <p class="empty-text">
       Your drink ledger is empty. When you complete a cocktail in prep mode, it

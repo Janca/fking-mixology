@@ -65,6 +65,14 @@ export const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: "/achievements",
+    name: "achievements",
+    component: () => import("@/views/Achievements/AchievementsView.vue"),
+    meta: {
+      title: "Achievements",
+    },
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "not-found",
     component: () => import("@/views/NotFound"),

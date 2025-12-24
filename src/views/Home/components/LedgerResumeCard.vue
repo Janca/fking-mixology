@@ -6,6 +6,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useLedgerStore } from "@/stores/ledger";
 import AppButton from "@/components/common/AppButton.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 import type { LedgerSession } from "@/types";
 
 const router = useRouter();
@@ -80,7 +81,7 @@ onMounted(loadPreviousSession);
       class="resume-card"
     >
       <div class="resume-content">
-        <div class="resume-icon">📒</div>
+        <AppEmoji class="resume-icon">📒</AppEmoji>
         <div class="resume-info">
           <h4 class="resume-title">Continue your session?</h4>
           <p class="resume-meta">

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { usePantryStore } from "@/stores/pantry";
 import { usePantryFormatter } from "@/composables/usePantryFormatter";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 const emit = defineEmits<{
   (e: "removed", ingredientId: number): void;
@@ -18,7 +19,7 @@ async function removeFromPantry(ingredientId: number) {
 <template>
   <div class="inventory">
     <h2 class="inventory__title">
-      <span>🧪</span> Your Inventory
+      <AppEmoji>🧪</AppEmoji> Your Inventory
       <span class="inventory__count">{{ pantryStore.itemCount }}</span>
     </h2>
 

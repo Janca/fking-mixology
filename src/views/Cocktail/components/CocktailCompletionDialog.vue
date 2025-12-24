@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppButton from "@/components/common/AppButton.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 defineProps<{
   show: boolean;
@@ -19,7 +20,7 @@ const emit = defineEmits<{
         <div class="dialog-content">
           <button class="dialog-close" @click="emit('close')">✕</button>
           <div class="dialog-body">
-            <div class="dialog-icon">🍹</div>
+            <AppEmoji class="dialog-icon">🍹</AppEmoji>
             <h2 class="dialog-title">Ready to serve?</h2>
             <p class="dialog-text">
               This will use ingredients from your pantry and mark this cocktail

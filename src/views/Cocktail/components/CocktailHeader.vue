@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 import AppButton from "@/components/common/AppButton.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 import type { CocktailWithDetails } from "@/types";
 import { getCategoryEmoji } from "@/utils/cocktailUtils";
 
@@ -39,22 +40,22 @@ onUnmounted(() => {
   <div class="cocktail-header-wrapper">
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-state">
-      <div class="loading-spinner">🍸</div>
+      <AppEmoji class="loading-spinner">🍸</AppEmoji>
       <p>Mixing up the details...</p>
     </div>
 
     <!-- Error State -->
     <div v-else-if="error" class="error-state">
-      <div class="error-icon">😕</div>
+      <AppEmoji class="error-icon">😕</AppEmoji>
       <h2>{{ error }}</h2>
       <AppButton variant="primary" @click="emit('goHome')"> Go Home </AppButton>
     </div>
 
     <!-- Recipe Header -->
     <div v-else-if="cocktail" class="recipe-header">
-      <div class="recipe-header__emoji">
+      <AppEmoji class="recipe-header__emoji">
         {{ getCategoryEmoji(cocktail.category.name) }}
-      </div>
+      </AppEmoji>
       <span class="recipe-header__category">{{ cocktail.category.name }}</span>
       <h1 class="recipe-header__name">{{ cocktail.name }}</h1>
       <p class="recipe-header__ingredients">

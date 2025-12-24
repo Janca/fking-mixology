@@ -4,6 +4,7 @@
  */
 import type { LedgerSession } from "@/types";
 import AppButton from "@/components/common/AppButton.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 const props = defineProps<{
   session: LedgerSession;
@@ -89,11 +90,11 @@ function getDuration(): string {
 
       <div class="session-meta">
         <span class="meta-item">
-          <span class="meta-icon">📅</span>
+          <AppEmoji class="meta-icon">📅</AppEmoji>
           {{ formatDate(session.createdAt) }}
         </span>
         <span class="meta-item">
-          <span class="meta-icon">🕐</span>
+          <AppEmoji class="meta-icon">🕐</AppEmoji>
           {{ formatTime(session.createdAt) }}
         </span>
       </div>
@@ -122,10 +123,10 @@ function getDuration(): string {
     <!-- Actions (hidden in select mode) -->
     <div v-if="!isSelectMode" class="card-actions" @click.stop>
       <button class="action-icon" title="Rename" @click="emit('rename')">
-        ✏️
+        <AppEmoji>✏️</AppEmoji>
       </button>
       <button class="action-icon" title="Delete" @click="emit('delete')">
-        🗑️
+        <AppEmoji>🗑️</AppEmoji>
       </button>
       <AppButton
         v-if="isActive"

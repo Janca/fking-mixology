@@ -2,8 +2,13 @@
 /**
  * CocktailCard - Modern Neumorphic Card with Progress Bar
  */
+import { computed } from "vue";
 import type { CocktailWithDetails, CocktailMatch } from "@/types";
 import { getCategoryEmoji, formatIngredientName } from "@/utils/cocktailUtils";
+import { useFavoritesStore } from "@/stores/favorites";
+import AppEmoji from "./AppEmoji.vue";
+
+const favoritesStore = useFavoritesStore();
 
 interface Props {
   cocktail: CocktailWithDetails;
@@ -24,6 +29,17 @@ function getMatchDisplay(match: CocktailMatch | undefined): string {
   const pct = Math.round(match.matchPercentage);
   return pct === 100 ? "✓ Perfect" : `${pct}%`;
 }
+
+const isFavorite = computed(() => {
+  if (!props.cocktail.id) return false;
+  return favoritesStore.isFavorite(props.cocktail.id);
+});
+
+function toggleFavorite() {
+  if (props.cocktail.id) {
+    favoritesStore.toggleFavorite(props.cocktail.id);
+  }
+}
 </script>
 
 <template>
@@ -40,9 +56,9 @@ function getMatchDisplay(match: CocktailMatch | undefined): string {
     @keydown.space.prevent="emit('click')"
   >
     <!-- Emoji Icon -->
-    <div class="cocktail-card__emoji">
+    <AppEmoji class="cocktail-card__emoji">
       {{ getCategoryEmoji(cocktail.category.name) }}
-    </div>
+    </AppEmoji>
 
     <!-- Match Badge (only show for perfect matches or when no progress bar) -->
     <div
@@ -80,6 +96,25 @@ function getMatchDisplay(match: CocktailMatch | undefined): string {
         </span>
       </div>
     </div>
+
+    <!-- Favorite Button -->
+    <button
+      class="cocktail-card__favorite"
+      :class="{ 'cocktail-card__favorite--active': isFavorite }"
+      @click.stop="toggleFavorite"
+      aria-label="Toggle Favorite"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        :fill="isFavorite ? 'currentColor' : 'none'"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+        />
+      </svg>
+    </button>
 
     <!-- Arrow indicator -->
     <div class="cocktail-card__arrow">
@@ -283,6 +318,53 @@ function getMatchDisplay(match: CocktailMatch | undefined): string {
     transform: translateX(4px);
   }
 
+  &__favorite {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: $space-xs;
+    color: $text-dark-muted;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-radius: $radius-full;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: -8px; // Pull closer to arrow
+    z-index: 2;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      transition: all 0.2s;
+    }
+
+    &:hover {
+      transform: scale(1.2);
+    }
+
+    &--active {
+      color: $accent-coral;
+
+      svg {
+        fill: $accent-coral;
+        animation: heart-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+    }
+  }
+
+  &--dark &__favorite {
+    color: rgba($text-light-primary, 0.3);
+
+    &:hover {
+      color: rgba($text-light-primary, 0.7);
+    }
+
+    &--active {
+      color: $accent-coral;
+      text-shadow: 0 0 10px rgba($accent-coral, 0.5);
+    }
+  }
+
   // Progress bar at bottom of card
   &__progress {
     position: absolute;
@@ -321,6 +403,18 @@ function getMatchDisplay(match: CocktailMatch | undefined): string {
   }
   50% {
     transform: translateY(-4px);
+  }
+}
+
+@keyframes heart-pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 </style>

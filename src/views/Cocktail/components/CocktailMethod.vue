@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { formatInstructions } from "@/utils/cocktailUtils";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 defineProps<{
   method: string;
@@ -12,7 +13,7 @@ defineProps<{
     <!-- Method -->
     <div class="recipe-section">
       <h2 class="recipe-section__title">
-        <span class="recipe-section__emoji">📝</span>
+        <AppEmoji class="recipe-section__emoji">📝</AppEmoji>
         Method
       </h2>
       <p class="recipe-method">{{ formatInstructions(method) }}</p>
@@ -21,7 +22,7 @@ defineProps<{
     <!-- Garnish (from cocktail.garnish field, if present) -->
     <div v-if="garnish" class="recipe-section">
       <h2 class="recipe-section__title">
-        <span class="recipe-section__emoji">🌿</span>
+        <AppEmoji class="recipe-section__emoji">🌿</AppEmoji>
         Garnish
       </h2>
       <p class="recipe-garnish">{{ garnish }}</p>

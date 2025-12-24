@@ -4,6 +4,7 @@
  */
 import type { LedgerSession } from "@/types";
 import AppButton from "@/components/common/AppButton.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 defineProps<{
   show: boolean;
@@ -27,7 +28,7 @@ const emit = defineEmits<{
         <div class="dialog-content">
           <button class="dialog-close" @click="emit('close')">✕</button>
           <div class="dialog-body">
-            <div class="dialog-icon">⚠️</div>
+            <AppEmoji class="dialog-icon">⚠️</AppEmoji>
             <h2 class="dialog-title">Delete Session?</h2>
             <p class="dialog-text">
               Are you sure you want to delete

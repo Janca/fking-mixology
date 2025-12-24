@@ -7,9 +7,12 @@ import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { db } from "@/services/database";
 import { toMl, fromMl, isConvertibleUnit } from "@/utils/unitConversions";
+import { useAchievementsStore } from "./achievements";
+import { useToastStore } from "./toast";
 import type { PantryItemWithDetails, VolumeUnit } from "@/types";
 
 export const usePantryStore = defineStore("pantry", () => {
+  const achievementsStore = useAchievementsStore();
   // ============================================
   // State
   // ============================================
@@ -48,6 +51,22 @@ export const usePantryStore = defineStore("pantry", () => {
       }
 
       items.value = withDetails;
+
+      // Track achievements
+      achievementsStore.trackEvent(
+        "pantry_items_count",
+        withDetails.length,
+        "set"
+      );
+
+      const nonAlcCount = withDetails.filter(
+        (i) => !i.ingredient.isAlcoholic
+      ).length;
+      achievementsStore.trackEvent(
+        "pantry_non_alcoholic_count",
+        nonAlcCount,
+        "set"
+      );
     } finally {
       isLoading.value = false;
     }
@@ -70,11 +89,20 @@ export const usePantryStore = defineStore("pantry", () => {
       .equals(ingredientId)
       .first();
 
+    const ingredient = await db.ingredients.get(ingredientId);
+    const ingredientName = ingredient?.name || "Ingredient";
+
     if (existing) {
       // Update existing - add to current quantity
       await db.pantryItems.update(existing.id!, {
         quantityMl: existing.quantityMl + quantityMl,
         updatedAt: new Date(),
+      });
+
+      useToastStore().addToast({
+        title: "Pantry Updated",
+        message: `Added more ${ingredientName}`,
+        duration: 3,
       });
     } else {
       // Add new
@@ -82,6 +110,13 @@ export const usePantryStore = defineStore("pantry", () => {
         ingredientId,
         quantityMl,
         updatedAt: new Date(),
+      });
+
+      useToastStore().addToast({
+        title: "Pantry Item Added",
+        message: `${ingredientName} added to your pantry`,
+        type: "success",
+        duration: 3,
       });
     }
 
@@ -164,8 +199,15 @@ export const usePantryStore = defineStore("pantry", () => {
    * Remove an ingredient from pantry completely
    */
   async function removeItem(ingredientId: number): Promise<void> {
+    const ingredient = await db.ingredients.get(ingredientId);
     await db.pantryItems.where("ingredientId").equals(ingredientId).delete();
     await loadItems();
+
+    useToastStore().addToast({
+      title: "Removed",
+      message: `${ingredient?.name || "Item"} removed from pantry`,
+      duration: 3,
+    });
   }
 
   /**

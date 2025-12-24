@@ -5,6 +5,7 @@
 import { ref, computed, watch } from "vue";
 import { RouterLink, useRouter, useRoute } from "vue-router";
 import { useIngredientsStore } from "@/stores/ingredients";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -17,13 +18,19 @@ const isSelectionClear = ref(false);
 
 // Check if we should show back button (not on main pages)
 const showBackButton = computed(() => {
-  const mainPages = ["home", "browse", "pantry", "ledger"];
+  const mainPages = ["home", "browse", "pantry", "ledger", "achievements"];
   return !mainPages.includes(route.name as string);
 });
 
 // Check if we should show search bar
 const shouldShowSearch = computed(() => {
-  const noSearchPages = ["cocktail", "pantry", "browse"];
+  const noSearchPages = [
+    "cocktail",
+    "pantry",
+    "browse",
+    "ledger",
+    "achievements",
+  ];
   return !noSearchPages.includes(route.name as string);
 });
 
@@ -159,7 +166,7 @@ function toggleMobileMenu() {
           'the-header__logo--expanded-mobile': !shouldShowSearch,
         }"
       >
-        <span class="the-header__logo-emoji">🍸</span>
+        <AppEmoji class="the-header__logo-emoji">🍸</AppEmoji>
         <span class="the-header__logo-text">Mixology</span>
       </RouterLink>
 
@@ -167,7 +174,7 @@ function toggleMobileMenu() {
       <Transition name="search-pop">
         <div v-if="shouldShowSearch" class="the-header__search">
           <div class="search-box">
-            <span class="search-box__icon">🔍</span>
+            <AppEmoji class="search-box__icon">🔍</AppEmoji>
             <input
               v-model="searchInput"
               type="text"
@@ -198,7 +205,7 @@ function toggleMobileMenu() {
                 class="search-dropdown__item"
                 @mousedown.prevent="handleIngredientSelect(ingredient)"
               >
-                <span class="search-dropdown__emoji">🍋</span>
+                <AppEmoji class="search-dropdown__emoji">🍋</AppEmoji>
                 <span class="search-dropdown__name">{{ ingredient.name }}</span>
                 <span class="search-dropdown__add">+</span>
               </button>
@@ -219,6 +226,9 @@ function toggleMobileMenu() {
         <RouterLink to="/ledger" class="the-header__nav-link"
           >Ledger</RouterLink
         >
+        <RouterLink to="/achievements" class="the-header__nav-link">
+          Cheevos
+        </RouterLink>
       </nav>
 
       <!-- Hamburger Menu Button (Visible on Mobile) -->
@@ -255,20 +265,24 @@ function toggleMobileMenu() {
         </div>
         <nav class="mobile-menu-nav">
           <RouterLink to="/" class="mobile-menu-link">
-            <span class="mobile-menu-icon">🎯</span>
+            <AppEmoji class="mobile-menu-icon">🎯</AppEmoji>
             Match
           </RouterLink>
           <RouterLink to="/browse" class="mobile-menu-link">
-            <span class="mobile-menu-icon">📖</span>
+            <AppEmoji class="mobile-menu-icon">📖</AppEmoji>
             Browse
           </RouterLink>
           <RouterLink to="/pantry" class="mobile-menu-link">
-            <span class="mobile-menu-icon">🥫</span>
+            <AppEmoji class="mobile-menu-icon">🥫</AppEmoji>
             Pantry
           </RouterLink>
           <RouterLink to="/ledger" class="mobile-menu-link">
-            <span class="mobile-menu-icon">📒</span>
+            <AppEmoji class="mobile-menu-icon">📒</AppEmoji>
             Ledger
+          </RouterLink>
+          <RouterLink to="/achievements" class="mobile-menu-link">
+            <AppEmoji class="mobile-menu-icon">🏆</AppEmoji>
+            Cheevos
           </RouterLink>
         </nav>
       </aside>

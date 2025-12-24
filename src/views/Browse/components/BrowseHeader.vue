@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppInput from "@/components/common/AppInput.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 defineProps<{
   // search query
@@ -14,7 +15,7 @@ const emit = defineEmits<{
 <template>
   <div>
     <div class="browse-header">
-      <div class="browse-header__emoji">📚</div>
+      <AppEmoji class="browse-header__emoji">📚</AppEmoji>
       <h1 class="browse-header__title">Recipe Book</h1>
       <p class="browse-header__subtitle">Explore our collection of recipes</p>
     </div>
@@ -30,7 +31,7 @@ const emit = defineEmits<{
         @update:model-value="emit('update:modelValue', $event)"
       >
         <template #prefix>
-          <span>🔍</span>
+          <AppEmoji>🔍</AppEmoji>
         </template>
       </AppInput>
     </div>

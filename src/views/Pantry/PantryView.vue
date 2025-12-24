@@ -8,6 +8,7 @@ import { onMounted, watch } from "vue";
 import { usePantryStore } from "@/stores/pantry";
 import { useCocktailsStore } from "@/stores/cocktails";
 import WaveLayout from "@/components/layout/WaveLayout.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 // Components
 import PantryAddForm from "./components/PantryAddForm.vue";
 import PantryInventory from "./components/PantryInventory.vue";
@@ -36,7 +37,7 @@ onMounted(async () => {
     <template #header>
       <!-- Page Title -->
       <div class="pantry-header">
-        <div class="pantry-header__emoji">🍾</div>
+        <AppEmoji class="pantry-header__emoji">🍾</AppEmoji>
         <h1 class="pantry-header__title">Your Pantry</h1>
         <p class="pantry-header__subtitle">
           <template v-if="pantryStore.itemCount > 0">

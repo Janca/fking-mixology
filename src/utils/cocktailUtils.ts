@@ -11,6 +11,7 @@ export function getCategoryEmoji(categoryName: string): string {
   const lower = categoryName.toLowerCase();
 
   if (lower.includes("all")) return "📚";
+  if (lower.includes("favorites")) return "❤️";
   if (lower.includes("beer")) return "🍺";
   if (lower.includes("cocktail")) return "🍸";
   if (lower.includes("cocoa")) return "☕";

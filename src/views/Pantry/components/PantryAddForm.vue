@@ -4,6 +4,7 @@ import { usePantryStore } from "@/stores/pantry";
 import { useIngredientSearch } from "@/composables/useIngredientSearch";
 import AppButton from "@/components/common/AppButton.vue";
 import AppInput from "@/components/common/AppInput.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 import type { Ingredient, VolumeUnit } from "@/types";
 
 const emit = defineEmits<{
@@ -73,7 +74,7 @@ async function addToPantry() {
 <template>
   <div class="add-form">
     <div class="add-form__glass">
-      <h2 class="add-form__title"><span>➕</span> Add Ingredient</h2>
+      <h2 class="add-form__title"><AppEmoji>➕</AppEmoji> Add Ingredient</h2>
 
       <!-- Ingredient Search -->
       <div class="form-group">
@@ -100,7 +101,7 @@ async function addToPantry() {
             @blur="handleBlur"
           >
             <template #prefix>
-              <span>🔍</span>
+              <AppEmoji>🔍</AppEmoji>
             </template>
           </AppInput>
           <Transition name="dropdown">

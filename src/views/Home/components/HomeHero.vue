@@ -1,10 +1,11 @@
 <script setup lang="ts">
 // Static hero
+import AppEmoji from "@/components/common/AppEmoji.vue";
 </script>
 
 <template>
   <div class="hero">
-    <div class="hero__icon">🍹</div>
+    <AppEmoji class="hero__icon">🍹</AppEmoji>
     <h1 class="hero__title">
       What can you <span class="text-gradient">make</span>?
     </h1>

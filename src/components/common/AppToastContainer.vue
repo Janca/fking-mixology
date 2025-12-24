@@ -1,0 +1,63 @@
+<script setup lang="ts">
+import { useToastStore } from "@/stores/toast";
+import AppToast from "./AppToast.vue";
+
+const toastStore = useToastStore();
+</script>
+
+<template>
+  <div class="app-toast-container">
+    <TransitionGroup name="toast">
+      <AppToast
+        v-for="toast in toastStore.toasts"
+        :key="toast.id"
+        :toast="toast"
+      />
+    </TransitionGroup>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+@use "@/styles/variables" as *;
+
+.app-toast-container {
+  position: fixed;
+  bottom: $space-lg;
+  right: $space-lg;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  pointer-events: none; // Allow clicking through the container space
+  max-width: 100%;
+  width: 400px;
+
+  // Mobile adjustments
+  @media (max-width: 768px) {
+    bottom: $space-md;
+    right: $space-md;
+    left: $space-md;
+    width: auto;
+  }
+}
+
+// Transition styles
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.toast-enter-from {
+  opacity: 0;
+  transform: translateX(30px) scale(0.9);
+}
+
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(30px) scale(0.9);
+}
+
+.toast-leave-active {
+  position: absolute; // Ensure smooth removal from flow
+}
+</style>

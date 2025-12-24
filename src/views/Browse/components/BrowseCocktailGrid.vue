@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import CocktailCard from "@/components/common/CocktailCard.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 import { useNavigationStore } from "@/stores/navigation";
 import type { CocktailWithDetails } from "@/types";
 
@@ -22,7 +23,7 @@ async function handleCocktailClick(cocktail: CocktailWithDetails) {
 <template>
   <Transition name="fade" mode="out-in">
     <div v-if="isLoading" key="loader" class="loading-state">
-      <div class="loading-spinner">🍸</div>
+      <AppEmoji class="loading-spinner">🍸</AppEmoji>
     </div>
 
     <TransitionGroup

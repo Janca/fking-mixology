@@ -3,6 +3,7 @@ import { computed } from "vue";
 import type { RecipeIngredientWithDetails } from "@/types";
 import { formatQuantity } from "@/composables/usePrepMode";
 import { formatIngredientName } from "@/utils/cocktailUtils";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 const props = defineProps<{
   ingredients: RecipeIngredientWithDetails[];
@@ -56,7 +57,7 @@ function formatQuantityHtml(
     <!-- Main Ingredients -->
     <div class="recipe-section">
       <h2 class="recipe-section__title">
-        <span class="recipe-section__emoji">🧪</span>
+        <AppEmoji class="recipe-section__emoji">🧪</AppEmoji>
         Ingredients
       </h2>
       <ul class="ingredients-list">
@@ -111,7 +112,7 @@ function formatQuantityHtml(
       <!-- Garnish Ingredients (Special UI) -->
       <div v-if="garnishIngredients.length > 0" class="garnish-section">
         <h3 class="garnish-section__title">
-          <span class="garnish-section__emoji">🌿</span>
+          <AppEmoji class="garnish-section__emoji">🌿</AppEmoji>
           Garnish
         </h3>
         <ul class="garnish-list">
@@ -128,7 +129,7 @@ function formatQuantityHtml(
               isPrepMode && emit('toggleIngredient', ingredient.ingredientId)
             "
           >
-            <span class="garnish-item__icon">🌿</span>
+            <AppEmoji class="garnish-item__icon">🌿</AppEmoji>
             <span class="garnish-item__name">
               {{ formatIngredientName(ingredient.ingredient.name) }}
             </span>

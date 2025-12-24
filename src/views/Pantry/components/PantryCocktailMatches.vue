@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useCocktailsStore } from "@/stores/cocktails";
 import CocktailCard from "@/components/common/CocktailCard.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 const router = useRouter();
 const cocktailsStore = useCocktailsStore();
@@ -20,7 +21,7 @@ function handleCocktailClick(slug: string) {
 <template>
   <div class="cocktail-matches">
     <div v-if="!hasMatches" class="empty-state">
-      <div class="empty-state__emoji">🍹</div>
+      <AppEmoji class="empty-state__emoji">🍹</AppEmoji>
       <h2 class="empty-state__title">No recipes yet</h2>
       <p class="empty-state__text">
         Add ingredients to see what cocktails you can make
@@ -29,7 +30,7 @@ function handleCocktailClick(slug: string) {
 
     <template v-else>
       <div class="section-header">
-        <h2 class="section-title"><span>✨</span> What You Can Make</h2>
+        <h2 class="section-title"><AppEmoji>✨</AppEmoji> What You Can Make</h2>
         <span class="section-count">{{ perfectMatches.length }} ready</span>
       </div>
 

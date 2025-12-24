@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getCategoryEmoji } from "@/utils/cocktailUtils";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 import type { Category } from "@/types";
 
 defineProps<{
@@ -23,9 +24,9 @@ const emit = defineEmits<{
       }"
       @click="emit('select', category)"
     >
-      <span class="category-tab__emoji">{{
-        getCategoryEmoji(category.name)
-      }}</span>
+      <AppEmoji class="category-tab__emoji">
+        {{ getCategoryEmoji(category.name) }}
+      </AppEmoji>
       <span class="category-tab__name">{{ category.name }}</span>
     </button>
   </div>

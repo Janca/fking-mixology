@@ -11,6 +11,7 @@ import { getCocktailWithDetails } from "@/composables/useCocktailMatcher";
 import { usePrepMode } from "@/composables/usePrepMode";
 import { usePantryStore } from "@/stores/pantry";
 import { useLedgerStore } from "@/stores/ledger";
+import { useAchievementsStore } from "@/stores/achievements";
 import { isConvertibleUnit, toMl } from "@/utils/unitConversions";
 import type { LedgerIngredientUsage } from "@/types";
 import WaveLayout from "@/components/layout/WaveLayout.vue";
@@ -27,6 +28,7 @@ const route = useRoute();
 const router = useRouter();
 const pantryStore = usePantryStore();
 const ledgerStore = useLedgerStore();
+const achievementsStore = useAchievementsStore();
 
 const cocktail = ref<CocktailWithDetails | null>(null);
 const isLoading = ref(true);
@@ -63,6 +65,7 @@ async function loadCocktail(slug: string) {
     const found = await db.cocktails.where("slug").equals(slug).first();
     if (found?.id) {
       cocktail.value = await getCocktailWithDetails(found.id);
+      achievementsStore.trackEvent("recipes_browsed");
     } else {
       error.value = "Cocktail not found";
     }

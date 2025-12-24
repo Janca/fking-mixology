@@ -56,6 +56,11 @@ $gradient-dark: linear-gradient(
   $surface-dark-300 0%,
   $surface-dark-500 100%
 );
+$gradient-gold: linear-gradient(
+  135deg,
+  $accent-gold 0%,
+  $accent-gold-dark 100%
+);
 $gradient-light: linear-gradient(
   180deg,
   $surface-light-100 0%,
@@ -173,6 +178,7 @@ $shadow-dark-inset-sm: inset 2px 2px 8px rgba(0, 0, 0, 0.4),
 $glow-coral: 0 8px 32px rgba($accent-coral, 0.35);
 $glow-blue: 0 8px 32px rgba($accent-blue, 0.35);
 $glow-teal: 0 8px 32px rgba($accent-teal, 0.35);
+$glow-purple: 0 8px 32px rgba($accent-purple, 0.35);
 
 // --------------------------------------------
 // Transitions

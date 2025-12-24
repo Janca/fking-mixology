@@ -15,6 +15,7 @@ import type {
   GlobalLedgerStats,
   CocktailWithDetails,
 } from "@/types";
+import { useAchievementsStore } from "./achievements";
 
 // ============================================
 // Helper: Generate session name from date
@@ -37,6 +38,8 @@ function generateSessionName(date: Date): string {
 // ============================================
 
 export const useLedgerStore = defineStore("ledger", () => {
+  const achievementsStore = useAchievementsStore();
+
   // ============================================
   // State
   // ============================================
@@ -92,6 +95,16 @@ export const useLedgerStore = defineStore("ledger", () => {
       if (meta) {
         previousSessionId.value = meta.value;
       }
+
+      // Track session count
+      const completedSessions = sessions.value.filter(
+        (s) => !s.isActive && s.totalDrinks > 0
+      ).length;
+      achievementsStore.trackEvent(
+        "sessions_completed",
+        completedSessions,
+        "set"
+      );
     } finally {
       isLoading.value = false;
     }
@@ -349,9 +362,14 @@ export const useLedgerStore = defineStore("ledger", () => {
     });
 
     // Update local state
+    // Update local state
     activeSession.value!.totalDrinks += 1;
     activeSession.value!.totalVolumeMl += volumeUsed;
     currentSessionEntries.value.push(entry);
+
+    // Track achievements
+    achievementsStore.trackEvent("recipes_prepped");
+    achievementsStore.trackEvent("total_volume_ml", volumeUsed);
 
     return entry;
   }

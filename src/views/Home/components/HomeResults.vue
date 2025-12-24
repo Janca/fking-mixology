@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import { useCocktailsStore } from "@/stores/cocktails";
 import { useNavigationStore } from "@/stores/navigation";
 import CocktailCard from "@/components/common/CocktailCard.vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 const props = defineProps<{
   mode: "search" | "pantry";
@@ -69,7 +70,9 @@ function handleCocktailClick(slug: string) {
     <!-- Perfect Matches Section -->
     <div v-if="perfectMatches.length > 0" class="results-section">
       <h2 class="results-section__title">
-        <span class="results-section__emoji">{{ sectionEmoji.perfect }}</span>
+        <AppEmoji class="results-section__emoji">{{
+          sectionEmoji.perfect
+        }}</AppEmoji>
         {{ sectionTitle.perfect }}
       </h2>
       <div class="results-grid">
@@ -88,7 +91,9 @@ function handleCocktailClick(slug: string) {
     <!-- Partial Matches Section -->
     <div v-if="partialMatches.length > 0" class="results-section">
       <h2 class="results-section__title">
-        <span class="results-section__emoji">{{ sectionEmoji.partial }}</span>
+        <AppEmoji class="results-section__emoji">{{
+          sectionEmoji.partial
+        }}</AppEmoji>
         {{ sectionTitle.partial }}
       </h2>
       <div class="results-grid">

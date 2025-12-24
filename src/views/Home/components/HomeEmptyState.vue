@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import AppButton from "@/components/common/AppButton.vue";
 import { useRouter } from "vue-router";
+import AppEmoji from "@/components/common/AppEmoji.vue";
+import AppButton from "@/components/common/AppButton.vue";
 
 const router = useRouter();
 </script>
@@ -8,7 +9,7 @@ const router = useRouter();
 <template>
   <div class="empty-state">
     <div class="empty-state__illustration">
-      <div class="empty-state__glass">🍸</div>
+      <AppEmoji class="empty-state__glass">🍸</AppEmoji>
       <div class="empty-state__bubbles">
         <span class="bubble bubble--1">○</span>
         <span class="bubble bubble--2">○</span>

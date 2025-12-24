@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppEmoji from "@/components/common/AppEmoji.vue";
 import AppButton from "@/components/common/AppButton.vue";
 import IngredientTag from "@/components/common/IngredientTag.vue";
 import { useIngredientsStore } from "@/stores/ingredients";
@@ -77,7 +78,7 @@ function handleRemoveIngredient(id: number) {
           @click="toggleSubstitution"
           title="Allow ingredient substitutions (e.g. Jack Daniels ≈ Whiskey)"
         >
-          <span class="fuzzy-toggle-btn__icon">🔄</span>
+          <AppEmoji class="fuzzy-toggle-btn__icon">🔄</AppEmoji>
           {{ cocktailsStore.allowSubstitution ? "Fuzzy Match" : "Exact Match" }}
         </button>
       </div>

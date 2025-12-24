@@ -4,6 +4,7 @@
  */
 import { computed, ref, onMounted, watch } from "vue";
 import type { GlobalLedgerStats } from "@/types";
+import AppEmoji from "@/components/common/AppEmoji.vue";
 
 const props = defineProps<{
   stats: GlobalLedgerStats;
@@ -88,17 +89,17 @@ function getHourLabel(hour: number): string {
     <!-- Hero Stats -->
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="hero-stat__icon">🍹</span>
+        <AppEmoji class="hero-stat__icon">🍹</AppEmoji>
         <span class="hero-stat__value">{{ animatedDrinks }}</span>
         <span class="hero-stat__label">Total Drinks</span>
       </div>
       <div class="hero-stat">
-        <span class="hero-stat__icon">📒</span>
+        <AppEmoji class="hero-stat__icon">📒</AppEmoji>
         <span class="hero-stat__value">{{ animatedSessions }}</span>
         <span class="hero-stat__label">Sessions</span>
       </div>
       <div class="hero-stat">
-        <span class="hero-stat__icon">🧪</span>
+        <AppEmoji class="hero-stat__icon">🧪</AppEmoji>
         <span class="hero-stat__value">{{ formatVolume(animatedVolume) }}</span>
         <span class="hero-stat__label">Consumed</span>
       </div>
@@ -108,7 +109,7 @@ function getHourLabel(hour: number): string {
     <div class="charts-grid">
       <!-- Most Popular Cocktail -->
       <div class="chart-card chart-card--highlight">
-        <h3 class="chart-title">🏆 Most Made Cocktail</h3>
+        <h3 class="chart-title"><AppEmoji>🏆</AppEmoji> Most Made Cocktail</h3>
         <div v-if="stats.mostMadeCocktail" class="popular-cocktail">
           <span class="popular-name">{{ stats.mostMadeCocktail.name }}</span>
           <span class="popular-count">{{ stats.mostMadeCocktail.count }}x</span>
@@ -118,7 +119,7 @@ function getHourLabel(hour: number): string {
 
       <!-- Average Stats -->
       <div class="chart-card">
-        <h3 class="chart-title">📈 Averages</h3>
+        <h3 class="chart-title"><AppEmoji>📈</AppEmoji> Averages</h3>
         <div class="avg-stats">
           <div class="avg-stat">
             <span class="avg-value">{{
@@ -137,7 +138,7 @@ function getHourLabel(hour: number): string {
 
       <!-- Drinks by Hour Chart -->
       <div class="chart-card chart-card--wide">
-        <h3 class="chart-title">🕐 Drinks by Hour</h3>
+        <h3 class="chart-title"><AppEmoji>🕐</AppEmoji> Drinks by Hour</h3>
         <div class="bar-chart hour-chart">
           <div
             v-for="item in stats.drinksByHour"
@@ -162,7 +163,7 @@ function getHourLabel(hour: number): string {
 
       <!-- Drinks by Weekday -->
       <div class="chart-card">
-        <h3 class="chart-title">📅 By Weekday</h3>
+        <h3 class="chart-title"><AppEmoji>📅</AppEmoji> By Weekday</h3>
         <div class="bar-chart weekday-chart">
           <div
             v-for="item in stats.drinksByWeekday"
@@ -187,7 +188,7 @@ function getHourLabel(hour: number): string {
 
       <!-- Top Ingredients -->
       <div class="chart-card">
-        <h3 class="chart-title">🧴 Top Ingredients</h3>
+        <h3 class="chart-title"><AppEmoji>🧴</AppEmoji> Top Ingredients</h3>
         <div v-if="stats.topIngredients.length > 0" class="ingredients-list">
           <div
             v-for="(ing, index) in stats.topIngredients.slice(0, 5)"
@@ -206,7 +207,7 @@ function getHourLabel(hour: number): string {
 
       <!-- Recent Activity (Last 30 days) -->
       <div class="chart-card chart-card--wide">
-        <h3 class="chart-title">📆 Last 30 Days</h3>
+        <h3 class="chart-title"><AppEmoji>📆</AppEmoji> Last 30 Days</h3>
         <div v-if="stats.drinksByDay.length > 0" class="activity-chart">
           <div
             v-for="day in stats.drinksByDay"

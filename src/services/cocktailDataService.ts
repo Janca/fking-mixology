@@ -2,7 +2,12 @@
  * Service for fetching and importing cocktail data from local JSON sources
  */
 
-import { db, isDatabasePopulated, clearDatabase } from "./database";
+import {
+  db,
+  isDatabasePopulated,
+  clearDatabase,
+  wipeDatabase,
+} from "./database";
 import type { JsonCocktail, JsonIngredient } from "@/types";
 
 // Import local JSON data
@@ -424,6 +429,42 @@ export async function initializeCocktailData(forceRefresh = false): Promise<{
     };
   } catch (error) {
     console.error("Failed to initialize cocktail data:", error);
+
+    // Check if this is the specific upgrade error for changing primary keys
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const isUpgradeError =
+      errorMessage.includes("UpgradeError") &&
+      errorMessage.includes("primary key");
+
+    if (isUpgradeError) {
+      console.warn(
+        "[MixologyMatcher] Detected incompatible schema upgrade. Wiping database and reinitializing..."
+      );
+
+      try {
+        // Wipe the entire database
+        await wipeDatabase();
+
+        // Reload the page to reinitialize with a fresh database
+        // This is the cleanest approach as it creates a new database instance
+        window.location.reload();
+
+        // Return a pending state (though reload will happen first)
+        return {
+          success: true,
+          message:
+            "Database incompatibility detected. Reloading to reinitialize...",
+        };
+      } catch (wipeError) {
+        console.error("[MixologyMatcher] Failed to wipe database:", wipeError);
+        return {
+          success: false,
+          message:
+            "Failed to recover from database upgrade error. Please clear your browser data and reload.",
+        };
+      }
+    }
+
     return {
       success: false,
       message:

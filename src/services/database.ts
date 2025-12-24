@@ -168,3 +168,24 @@ export async function getDatabaseStats(): Promise<{
 
   return { categories, cocktails, ingredients, recipeIngredients, pantryItems };
 }
+
+/**
+ * Completely wipe the database and recreate it
+ * This is used when upgrading from incompatible schema versions
+ */
+export async function wipeDatabase(): Promise<void> {
+  try {
+    console.warn("[Database] Wiping database due to incompatible schema...");
+
+    // Close the database connection
+    db.close();
+
+    // Delete the entire database
+    await Dexie.delete("MixologyMatcherDB");
+
+    console.log("[Database] Database wiped successfully");
+  } catch (error) {
+    console.error("[Database] Error wiping database:", error);
+    throw error;
+  }
+}

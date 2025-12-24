@@ -419,7 +419,7 @@ function cancelImport() {
             <div class="actions">
               <div class="action-group">
                 <AppButton
-                  variant="danger"
+                  variant="coral"
                   class="action-btn"
                   @click="executeImport('wipe')"
                 >

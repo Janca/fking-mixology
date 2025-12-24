@@ -113,7 +113,8 @@ function goToUserData() {
     p {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: left;
+      text-align: left;
       gap: $space-xs;
       margin: 0;
       line-height: 1.4;
@@ -121,6 +122,8 @@ function goToUserData() {
 
     .icon {
       font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
       color: $accent-warning;
     }
   }

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useToastStore } from "@/stores/toast";
 import AppToast from "./AppToast.vue";
-import { computed } from "vue";
 import { useMobileFullscreen } from "@/composables/useMobileFullscreen";
 
 const { isMobileFullscreen } = useMobileFullscreen()

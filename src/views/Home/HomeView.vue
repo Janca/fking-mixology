@@ -16,7 +16,6 @@ import HomeIngredientsDisplay from "./components/HomeIngredientsDisplay.vue";
 import HomePantrySummary from "./components/HomePantrySummary.vue";
 import HomeResults from "./components/HomeResults.vue";
 import HomeEmptyState from "./components/HomeEmptyState.vue";
-import LedgerResumeCard from "./components/LedgerResumeCard.vue";
 import { useScrollRestoration } from "@/composables/useScrollRestoration";
 import { storeToRefs } from "pinia";
 

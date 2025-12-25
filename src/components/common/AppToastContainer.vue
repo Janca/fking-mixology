@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import { useToastStore } from "@/stores/toast";
 import AppToast from "./AppToast.vue";
+import { computed } from "vue";
+import { useMobileFullscreen } from "@/composables/useMobileFullscreen";
 
+const { isMobileFullscreen } = useMobileFullscreen()
 const toastStore = useToastStore();
+
 </script>
 
 <template>
-  <div class="app-toast-container">
+  <div :class="{
+    'app-toast-container': true,
+    'app-toast-container--mobile-nav': isMobileFullscreen,
+  }">
     <TransitionGroup name="toast">
       <AppToast v-for="toast in toastStore.toasts" :key="toast.id" :toast="toast" />
     </TransitionGroup>
@@ -31,13 +38,16 @@ const toastStore = useToastStore();
   flex-direction: column;
 
   @include mobile-only {
-    top: 82px;
-    bottom: unset;
+    bottom: $space-md;
     left: 50%;
     right: auto;
     transform: translateX(-50%);
     width: calc(100% - #{$space-md * 2});
     max-width: 400px;
+  }
+
+  &--mobile-nav {
+    bottom: 112px;
   }
 }
 

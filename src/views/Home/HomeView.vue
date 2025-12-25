@@ -106,7 +106,7 @@ watch(
       <HomeHero />
 
       <!-- Resume Session Prompt -->
-      <LedgerResumeCard />
+      <!-- <LedgerResumeCard /> -->
 
       <!-- Selected Ingredients Display -->
       <div v-if="ingredientsStore.hasSelection">

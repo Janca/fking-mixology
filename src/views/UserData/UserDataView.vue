@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, toRaw } from "vue";
 import semver from "semver";
-import { db } from "@/services/database";
+import { db, wipeDatabase } from "@/services/database";
 import { useToastStore } from "@/stores/toast";
 import WaveLayout from "@/components/layout/WaveLayout.vue";
 import UserDataExportCard from "./components/UserDataExportCard.vue";
 import UserDataImportCard from "./components/UserDataImportCard.vue";
+import UserDataDeleteCard from "./components/UserDataDeleteCard.vue";
 import UserDataImportDialog from "./components/UserDataImportDialog.vue";
+import UserDataDeleteDialog from "./components/UserDataDeleteDialog.vue";
 import {
   DATA_EXPORT_VERSION,
   MIN_SUPPORTED_DATA_VERSION,
@@ -292,6 +294,35 @@ function handleDialogClose() {
     importCardRef.value.fileInput.value = "";
   }
 }
+
+const showDeleteDialog = ref(false);
+
+async function executeDelete() {
+  try {
+    isProcessing.value = true;
+    await wipeDatabase();
+
+    toastStore.addToast({
+      title: "Reset Complete",
+      message: "Application storage cleared. Reloading...",
+      type: "success",
+    });
+
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 1500);
+  } catch (e: any) {
+    console.error("Delete failed", e);
+    toastStore.addToast({
+      title: "Reset Failed",
+      message: e.message || "An error occurred while wiping data.",
+      type: "error",
+    });
+    isProcessing.value = false;
+  } finally {
+    showDeleteDialog.value = false;
+  }
+}
 </script>
 
 <template>
@@ -300,10 +331,13 @@ function handleDialogClose() {
       <div class="card-grid">
         <UserDataExportCard :is-processing="isProcessing" @export="handleExport" />
         <UserDataImportCard ref="importCardRef" :is-processing="isProcessing" @select-file="handleFileSelect" />
+        <UserDataDeleteCard :is-processing="isProcessing" @delete="showDeleteDialog = true" />
       </div>
 
       <UserDataImportDialog :show="!!pendingImportData" :import-data="pendingImportData" @close="handleDialogClose"
         @import="executeImport" />
+
+      <UserDataDeleteDialog :show="showDeleteDialog" @close="showDeleteDialog = false" @confirm="executeDelete" />
     </div>
   </WaveLayout>
 </template>

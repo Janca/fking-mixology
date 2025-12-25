@@ -5,7 +5,9 @@
 import { ref, computed, watch } from "vue";
 import { RouterLink, useRouter, useRoute } from "vue-router";
 import { useIngredientsStore } from "@/stores/ingredients";
+import { getIngredientEmoji } from "@/utils/cocktailUtils";
 import AppEmoji from "@/components/common/AppEmoji.vue";
+import AppAutocomplete, { type AutocompleteItem } from "@/components/common/AppAutocomplete.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -102,11 +104,19 @@ const showDropdown = computed(
     isSearchFocused.value && ingredientsStore.filteredSearchResults.length > 0
 );
 
-function handleIngredientSelect(ingredient: { id?: number; name: string }) {
+// Transform search results to autocomplete items format
+const autocompleteItems = computed(() =>
+  ingredientsStore.filteredSearchResults.slice(0, 6).map((ing) => ({
+    id: ing.id!,
+    name: ing.name,
+    ingredient: ing,
+  }))
+);
+
+function handleIngredientSelect(item: AutocompleteItem) {
+  const ingredient = item.ingredient as { id: number; name: string; normalizedName: string };
   if (ingredient.id) {
-    ingredientsStore.addIngredient(
-      ingredient as { id: number; name: string; normalizedName: string }
-    );
+    ingredientsStore.addIngredient(ingredient);
     // Set flag to prevent search dropdown from reopening immediately
     isSelectionClear.value = true;
     searchInput.value = "";
@@ -166,29 +176,19 @@ function toggleMobileMenu() {
       <!-- Search Input (Centered) -->
       <Transition name="search-pop">
         <div v-if="shouldShowSearch" class="the-header__search">
-          <div class="search-box">
-            <AppEmoji class="search-box__icon">🔍</AppEmoji>
-            <input v-model="searchInput" type="text" placeholder="Add ingredients..." class="search-box__input"
-              @focus="handleFocus" @blur="handleBlur" />
-            <button v-if="searchInput" type="button" class="search-box__clear" @click="handleClear">
-              ✕
-            </button>
-          </div>
-
-          <!-- Dropdown Results -->
-          <Transition name="dropdown">
-            <div v-if="showDropdown" class="search-dropdown">
-              <button v-for="ingredient in ingredientsStore.filteredSearchResults.slice(
-                0,
-                6
-              )" :key="ingredient.id" class="search-dropdown__item"
-                @mousedown.prevent="handleIngredientSelect(ingredient)">
-                <AppEmoji class="search-dropdown__emoji">🍋</AppEmoji>
-                <span class="search-dropdown__name">{{ ingredient.name }}</span>
-                <span class="search-dropdown__add">+</span>
-              </button>
-            </div>
-          </Transition>
+          <AppAutocomplete v-model="searchInput" :items="autocompleteItems" :show-dropdown="showDropdown"
+            placeholder="Add ingredients..." variant="light" size="sm" bordered color="coral" clearable
+            teleport-to="body" @input="performSearch" @focus="handleFocus" @blur="handleBlur" @clear="handleClear"
+            @select="handleIngredientSelect">
+            <template #prefix>
+              <AppEmoji class="search-box__icon">🔍</AppEmoji>
+            </template>
+            <template #item="{ item }">
+              <AppEmoji class="search-dropdown__emoji">{{ getIngredientEmoji(String(item.name)) }}</AppEmoji>
+              <span class="search-dropdown__name">{{ item.name }}</span>
+              <span class="search-dropdown__add">+</span>
+            </template>
+          </AppAutocomplete>
         </div>
       </Transition>
 

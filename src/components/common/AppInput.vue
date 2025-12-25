@@ -1,8 +1,10 @@
 <script setup lang="ts">
 /**
- * AppInput - Modern Neumorphic Input
+ * AppInput - Modern Input with Neumorphic or Bordered styles
  */
 import { computed, ref } from "vue";
+
+type AccentColor = "coral" | "teal" | "blue" | "purple" | "gold";
 
 interface Props {
   modelValue?: string;
@@ -12,6 +14,10 @@ interface Props {
   size?: "sm" | "md" | "lg";
   variant?: "light" | "dark";
   clearable?: boolean;
+  /** Use bordered style instead of neumorphic */
+  bordered?: boolean;
+  /** Accent color for focus states (default: coral) */
+  color?: AccentColor;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -22,6 +28,8 @@ const props = withDefaults(defineProps<Props>(), {
   size: "md",
   variant: "light",
   clearable: false,
+  bordered: false,
+  color: "coral",
 });
 
 const emit = defineEmits<{
@@ -38,10 +46,12 @@ const classes = computed(() => [
   "app-input",
   `app-input--${props.size}`,
   `app-input--${props.variant}`,
+  `app-input--color-${props.color}`,
   {
     "app-input--focused": isFocused.value,
     "app-input--disabled": props.disabled,
     "app-input--has-value": !!props.modelValue,
+    "app-input--bordered": props.bordered,
   },
 ]);
 
@@ -81,31 +91,11 @@ defineExpose({
     <div class="app-input__wrapper">
       <slot name="prefix" />
 
-      <input
-        ref="inputRef"
-        :type="type"
-        :value="modelValue"
-        :placeholder="placeholder"
-        :disabled="disabled"
-        class="app-input__field"
-        @input="handleInput"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
+      <input ref="inputRef" :type="type" :value="modelValue" :placeholder="placeholder" :disabled="disabled"
+        class="app-input__field" @input="handleInput" @focus="handleFocus" @blur="handleBlur" />
 
-      <button
-        v-if="clearable && modelValue"
-        type="button"
-        class="app-input__clear"
-        tabindex="-1"
-        @click="handleClear"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-        >
+      <button v-if="clearable && modelValue" type="button" class="app-input__clear" tabindex="-1" @click="handleClear">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <line x1="18" y1="6" x2="6" y2="18" />
           <line x1="6" y1="6" x2="18" y2="18" />
         </svg>
@@ -120,6 +110,15 @@ defineExpose({
 @use "sass:color";
 @use "@/styles/variables" as *;
 
+// Color map for accent colors
+$accent-colors: (
+  "coral": $accent-coral,
+  "teal": $accent-teal,
+  "blue": $accent-blue,
+  "purple": $accent-purple,
+  "gold": $accent-gold,
+);
+
 .app-input {
   width: 100%;
 
@@ -131,28 +130,78 @@ defineExpose({
     transition: all $transition-normal;
   }
 
+  // ============================================
+  // NEUMORPHIC STYLE (default)
+  // ============================================
+
   // Light variant (for light backgrounds)
-  &--light &__wrapper {
+  &--light:not(.app-input--bordered) &__wrapper {
     background: $surface-light-100;
     box-shadow: $shadow-light-inset;
   }
 
-  &--light.app-input--focused &__wrapper {
+  &--light:not(.app-input--bordered).app-input--focused &__wrapper {
     box-shadow: $shadow-light-inset,
-      0 0 0 3px color.change($accent-blue, $alpha: 0.2);
+      0 0 0 3px color.change($accent-coral, $alpha: 0.15);
   }
 
   // Dark variant (for dark backgrounds)
-  &--dark &__wrapper {
+  &--dark:not(.app-input--bordered) &__wrapper {
     background: $surface-dark-400;
     box-shadow: $shadow-dark-inset;
   }
 
-  &--dark.app-input--focused &__wrapper {
+  &--dark:not(.app-input--bordered).app-input--focused &__wrapper {
     box-shadow: $shadow-dark-inset,
       0 0 0 3px color.change($accent-coral, $alpha: 0.3);
   }
 
+  // ============================================
+  // BORDERED STYLE (alternative)
+  // ============================================
+
+  &--bordered.app-input--light &__wrapper {
+    background: $surface-light-200;
+    border: 1px solid color.change($surface-light-400, $alpha: 0.5);
+    box-shadow: inset 0 1px 2px color.change(#000, $alpha: 0.03);
+  }
+
+  &--bordered.app-input--dark &__wrapper {
+    background: color.change($surface-dark-400, $alpha: 0.8);
+    border: 1px solid color.change(#fff, $alpha: 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  // Bordered focus states with color variants
+  @each $name, $color in $accent-colors {
+    &--bordered.app-input--color-#{$name}.app-input--focused.app-input--light &__wrapper {
+      background: $surface-light-100;
+      border-color: $color;
+      box-shadow: 0 0 0 4px color.change($color, $alpha: 0.12),
+        inset 0 1px 2px color.change(#000, $alpha: 0.02);
+    }
+
+    &--bordered.app-input--color-#{$name}.app-input--focused.app-input--dark &__wrapper {
+      border-color: $color;
+      box-shadow: 0 0 0 4px color.change($color, $alpha: 0.2);
+    }
+  }
+
+  // Color variants for neumorphic focus states
+  @each $name, $color in $accent-colors {
+    &--color-#{$name}:not(.app-input--bordered).app-input--focused.app-input--light &__wrapper {
+      box-shadow: $shadow-light-inset,
+        0 0 0 3px color.change($color, $alpha: 0.15);
+    }
+
+    &--color-#{$name}:not(.app-input--bordered).app-input--focused.app-input--dark &__wrapper {
+      box-shadow: $shadow-dark-inset,
+        0 0 0 3px color.change($color, $alpha: 0.25);
+    }
+  }
+
+  // Dark variant text colors
   &--dark &__field {
     color: $text-light-primary;
 
@@ -176,6 +225,19 @@ defineExpose({
   &--lg &__wrapper {
     height: 64px;
     padding: 0 $space-xl;
+    border-radius: $radius-2xl;
+  }
+
+  // Bordered sizes adjust border-radius
+  &--bordered.app-input--sm &__wrapper {
+    border-radius: $radius-full;
+  }
+
+  &--bordered.app-input--md &__wrapper {
+    border-radius: $radius-xl;
+  }
+
+  &--bordered.app-input--lg &__wrapper {
     border-radius: $radius-2xl;
   }
 

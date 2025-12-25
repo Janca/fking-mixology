@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { usePantryStore } from "@/stores/pantry";
 import { useIngredientSearch } from "@/composables/useIngredientSearch";
+import { getIngredientEmoji } from "@/utils/cocktailUtils";
 import AppButton from "@/components/common/AppButton.vue";
-import AppInput from "@/components/common/AppInput.vue";
+import AppAutocomplete, { type AutocompleteItem } from "@/components/common/AppAutocomplete.vue";
 import AppEmoji from "@/components/common/AppEmoji.vue";
+import AppSelect from "@/components/common/AppSelect.vue";
+import AppNumberInput from "@/components/common/AppNumberInput.vue";
 import type { Ingredient, VolumeUnit } from "@/types";
 
 const emit = defineEmits<{
@@ -25,11 +28,20 @@ const {
   clearSearch,
 } = useIngredientSearch((ing) => !pantryStore.ingredientIds.includes(ing.id!));
 
+// Transform search results to autocomplete items format
+const autocompleteItems = computed(() =>
+  searchResults.value.map((ing) => ({
+    id: ing.id!,
+    name: ing.name,
+    ingredient: ing,
+  }))
+);
+
 const selectedIngredient = ref<Ingredient | null>(null);
 const addQuantity = ref(750);
 const addUnit = ref<VolumeUnit>("ml");
 
-const units: { value: VolumeUnit; label: string }[] = [
+const unitOptions = [
   { value: "ml", label: "ml" },
   { value: "oz", label: "oz" },
   { value: "l", label: "L" },
@@ -46,8 +58,8 @@ const presets = [
   { label: "Handle", value: 1750, unit: "ml" as VolumeUnit },
 ];
 
-function selectIngredient(ingredient: Ingredient) {
-  selectedIngredient.value = ingredient;
+function selectIngredient(item: AutocompleteItem) {
+  selectedIngredient.value = item.ingredient as Ingredient;
   clearSearch();
 }
 
@@ -89,22 +101,22 @@ async function addToPantry() {
             ✕
           </button>
         </div>
-        <div v-else class="search-wrapper">
-          <AppInput v-model="searchQuery" placeholder="Search ingredients..." variant="light" size="md"
-            @input="handleSearch(searchQuery)" @focus="handleFocus" @blur="handleBlur">
+        <div v-else>
+          <AppAutocomplete v-model="searchQuery" :items="autocompleteItems" :show-dropdown="showDropdown"
+            placeholder="Search ingredients..." variant="light" size="md" clearable item-label-key="name"
+            no-results-text="No ingredients found" @input="handleSearch" @focus="handleFocus" @blur="handleBlur"
+            @select="selectIngredient" @update:show-dropdown="(val) => showDropdown = val">
             <template #prefix>
               <AppEmoji>🔍</AppEmoji>
             </template>
-          </AppInput>
-          <Transition name="dropdown">
-            <div v-if="showDropdown" class="search-dropdown">
-              <button v-for="ingredient in searchResults" :key="ingredient.id" class="search-dropdown__item"
-                @mousedown.prevent="selectIngredient(ingredient)">
-                <span>{{ ingredient.name }}</span>
-                <span class="search-dropdown__add">+</span>
-              </button>
-            </div>
-          </Transition>
+            <template #item="{ item }">
+              <span class="search-dropdown__emoji">
+                <AppEmoji>{{ getIngredientEmoji(String(item.name)) }}</AppEmoji>
+              </span>
+              <span class="search-dropdown__name">{{ item.name }}</span>
+              <span class="search-dropdown__add">+</span>
+            </template>
+          </AppAutocomplete>
         </div>
       </div>
 
@@ -125,18 +137,9 @@ async function addToPantry() {
       <div class="form-group">
         <label class="form-label">Amount</label>
         <div class="quantity-row">
-          <div class="quantity-input">
-            <button class="quantity-btn" @click="addQuantity = Math.max(10, addQuantity - 50)">
-              −
-            </button>
-            <input v-model.number="addQuantity" type="number" min="1" class="quantity-value" />
-            <button class="quantity-btn" @click="addQuantity += 50">+</button>
-          </div>
-          <select v-model="addUnit" class="unit-select">
-            <option v-for="unit in units" :key="unit.value" :value="unit.value">
-              {{ unit.label }}
-            </option>
-          </select>
+          <AppNumberInput v-model="addQuantity" :min="10" :max="5000" :step="50" variant="light" size="md"
+            class="quantity-stepper" />
+          <AppSelect v-model="addUnit" :options="unitOptions" variant="light" size="md" class="unit-select" />
         </div>
       </div>
 
@@ -211,52 +214,96 @@ async function addToPantry() {
 
 .search-dropdown {
   position: absolute;
-  top: calc(100% + $space-xs);
+  top: calc(100% + $space-sm);
   left: 0;
   right: 0;
-  background: white;
-  border-radius: $radius-lg;
-  box-shadow: 0 8px 32px color.change(#000, $alpha: 0.12);
-  max-height: 200px;
+  background: linear-gradient(135deg,
+      $surface-light-100 0%,
+      color.adjust($surface-light-100, $lightness: -1%) 100%);
+  border-radius: $radius-xl;
+  box-shadow: 0 8px 32px color.change(#000, $alpha: 0.12),
+    0 4px 16px color.change(#000, $alpha: 0.06);
+  max-height: 280px;
   overflow-y: auto;
   z-index: $z-dropdown;
-  padding: $space-xs;
+  padding: $space-sm;
+  border: 1px solid color.change($surface-light-400, $alpha: 0.4);
 
   &__item {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: $space-md;
     width: 100%;
-    padding: $space-sm $space-md;
+    padding: $space-md $space-lg;
     background: transparent;
     border: none;
-    border-radius: $radius-md;
+    border-radius: $radius-lg;
     text-align: left;
     font-size: $font-size-body-sm;
     color: $text-dark-primary;
     cursor: pointer;
-    transition: background $transition-fast;
+    transition: all $transition-normal;
 
     &:hover {
-      background: $surface-light-200;
+      background: linear-gradient(135deg,
+          color.change(#fff, $alpha: 0.9) 0%,
+          color.change(#fff, $alpha: 0.7) 100%);
+      transform: translateX(4px);
+      box-shadow: 0 2px 8px color.change(#000, $alpha: 0.05);
+    }
+
+    &:active {
+      transform: translateX(2px) scale(0.99);
     }
   }
 
+  &__emoji {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $surface-light-200;
+    border-radius: $radius-lg;
+    font-size: 1.1rem;
+  }
+
+  &__name {
+    flex: 1;
+    font-weight: $font-weight-medium;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   &__add {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: $surface-light-300;
     border-radius: $radius-full;
     font-weight: $font-weight-bold;
-    font-size: 12px;
+    font-size: 14px;
+    color: $text-dark-secondary;
+    flex-shrink: 0;
+    transition: all $transition-fast;
+  }
+
+  &__item:hover &__emoji {
+    background: color.change($accent-coral, $alpha: 0.15);
   }
 
   &__item:hover &__add {
-    background: $accent-coral;
+    background: linear-gradient(135deg,
+        $accent-coral 0%,
+        $accent-coral-dark 100%);
     color: white;
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px color.change($accent-coral, $alpha: 0.35);
   }
 }
 
@@ -342,67 +389,14 @@ async function addToPantry() {
   }
 }
 
-.quantity-input {
-  display: flex;
-  align-items: center;
+.quantity-stepper {
   flex: 1;
-  background: $surface-light-200;
-  border-radius: $radius-full;
-  overflow: hidden;
-}
-
-.quantity-btn {
-  width: 36px;
-  height: 36px;
-  background: transparent;
-  border: none;
-  color: $text-dark-primary;
-  font-size: $font-size-body-lg;
-  cursor: pointer;
-
-  &:hover {
-    background: $surface-light-300;
-  }
-
-  @include mobile-only {
-    width: 32px;
-    height: 32px;
-  }
-}
-
-.quantity-value {
-  flex: 1;
-  text-align: center;
-  background: transparent;
-  border: none;
-  font-family: $font-mono;
-  font-size: $font-size-body-sm;
-  font-weight: $font-weight-bold;
-  color: $text-dark-primary;
-
-  &:focus {
-    outline: none;
-  }
-
-  &::-webkit-inner-spin-button,
-  &::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  -moz-appearance: textfield;
-  appearance: textfield;
+  min-width: 0;
 }
 
 .unit-select {
-  padding: $space-xs $space-md;
-  background: $surface-light-200;
-  border: none;
-  border-radius: $radius-full;
-  font-size: $font-size-body-sm;
-  font-weight: $font-weight-medium;
-  color: $text-dark-primary;
-  cursor: pointer;
+  min-width: 90px;
+  flex-shrink: 0;
 }
 
 // Transitions

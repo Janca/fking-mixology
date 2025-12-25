@@ -43,28 +43,18 @@ function toggleFavorite() {
 </script>
 
 <template>
-  <article
-    class="cocktail-card"
-    :class="[
-      `cocktail-card--${variant}`,
-      { 'cocktail-card--perfect': match?.matchPercentage === 100 },
-    ]"
-    role="button"
-    tabindex="0"
-    @click="emit('click')"
-    @keydown.enter="emit('click')"
-    @keydown.space.prevent="emit('click')"
-  >
+  <article class="cocktail-card" :class="[
+    `cocktail-card--${variant}`,
+    { 'cocktail-card--perfect': match?.matchPercentage === 100 },
+  ]" role="button" tabindex="0" @click="emit('click')" @keydown.enter="emit('click')"
+    @keydown.space.prevent="emit('click')">
     <!-- Emoji Icon -->
     <AppEmoji class="cocktail-card__emoji">
       {{ getCategoryEmoji(cocktail.category.name) }}
     </AppEmoji>
 
     <!-- Match Badge (only show for perfect matches or when no progress bar) -->
-    <div
-      v-if="match?.matchPercentage === 100"
-      class="cocktail-card__badge cocktail-card__badge--perfect"
-    >
+    <div v-if="match?.matchPercentage === 100" class="cocktail-card__badge cocktail-card__badge--perfect">
       {{ getMatchDisplay(match) }}
     </div>
 
@@ -78,65 +68,35 @@ function toggleFavorite() {
 
       <!-- Ingredients preview -->
       <div class="cocktail-card__ingredients">
-        <span
-          v-for="(ing, idx) in cocktail.ingredients.slice(0, 3)"
-          :key="ing.id"
-          class="cocktail-card__ingredient"
-        >
+        <span v-for="(ing, idx) in cocktail.ingredients.slice(0, 3)" :key="ing.id" class="cocktail-card__ingredient">
           {{ formatIngredientName(ing.ingredient.name)
           }}{{
-            idx < Math.min(2, cocktail.ingredients.length - 1) ? " · " : ""
-          }}
-        </span>
-        <span
-          v-if="cocktail.ingredients.length > 3"
-          class="cocktail-card__more"
-        >
-          +{{ cocktail.ingredients.length - 3 }} more
-        </span>
+            idx < Math.min(2, cocktail.ingredients.length - 1) ? " · " : "" }} </span>
+            <span v-if="cocktail.ingredients.length > 3" class="cocktail-card__more">
+              +{{ cocktail.ingredients.length - 3 }} more
+            </span>
       </div>
     </div>
 
     <!-- Favorite Button -->
-    <button
-      class="cocktail-card__favorite"
-      :class="{ 'cocktail-card__favorite--active': isFavorite }"
-      @click.stop="toggleFavorite"
-      aria-label="Toggle Favorite"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        :fill="isFavorite ? 'currentColor' : 'none'"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+    <button class="cocktail-card__favorite" :class="{ 'cocktail-card__favorite--active': isFavorite }"
+      @click.stop="toggleFavorite" aria-label="Toggle Favorite">
+      <svg viewBox="0 0 24 24" :fill="isFavorite ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2">
         <path
-          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-        />
+          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
       </svg>
     </button>
 
     <!-- Arrow indicator -->
     <div class="cocktail-card__arrow">
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-      >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M5 12h14M12 5l7 7-7 7" />
       </svg>
     </div>
 
     <!-- Progress Bar (Bottom Border) - Shows match percentage for partial matches -->
-    <div
-      v-if="match && match.matchPercentage < 100"
-      class="cocktail-card__progress"
-    >
-      <div
-        class="cocktail-card__progress-fill"
-        :style="{ width: `${match.matchPercentage}%` }"
-      />
+    <div v-if="match && match.matchPercentage < 100" class="cocktail-card__progress">
+      <div class="cocktail-card__progress-fill" :style="{ width: `${match.matchPercentage}%` }" />
     </div>
   </article>
 </template>
@@ -161,23 +121,31 @@ function toggleFavorite() {
   // Light variant
   &--light {
     background: $surface-light-100;
-    box-shadow: $shadow-light-raised-sm;
+    border: 1px solid color.change($surface-light-400, $alpha: 0.4);
+    box-shadow: 0 2px 8px color.change(#000, $alpha: 0.04),
+      0 4px 16px color.change(#000, $alpha: 0.02);
 
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: $shadow-light-raised;
+      transform: translateY(-6px);
+      box-shadow: 0 8px 24px color.change(#000, $alpha: 0.08),
+        0 16px 40px color.change(#000, $alpha: 0.04);
+      border-color: color.change($accent-coral, $alpha: 0.3);
     }
 
     &:active {
-      transform: translateY(-2px);
-      box-shadow: $shadow-light-raised-sm;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px color.change(#000, $alpha: 0.06);
     }
   }
 
   // Dark variant
   &--dark {
-    background: $surface-dark-300;
-    box-shadow: $shadow-dark-raised-sm;
+    background: linear-gradient(135deg,
+        $surface-dark-300 0%,
+        color.adjust($surface-dark-300, $lightness: -3%) 100%);
+    border: 1px solid color.change(#fff, $alpha: 0.06);
+    box-shadow: 0 4px 12px color.change(#000, $alpha: 0.2),
+      0 8px 24px color.change(#000, $alpha: 0.15);
 
     .cocktail-card__name {
       color: $text-light-primary;
@@ -195,13 +163,19 @@ function toggleFavorite() {
     }
 
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: $shadow-dark-raised;
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px color.change(#000, $alpha: 0.3),
+        0 20px 48px color.change(#000, $alpha: 0.2);
+      border-color: color.change($accent-coral, $alpha: 0.3);
 
       .cocktail-card__arrow {
         background: $accent-coral;
         color: white;
       }
+    }
+
+    &:active {
+      transform: translateY(-3px);
     }
   }
 
@@ -398,10 +372,12 @@ function toggleFavorite() {
 }
 
 @keyframes bounce-gentle {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-4px);
   }
@@ -411,9 +387,11 @@ function toggleFavorite() {
   0% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.4);
   }
+
   100% {
     transform: scale(1);
   }

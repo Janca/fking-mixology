@@ -30,6 +30,8 @@ const shouldShowSearch = computed(() => {
     "browse",
     "ledger",
     "achievements",
+    "user-data",
+    "session-detail"
   ];
   return !noSearchPages.includes(route.name as string);
 });
@@ -146,26 +148,17 @@ function toggleMobileMenu() {
       <!-- Back Button (Mobile/Desktop logic handled via CSS/Layout) -->
       <Transition name="fade-slide">
         <button v-if="showBackButton" class="the-header__back" @click="goBack">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-          >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
         </button>
       </Transition>
 
       <!-- Logo -->
-      <RouterLink
-        to="/"
-        class="the-header__logo"
-        :class="{
-          'the-header__logo--hidden-mobile': isLogoHiddenOnMobile,
-          'the-header__logo--expanded-mobile': !shouldShowSearch,
-        }"
-      >
+      <RouterLink to="/" class="the-header__logo" :class="{
+        'the-header__logo--hidden-mobile': isLogoHiddenOnMobile,
+        'the-header__logo--expanded-mobile': !shouldShowSearch,
+      }">
         <AppEmoji class="the-header__logo-emoji">🍸</AppEmoji>
         <span class="the-header__logo-text">Mixology</span>
       </RouterLink>
@@ -175,20 +168,9 @@ function toggleMobileMenu() {
         <div v-if="shouldShowSearch" class="the-header__search">
           <div class="search-box">
             <AppEmoji class="search-box__icon">🔍</AppEmoji>
-            <input
-              v-model="searchInput"
-              type="text"
-              placeholder="Add ingredients..."
-              class="search-box__input"
-              @focus="handleFocus"
-              @blur="handleBlur"
-            />
-            <button
-              v-if="searchInput"
-              type="button"
-              class="search-box__clear"
-              @click="handleClear"
-            >
+            <input v-model="searchInput" type="text" placeholder="Add ingredients..." class="search-box__input"
+              @focus="handleFocus" @blur="handleBlur" />
+            <button v-if="searchInput" type="button" class="search-box__clear" @click="handleClear">
               ✕
             </button>
           </div>
@@ -196,15 +178,11 @@ function toggleMobileMenu() {
           <!-- Dropdown Results -->
           <Transition name="dropdown">
             <div v-if="showDropdown" class="search-dropdown">
-              <button
-                v-for="ingredient in ingredientsStore.filteredSearchResults.slice(
-                  0,
-                  6
-                )"
-                :key="ingredient.id"
-                class="search-dropdown__item"
-                @mousedown.prevent="handleIngredientSelect(ingredient)"
-              >
+              <button v-for="ingredient in ingredientsStore.filteredSearchResults.slice(
+                0,
+                6
+              )" :key="ingredient.id" class="search-dropdown__item"
+                @mousedown.prevent="handleIngredientSelect(ingredient)">
                 <AppEmoji class="search-dropdown__emoji">🍋</AppEmoji>
                 <span class="search-dropdown__name">{{ ingredient.name }}</span>
                 <span class="search-dropdown__add">+</span>
@@ -217,26 +195,17 @@ function toggleMobileMenu() {
       <!-- Desktop Navigation (Hidden on Mobile) -->
       <nav class="the-header__nav the-header__nav--desktop">
         <RouterLink to="/" class="the-header__nav-link">Match</RouterLink>
-        <RouterLink to="/browse" class="the-header__nav-link"
-          >Browse</RouterLink
-        >
-        <RouterLink to="/pantry" class="the-header__nav-link"
-          >Pantry</RouterLink
-        >
-        <RouterLink to="/ledger" class="the-header__nav-link"
-          >Ledger</RouterLink
-        >
+        <RouterLink to="/browse" class="the-header__nav-link">Browse</RouterLink>
+        <RouterLink to="/pantry" class="the-header__nav-link">Pantry</RouterLink>
+        <RouterLink to="/ledger" class="the-header__nav-link">Ledger</RouterLink>
         <RouterLink to="/achievements" class="the-header__nav-link">
           Cheevos
         </RouterLink>
       </nav>
 
       <!-- Hamburger Menu Button (Visible on Mobile) -->
-      <button
-        class="the-header__hamburger"
-        :class="{ 'the-header__hamburger--active': isMobileMenuOpen }"
-        @click="toggleMobileMenu"
-      >
+      <button class="the-header__hamburger" :class="{ 'the-header__hamburger--active': isMobileMenuOpen }"
+        @click="toggleMobileMenu">
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
         <span class="hamburger-line"></span>
@@ -247,11 +216,7 @@ function toggleMobileMenu() {
   <!-- Mobile Drawer Overlay - Teleported to body to avoid header's backdrop-filter containing block -->
   <Teleport to="body">
     <Transition name="fade">
-      <div
-        v-if="isMobileMenuOpen"
-        class="mobile-menu-overlay"
-        @click="isMobileMenuOpen = false"
-      />
+      <div v-if="isMobileMenuOpen" class="mobile-menu-overlay" @click="isMobileMenuOpen = false" />
     </Transition>
 
     <!-- Mobile Drawer Panel -->
@@ -273,7 +238,7 @@ function toggleMobileMenu() {
             Browse
           </RouterLink>
           <RouterLink to="/pantry" class="mobile-menu-link">
-            <AppEmoji class="mobile-menu-icon">🥫</AppEmoji>
+            <AppEmoji class="mobile-menu-icon">🍻</AppEmoji>
             Pantry
           </RouterLink>
           <RouterLink to="/ledger" class="mobile-menu-link">
@@ -307,10 +272,20 @@ function toggleMobileMenu() {
   min-height: 60px;
   // Reduced mobile padding as requested
   padding: $space-sm $space-sm;
-  background: color.change($surface-light-100, $alpha: 0.92);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid color.change($surface-light-100, $alpha: 0.5);
+  background: linear-gradient(180deg,
+      color.change($surface-light-100, $alpha: 0.97) 0%,
+      color.change($surface-light-100, $alpha: 0.92) 100%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid color.change($surface-light-300, $alpha: 0.6);
+  box-shadow: 0 1px 3px color.change(#000, $alpha: 0.03),
+    0 4px 12px color.change(#000, $alpha: 0.02);
+
+  @include tablet-up {
+    height: 64px;
+    min-height: 64px;
+    padding: $space-sm $space-lg;
+  }
 
   @include desktop-up {
     height: 72px;
@@ -328,8 +303,12 @@ function toggleMobileMenu() {
     // Removed fixed padding-left, using flex layout instead
     justify-content: space-between;
 
-    @include desktop-up {
+    @include tablet-up {
       gap: $space-md;
+    }
+
+    @include desktop-up {
+      gap: $space-lg;
     }
   }
 
@@ -501,9 +480,11 @@ function toggleMobileMenu() {
       .hamburger-line:nth-child(1) {
         transform: translateY(7px) rotate(45deg);
       }
+
       .hamburger-line:nth-child(2) {
         opacity: 0;
       }
+
       .hamburger-line:nth-child(3) {
         transform: translateY(-7px) rotate(-45deg);
       }
@@ -519,19 +500,28 @@ function toggleMobileMenu() {
   height: 40px;
   padding: 0 $space-sm;
   background: $surface-light-200;
-  border: 1px solid transparent;
+  border: 1px solid color.change($surface-light-400, $alpha: 0.5);
   border-radius: $radius-full;
-  transition: all $transition-fast;
+  transition: all $transition-normal;
   width: 100%;
+  box-shadow: inset 0 1px 2px color.change(#000, $alpha: 0.03);
+
+  @include tablet-up {
+    height: 44px;
+    padding: 0 $space-md;
+  }
 
   @include desktop-up {
-    padding: 0 $space-md;
+    height: 48px;
+    padding: 0 $space-lg;
   }
 
   &:focus-within {
     background: $surface-light-100;
     border-color: $accent-coral;
-    box-shadow: 0 0 0 3px color.change($surface-light-100, $alpha: 0.15);
+    box-shadow: 0 0 0 4px color.change($accent-coral, $alpha: 0.12),
+      inset 0 1px 2px color.change(#000, $alpha: 0.02);
+    transform: scale(1.01);
   }
 
   &__icon {
@@ -588,16 +578,19 @@ function toggleMobileMenu() {
 // Search Dropdown
 .search-dropdown {
   position: absolute;
-  top: calc(100% + $space-xs);
+  top: calc(100% + $space-sm);
   left: 0;
   right: 0;
   background: $surface-light-100;
-  border-radius: $radius-lg;
-  box-shadow: 0 8px 32px color.change(#000, $alpha: 0.12), 0 2px 8px color.change(#000, $alpha: 0.08);
-  max-height: 320px;
+  border-radius: $radius-xl;
+  box-shadow: 0 12px 40px color.change(#000, $alpha: 0.15),
+    0 4px 12px color.change(#000, $alpha: 0.08),
+    0 0 0 1px color.change(#000, $alpha: 0.03);
+  max-height: 360px;
   overflow-y: auto;
   z-index: $z-dropdown;
-  padding: $space-xs;
+  padding: $space-sm;
+  border: 1px solid color.change($surface-light-300, $alpha: 0.8);
 
   &__item {
     display: flex;
@@ -695,65 +688,84 @@ function toggleMobileMenu() {
   font-size: $font-size-h2;
   font-weight: $font-weight-bold;
   color: $text-dark-primary;
+  letter-spacing: -0.02em;
 }
 
 .mobile-menu-close {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: $surface-light-200;
-  border: none;
+  border: 1px solid color.change($surface-light-400, $alpha: 0.5);
   border-radius: $radius-full;
   color: $text-dark-secondary;
   font-size: 1.25rem;
   cursor: pointer;
-  transition: all $transition-fast;
+  transition: all $transition-normal;
+  box-shadow: 0 2px 8px color.change(#000, $alpha: 0.06);
 
   &:hover {
-    background: $surface-light-300;
+    background: $surface-light-100;
+    color: $accent-coral;
+    transform: rotate(90deg);
+    box-shadow: 0 4px 12px color.change(#000, $alpha: 0.1);
   }
 
   &:active {
-    background: $surface-light-400;
+    transform: rotate(90deg) scale(0.95);
   }
 }
 
 .mobile-menu-nav {
   display: flex;
   flex-direction: column;
-  gap: $space-sm;
+  gap: $space-xs;
 }
 
 .mobile-menu-link {
   display: flex;
   align-items: center;
   gap: $space-md;
-  padding: $space-md;
+  padding: $space-md $space-lg;
   background: transparent;
-  border-radius: $radius-lg;
+  border-radius: $radius-xl;
   text-decoration: none;
   color: $text-dark-secondary;
   font-size: $font-size-body-lg;
   font-weight: $font-weight-medium;
-  transition: all $transition-fast;
+  transition: all $transition-normal;
+  position: relative;
+  overflow: hidden;
 
   .mobile-menu-icon {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    transition: transform $transition-normal;
   }
 
   &:hover,
   &:active {
     background: $surface-light-200;
     color: $text-dark-primary;
-    transform: translateX(4px);
+    transform: translateX(8px);
+
+    .mobile-menu-icon {
+      transform: scale(1.1);
+    }
   }
 
   &.router-link-exact-active {
-    background: color.change($surface-light-100, $alpha: 0.15);
+    background: linear-gradient(135deg,
+        color.change($accent-coral, $alpha: 0.12) 0%,
+        color.change($accent-coral, $alpha: 0.05) 100%);
     color: $accent-coral;
     font-weight: $font-weight-semibold;
+    border: 1px solid color.change($accent-coral, $alpha: 0.2);
+
+    .mobile-menu-icon {
+      transform: scale(1.1);
+    }
   }
 }
 
@@ -784,6 +796,7 @@ function toggleMobileMenu() {
 .fade-leave-active {
   transition: opacity 0.3s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
@@ -793,6 +806,7 @@ function toggleMobileMenu() {
 .slide-right-leave-active {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
 .slide-right-enter-from,
 .slide-right-leave-to {
   transform: translateX(100%);
@@ -818,6 +832,7 @@ function toggleMobileMenu() {
     opacity: 0;
     transform: translateY(5px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

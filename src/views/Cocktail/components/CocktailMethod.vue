@@ -38,6 +38,10 @@ defineProps<{
   max-width: 600px;
   margin: 0 auto $space-xl;
 
+  @include mobile-only {
+    padding: 0 $space-sm;
+  }
+
   &__title {
     display: flex;
     align-items: center;

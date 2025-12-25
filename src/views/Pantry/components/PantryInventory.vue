@@ -29,33 +29,20 @@ async function removeFromPantry(ingredientId: number) {
     </div>
 
     <div v-else class="inventory__grid">
-      <div
-        v-for="item in pantryStore.items"
-        :key="item.id"
-        class="inventory-item"
-      >
+      <div v-for="item in pantryStore.items" :key="item.id" class="inventory-item">
         <div class="inventory-item__visual">
-          <div
-            class="inventory-item__level"
-            :style="{
-              height: `${Math.min(100, (item.quantityMl / 750) * 100)}%`,
-            }"
-          />
+          <div class="inventory-item__level" :style="{
+            height: `${Math.min(100, (item.quantityMl / 750) * 100)}%`,
+          }" />
         </div>
         <div class="inventory-item__info">
           <span class="inventory-item__name">{{ item.ingredient.name }}</span>
           <span class="inventory-item__quantity">
             {{ formatPantryQuantity(item.quantityMl) }}
-            <span class="inventory-item__alt"
-              >({{ formatOz(item.quantityMl) }})</span
-            >
+            <span class="inventory-item__alt">({{ formatOz(item.quantityMl) }})</span>
           </span>
         </div>
-        <button
-          class="inventory-item__remove"
-          @click="removeFromPantry(item.ingredientId)"
-          aria-label="Remove"
-        >
+        <button class="inventory-item__remove" @click="removeFromPantry(item.ingredientId)" aria-label="Remove">
           ✕
         </button>
       </div>
@@ -76,29 +63,38 @@ async function removeFromPantry(ingredientId: number) {
     font-size: $font-size-h3;
     font-weight: $font-weight-bold;
     color: $text-dark-primary;
-    margin-bottom: $space-md;
+    margin-bottom: $space-lg;
+    letter-spacing: -0.02em;
   }
 
   &__count {
     margin-left: auto;
-    padding: $space-2xs $space-sm;
-    background: $surface-light-300;
+    padding: $space-xs $space-md;
+    background: linear-gradient(135deg,
+        $surface-light-200 0%,
+        $surface-light-300 100%);
     border-radius: $radius-full;
     font-size: $font-size-caption;
-    color: $text-dark-muted;
+    font-weight: $font-weight-bold;
+    color: $accent-coral;
+    box-shadow: 0 2px 4px color.change(#000, $alpha: 0.04);
   }
 
   &__empty {
     text-align: center;
-    padding: $space-2xl $space-lg;
-    background: color.change(white, $alpha: 0.5);
+    padding: $space-2xl $space-xl;
+    background: linear-gradient(135deg,
+        color.change(white, $alpha: 0.6) 0%,
+        color.change(white, $alpha: 0.4) 100%);
     border-radius: $radius-xl;
     color: $text-dark-muted;
+    border: 1px dashed color.change($surface-light-500, $alpha: 0.4);
 
     p {
       font-weight: $font-weight-semibold;
+      font-size: $font-size-body-lg;
       color: $text-dark-secondary;
-      margin-bottom: $space-2xs;
+      margin-bottom: $space-xs;
     }
 
     span {
@@ -112,6 +108,8 @@ async function removeFromPantry(ingredientId: number) {
     gap: $space-sm;
     max-height: 400px;
     overflow-y: auto;
+    padding-right: $space-xs;
+    padding-bottom: $space-sm;
   }
 }
 
@@ -119,22 +117,31 @@ async function removeFromPantry(ingredientId: number) {
   display: flex;
   align-items: center;
   gap: $space-md;
-  padding: $space-sm $space-md;
-  background: color.change(white, $alpha: 0.7);
-  border-radius: $radius-lg;
-  transition: background $transition-fast;
+  padding: $space-md $space-lg;
+  background: linear-gradient(135deg,
+      color.change(white, $alpha: 0.85) 0%,
+      color.change(white, $alpha: 0.7) 100%);
+  border-radius: $radius-xl;
+  transition: all $transition-normal;
+  border: 1px solid color.change($surface-light-400, $alpha: 0.3);
+  box-shadow: 0 2px 8px color.change(#000, $alpha: 0.03);
 
   &:hover {
-    background: color.change(white, $alpha: 0.9);
+    background: linear-gradient(135deg,
+        color.change(white, $alpha: 0.95) 0%,
+        color.change(white, $alpha: 0.85) 100%);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px color.change(#000, $alpha: 0.06);
   }
 
   &__visual {
-    width: 6px;
-    height: 32px;
+    width: 8px;
+    height: 36px;
     background: $surface-light-300;
     border-radius: $radius-full;
     overflow: hidden;
     position: relative;
+    box-shadow: inset 0 1px 2px color.change(#000, $alpha: 0.06);
   }
 
   &__level {
@@ -142,8 +149,11 @@ async function removeFromPantry(ingredientId: number) {
     bottom: 0;
     left: 0;
     right: 0;
-    background: $gradient-coral;
+    background: linear-gradient(180deg,
+        $accent-coral 0%,
+        $accent-coral-dark 100%);
     border-radius: $radius-full;
+    box-shadow: 0 -2px 4px color.change($accent-coral, $alpha: 0.3);
   }
 
   &__info {
@@ -159,35 +169,44 @@ async function removeFromPantry(ingredientId: number) {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-bottom: 2px;
   }
 
   &__quantity {
     font-family: $font-mono;
     font-size: $font-size-caption;
     color: $accent-coral;
+    font-weight: $font-weight-medium;
   }
 
   &__alt {
     color: $text-dark-muted;
+    margin-left: $space-2xs;
   }
 
   &__remove {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
-    border: none;
+    background: color.change($surface-light-200, $alpha: 0.8);
+    border: 1px solid color.change($surface-light-400, $alpha: 0.3);
     border-radius: $radius-full;
     color: $text-dark-muted;
     cursor: pointer;
     font-size: 12px;
-    transition: all $transition-fast;
+    transition: all $transition-normal;
 
     &:hover {
-      background: color.change($surface-light-100, $alpha: 0.15);
+      background: color.change($accent-coral, $alpha: 0.1);
+      border-color: color.change($accent-coral, $alpha: 0.3);
       color: $accent-coral;
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
     }
   }
 }

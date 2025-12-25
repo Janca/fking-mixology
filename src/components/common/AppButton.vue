@@ -52,10 +52,7 @@ function handleClick(event: MouseEvent) {
       <span class="app-btn__loader-dot" />
       <span class="app-btn__loader-dot" />
     </span>
-    <span
-      class="app-btn__content"
-      :class="{ 'app-btn__content--hidden': loading }"
-    >
+    <span class="app-btn__content" :class="{ 'app-btn__content--hidden': loading }">
       <slot />
     </span>
   </button>
@@ -108,18 +105,25 @@ function handleClick(event: MouseEvent) {
 
   // Primary - Coral gradient
   &--primary {
-    background: $gradient-coral;
+    background: linear-gradient(135deg,
+        $accent-coral-light 0%,
+        $accent-coral 40%,
+        $accent-coral-dark 100%);
     color: white;
-    box-shadow: $glow-coral;
+    box-shadow: 0 4px 16px color.change($accent-coral, $alpha: 0.35),
+      0 2px 4px color.change($accent-coral, $alpha: 0.2);
+    border: 1px solid color.change($accent-coral-dark, $alpha: 0.3);
+    text-shadow: 0 1px 2px color.change(#000, $alpha: 0.15);
 
     &:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px color.change($accent-coral, $alpha: 0.45);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 24px color.change($accent-coral, $alpha: 0.45),
+        0 4px 8px color.change($accent-coral, $alpha: 0.25);
     }
 
     &:active:not(:disabled) {
-      transform: translateY(0);
-      box-shadow: 0 4px 20px color.change($accent-coral, $alpha: 0.3);
+      transform: translateY(-1px) scale(1);
+      box-shadow: 0 2px 12px color.change($accent-coral, $alpha: 0.3);
     }
   }
 
@@ -244,11 +248,13 @@ function handleClick(event: MouseEvent) {
 }
 
 @keyframes bounce-loader {
+
   0%,
   100% {
     transform: translateY(0);
     opacity: 0.6;
   }
+
   50% {
     transform: translateY(-6px);
     opacity: 1;

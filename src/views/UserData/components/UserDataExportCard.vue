@@ -33,6 +33,7 @@ const emit = defineEmits<{
 </template>
 
 <style lang="scss" scoped>
+@use "sass:color";
 @use "@/styles/variables" as *;
 
 .export-card {
@@ -40,10 +41,11 @@ const emit = defineEmits<{
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: $space-md;
+    gap: $space-lg;
 
     &__icon {
-        font-size: 3rem;
+        font-size: 3.5rem;
+        filter: drop-shadow(0 4px 12px color.change($accent-coral, $alpha: 0.25));
     }
 
     &__title {
@@ -51,13 +53,16 @@ const emit = defineEmits<{
         font-size: $font-size-h3;
         color: $text-light-primary;
         margin: 0;
+        letter-spacing: -0.02em;
     }
 
     &__desc {
-        color: $text-light-muted;
+        color: $text-light-secondary;
         font-size: $font-size-body-sm;
         margin-bottom: $space-md;
         flex: 1;
+        line-height: 1.6;
+        max-width: 280px;
     }
 }
 </style>

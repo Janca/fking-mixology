@@ -64,20 +64,10 @@ onUnmounted(() => {
 
       <!-- Scroll Arrow -->
       <Transition name="fade">
-        <button
-          v-if="showScrollArrow"
-          class="scroll-arrow"
-          @click="emit('scrollDown')"
-          aria-label="Scroll to ingredients"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
+        <button v-if="showScrollArrow" class="scroll-arrow" @click="emit('scrollDown')"
+          aria-label="Scroll to ingredients">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+            stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <polyline points="19 12 12 19 5 12"></polyline>
           </svg>
@@ -124,6 +114,7 @@ onUnmounted(() => {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -132,26 +123,41 @@ onUnmounted(() => {
 // Recipe Header
 .recipe-header {
   text-align: center;
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto;
+  padding: 0 $space-md;
 
   &__emoji {
-    font-size: 4rem;
-    margin-bottom: $space-md;
+    font-size: 4.5rem;
+    margin-bottom: $space-lg;
     animation: float-gentle 3s ease-in-out infinite;
+    display: inline-block;
+    filter: drop-shadow(0 6px 16px color.change($accent-coral, $alpha: 0.25));
+
+    @include mobile-only {
+      font-size: 3.5rem;
+    }
   }
 
   &__category {
-    display: inline-block;
-    padding: $space-2xs $space-md;
-    background: $gradient-coral;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: $space-xs $space-lg;
+    background: linear-gradient(135deg,
+        $accent-coral 0%,
+        $accent-coral-dark 100%);
     border-radius: $radius-full;
     font-size: $font-size-tiny;
     font-weight: $font-weight-bold;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: white;
-    margin-bottom: $space-sm;
+    margin: 0 auto;
+    margin-bottom: $space-md;
+    box-shadow: 0 4px 12px color.change($accent-coral, $alpha: 0.3);
+    text-shadow: 0 1px 2px color.change(#000, $alpha: 0.15);
   }
 
   &__name {
@@ -160,7 +166,12 @@ onUnmounted(() => {
     font-weight: $font-weight-extrabold;
     color: $text-dark-primary;
     letter-spacing: -0.03em;
-    margin-bottom: $space-xs;
+    margin-bottom: $space-sm;
+    line-height: 1.1;
+
+    @include tablet-up {
+      font-size: $font-size-hero;
+    }
 
     @include mobile-only {
       font-size: $font-size-h1;
@@ -168,48 +179,56 @@ onUnmounted(() => {
   }
 
   &__ingredients {
-    font-size: $font-size-body;
+    font-size: $font-size-body-lg;
     color: $text-dark-muted;
+    padding: $space-xs $space-md;
+    background: color.change($surface-light-300, $alpha: 0.5);
+    border-radius: $radius-full;
+    display: inline-block;
   }
 }
 
 @keyframes float-gentle {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
 }
 
 .scroll-arrow {
-  margin: $space-lg auto 0;
-  width: 48px;
-  height: 48px;
+  margin: $space-xl auto 0;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: $surface-light-100;
-  border: 1px solid color.change(#fff, $alpha: 0.5);
-  display: inline-flex;
+  background: linear-gradient(135deg,
+      $surface-light-100 0%,
+      $surface-light-200 100%);
+  border: 1px solid color.change($surface-light-400, $alpha: 0.5);
+  display: flex;
   align-items: center;
   justify-content: center;
   color: $accent-coral;
   cursor: pointer;
   transition: all $transition-normal;
-
-  // Neumorphic Shadow
-  box-shadow: 6px 6px 12px color.change(#a6b4c8, $alpha: 0.4),
-    -6px -6px 12px color.change(#fff, $alpha: 1);
+  box-shadow: 0 4px 12px color.change(#000, $alpha: 0.06),
+    0 8px 24px color.change(#000, $alpha: 0.04);
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
     color: $accent-coral-dark;
+    box-shadow: 0 8px 24px color.change(#000, $alpha: 0.1),
+      0 12px 32px color.change(#000, $alpha: 0.06);
+    border-color: color.change($accent-coral, $alpha: 0.3);
   }
 
   &:active {
-    box-shadow: inset 4px 4px 8px color.change(#a6b4c8, $alpha: 0.4),
-      inset -4px -4px 8px color.change(#fff, $alpha: 1);
-    transform: translateY(0) scale(0.95);
+    transform: translateY(-2px) scale(0.96);
+    box-shadow: 0 2px 8px color.change(#000, $alpha: 0.08);
   }
 
   svg {
@@ -220,6 +239,7 @@ onUnmounted(() => {
 }
 
 @keyframes bounce-arrow {
+
   0%,
   20%,
   50%,
@@ -227,9 +247,11 @@ onUnmounted(() => {
   100% {
     transform: translateY(0);
   }
+
   40% {
     transform: translateY(-5px);
   }
+
   60% {
     transform: translateY(-3px);
   }

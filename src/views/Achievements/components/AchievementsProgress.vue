@@ -33,13 +33,16 @@ defineProps<{
     margin: 0 auto $space-xl;
     text-align: center;
     background: linear-gradient(135deg,
-            color.change(#fff, $alpha: 0.15),
-            color.change(#fff, $alpha: 0.05));
-    backdrop-filter: blur(10px);
-    padding: $space-lg;
-    border-radius: $radius-xl;
-    border: 1px solid color.change(#fff, $alpha: 0.2);
-    box-shadow: 0 4px 12px color.change(#000, $alpha: 0.1);
+            color.change(#fff, $alpha: 0.2),
+            color.change(#fff, $alpha: 0.08));
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    padding: $space-xl;
+    border-radius: $radius-2xl;
+    border: 1px solid color.change(#fff, $alpha: 0.25);
+    box-shadow: 0 8px 32px color.change(#000, $alpha: 0.08),
+        0 2px 8px color.change(#000, $alpha: 0.04),
+        inset 0 1px 0 color.change(#fff, $alpha: 0.3);
     position: relative;
     overflow: hidden;
     width: 100%;
@@ -48,39 +51,61 @@ defineProps<{
         content: "";
         position: absolute;
         inset: -1px;
-        border-radius: $radius-xl;
-        padding: 1px;
+        border-radius: $radius-2xl;
+        padding: 2px;
         background: linear-gradient(135deg,
-                color.change($accent-gold, $alpha: 0.5),
-                color.change($accent-purple, $alpha: 0.3),
-                color.change($accent-blue, $alpha: 0.5));
+                color.change($accent-gold, $alpha: 0.6),
+                color.change($accent-purple, $alpha: 0.4),
+                color.change($accent-blue, $alpha: 0.5),
+                color.change($accent-gold, $alpha: 0.6));
         -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
         mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
-        opacity: 0.6;
+        opacity: 0.7;
         pointer-events: none;
+        animation: border-shimmer 4s ease-in-out infinite;
     }
 
     &__info {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         font-weight: $font-weight-bold;
-        margin-bottom: $space-sm;
+        margin-bottom: $space-md;
         font-size: $font-size-body;
         color: $text-dark-primary;
     }
 
     &__label {
-        letter-spacing: 0.5px;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
-        font-size: $font-size-body-sm;
+        font-size: $font-size-caption;
+        font-weight: $font-weight-semibold;
+        color: $text-dark-secondary;
     }
 
     &__value {
         font-family: $font-display;
-        font-size: $font-size-h3;
-        color: $accent-gold;
+        font-size: $font-size-h2;
+        font-weight: $font-weight-extrabold;
+        background: $gradient-gold;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: none;
+    }
+}
+
+@keyframes border-shimmer {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.9;
     }
 }
 </style>

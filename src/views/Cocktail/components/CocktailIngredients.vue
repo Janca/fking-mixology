@@ -61,45 +61,29 @@ function formatQuantityHtml(
         Ingredients
       </h2>
       <ul class="ingredients-list">
-        <li
-          v-for="(ingredient, idx) in mainIngredients"
-          :key="ingredient.id"
-          class="ingredient-row"
-          :class="{
-            'ingredient-row--interactive': isPrepMode,
-            'ingredient-row--done':
-              isPrepMode && isComplete(ingredient.ingredientId),
-          }"
-          :style="{ animationDelay: `${idx * 50}ms` }"
-          @click="
+        <li v-for="(ingredient, idx) in mainIngredients" :key="ingredient.id" class="ingredient-row" :class="{
+          'ingredient-row--interactive': isPrepMode,
+          'ingredient-row--done':
+            isPrepMode && isComplete(ingredient.ingredientId),
+        }" :style="{ animationDelay: `${idx * 50}ms` }" @click="
             isPrepMode && emit('toggleIngredient', ingredient.ingredientId)
-          "
-        >
+            ">
           <Transition name="slide-reveal">
             <span class="ingredient-row__check" v-if="isPrepMode">
-              <svg
-                v-if="isComplete(ingredient.ingredientId)"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-              >
+              <svg v-if="isComplete(ingredient.ingredientId)" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="3">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </span>
           </Transition>
-          <span
-            class="ingredient-row__qty"
-            v-html="
-              formatQuantityHtml(
-                ingredient.quantity,
-                ingredient.unit,
-                scale,
-                ingredient.quantityMax,
-                ingredient.ingredient.name
-              )
-            "
-          ></span>
+          <span class="ingredient-row__qty" v-html="formatQuantityHtml(
+            ingredient.quantity,
+            ingredient.unit,
+            scale,
+            ingredient.quantityMax,
+            ingredient.ingredient.name
+          )
+            "></span>
           <span class="ingredient-row__name">
             {{ formatIngredientName(ingredient.ingredient.name) }}
           </span>
@@ -116,31 +100,20 @@ function formatQuantityHtml(
           Garnish
         </h3>
         <ul class="garnish-list">
-          <li
-            v-for="ingredient in garnishIngredients"
-            :key="ingredient.id"
-            class="garnish-item"
-            :class="{
-              'garnish-item--interactive': isPrepMode,
-              'garnish-item--done':
-                isPrepMode && isComplete(ingredient.ingredientId),
-            }"
-            @click="
+          <li v-for="ingredient in garnishIngredients" :key="ingredient.id" class="garnish-item" :class="{
+            'garnish-item--interactive': isPrepMode,
+            'garnish-item--done':
+              isPrepMode && isComplete(ingredient.ingredientId),
+          }" @click="
               isPrepMode && emit('toggleIngredient', ingredient.ingredientId)
-            "
-          >
+              ">
             <AppEmoji class="garnish-item__icon">🌿</AppEmoji>
             <span class="garnish-item__name">
               {{ formatIngredientName(ingredient.ingredient.name) }}
             </span>
             <span v-if="isPrepMode" class="garnish-item__check">
-              <svg
-                v-if="isComplete(ingredient.ingredientId)"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-              >
+              <svg v-if="isComplete(ingredient.ingredientId)" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="3">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
             </span>
@@ -156,8 +129,9 @@ function formatQuantityHtml(
 @use "@/styles/variables" as *;
 
 .recipe-section {
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto $space-xl;
+  padding: 0 $space-md;
 
   &__title {
     display: flex;
@@ -167,11 +141,13 @@ function formatQuantityHtml(
     font-size: $font-size-h3;
     font-weight: $font-weight-bold;
     color: $text-light-primary;
-    margin-bottom: $space-md;
+    margin-bottom: $space-lg;
+    letter-spacing: -0.01em;
   }
 
   &__emoji {
-    font-size: 1.25em;
+    font-size: 1.4em;
+    filter: drop-shadow(0 2px 4px color.change(#000, $alpha: 0.2));
   }
 }
 
@@ -184,32 +160,46 @@ function formatQuantityHtml(
   align-items: center;
   padding: $space-md $space-lg;
   min-height: 72px;
-  background: $surface-dark-300;
-  border-radius: $radius-lg;
-  margin-bottom: $space-xs;
+  background: linear-gradient(135deg,
+      $surface-dark-300 0%,
+      color.adjust($surface-dark-300, $lightness: -2%) 100%);
+  border-radius: $radius-xl;
+  margin-bottom: $space-sm;
   animation: slide-up-anim 0.4s ease forwards;
   opacity: 0;
-  transition: all $transition-fast;
+  transition: all $transition-normal;
+  border: 1px solid color.change(#fff, $alpha: 0.04);
+  box-shadow: 0 2px 8px color.change(#000, $alpha: 0.1);
 
   &--interactive {
     cursor: pointer;
 
     &:hover {
-      background: $surface-dark-200;
+      background: linear-gradient(135deg,
+          $surface-dark-200 0%,
+          $surface-dark-300 100%);
+      transform: translateX(4px);
+      border-color: color.change($accent-coral, $alpha: 0.2);
+      box-shadow: 0 4px 16px color.change(#000, $alpha: 0.15);
     }
   }
 
   &--done {
     opacity: 0.5;
+    background: color.adjust($surface-dark-400, $lightness: -2%);
 
     .ingredient-row__name,
     .ingredient-row__qty {
       text-decoration: line-through;
+      color: $text-light-muted;
     }
 
     .ingredient-row__check {
-      background: $accent-coral;
+      background: linear-gradient(135deg,
+          $accent-coral 0%,
+          $accent-coral-dark 100%);
       color: white;
+      box-shadow: 0 2px 8px color.change($accent-coral, $alpha: 0.35);
     }
   }
 
@@ -266,22 +256,28 @@ function formatQuantityHtml(
 
 // Garnish Section
 .garnish-section {
-  margin-top: $space-lg;
-  padding: $space-md;
-  background: color.change($surface-light-100, $alpha: 0.1);
-  border: 1px dashed color.change($surface-light-100, $alpha: 0.3);
-  border-radius: $radius-lg;
+  margin-top: $space-xl;
+  padding: $space-lg;
+  background: linear-gradient(135deg,
+      color.change($accent-teal, $alpha: 0.08) 0%,
+      color.change($accent-teal, $alpha: 0.03) 100%);
+  border: 1px dashed color.change($accent-teal, $alpha: 0.3);
+  border-radius: $radius-xl;
 
   &__title {
     display: flex;
     align-items: center;
-    gap: $space-xs;
+    gap: $space-sm;
     font-size: $font-size-body;
     font-weight: $font-weight-bold;
     color: $accent-teal;
-    margin-bottom: $space-sm;
+    margin-bottom: $space-md;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
+  }
+
+  &__emoji {
+    font-size: 1.2em;
   }
 }
 
@@ -335,6 +331,7 @@ function formatQuantityHtml(
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

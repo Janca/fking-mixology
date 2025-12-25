@@ -112,9 +112,16 @@ const hasHeaderSubtitleContent = computed(() => slots['header-subtitle'] || prop
 
   &__header {
     position: relative;
-    background: $surface-light-200;
-    padding: 120px $space-sm $space-xl;
-    padding-bottom: 120px; // Space for wave
+    background: linear-gradient(180deg,
+        $surface-light-100 0%,
+        $surface-light-200 100%);
+    padding: 100px $space-sm $space-xl;
+    padding-bottom: 100px; // Space for wave
+
+    @include tablet-up {
+      padding: 110px $space-lg $space-xl;
+      padding-bottom: 140px;
+    }
 
     @include desktop-up {
       padding: 120px $space-xl $space-2xl;
@@ -126,13 +133,19 @@ const hasHeaderSubtitleContent = computed(() => slots['header-subtitle'] || prop
     flex: 1;
     // Match the darkest wave color ($surface-dark-400 is #1c1f35 in variables)
     // We hardcode it here to ensure perfect seam match with the SVG fill
-    background: #1c1f35;
+    background: linear-gradient(180deg,
+        #1c1f35 0%,
+        #14162a 100%);
     padding: $space-xl $space-sm $space-2xl;
     min-height: 400px;
     // Critical fix for seam: overlap slightly to cover sub-pixel rendering gaps
     margin-top: -1px;
     position: relative;
     z-index: 1; // Ensure content sits on top if needed
+
+    @include tablet-up {
+      padding: $space-2xl $space-lg;
+    }
 
     @include desktop-up {
       padding: $space-3xl $space-xl;

@@ -62,15 +62,11 @@ function getDuration(): string {
 </script>
 
 <template>
-  <div
-    class="session-card"
-    :class="{
-      'session-card--selected': isSelected,
-      'session-card--active': isActive,
-      'session-card--select-mode': isSelectMode,
-    }"
-    @click="isSelectMode ? emit('select') : emit('view')"
-  >
+  <div class="session-card" :class="{
+    'session-card--selected': isSelected,
+    'session-card--active': isActive,
+    'session-card--select-mode': isSelectMode,
+  }" @click="isSelectMode ? emit('select') : emit('view')">
     <!-- Selection Checkbox -->
     <div v-if="isSelectMode" class="selection-indicator">
       <div class="checkbox" :class="{ 'checkbox--checked': isSelected }">
@@ -128,22 +124,10 @@ function getDuration(): string {
       <button class="action-icon" title="Delete" @click="emit('delete')">
         <AppEmoji>🗑️</AppEmoji>
       </button>
-      <AppButton
-        v-if="isActive"
-        variant="dark"
-        size="sm"
-        rounded
-        @click="emit('end')"
-      >
+      <AppButton v-if="isActive" variant="dark" size="sm" rounded @click="emit('end')">
         End Session
       </AppButton>
-      <AppButton
-        v-if="!isActive"
-        variant="teal"
-        size="sm"
-        rounded
-        @click="emit('resume')"
-      >
+      <AppButton v-if="!isActive" variant="teal" size="sm" rounded @click="emit('resume')">
         Resume
       </AppButton>
       <AppButton variant="primary" size="sm" rounded @click="emit('view')">
@@ -159,27 +143,40 @@ function getDuration(): string {
 
 .session-card {
   position: relative;
-  background: $surface-dark-200;
-  border-radius: $radius-xl;
+  background: linear-gradient(135deg,
+      $surface-dark-200 0%,
+      color.adjust($surface-dark-200, $lightness: -3%) 100%);
+  border-radius: $radius-2xl;
   padding: $space-lg;
-  box-shadow: $shadow-dark-raised-sm;
+  box-shadow: 0 4px 12px color.change(#000, $alpha: 0.15),
+    0 8px 24px color.change(#000, $alpha: 0.1);
   cursor: pointer;
   transition: all $transition-normal;
-  border: 2px solid transparent;
+  border: 2px solid color.change(#fff, $alpha: 0.04);
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: $shadow-dark-raised;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px color.change(#000, $alpha: 0.2),
+      0 16px 40px color.change(#000, $alpha: 0.15);
+    border-color: color.change(#fff, $alpha: 0.08);
   }
 
   &--selected {
     border-color: $accent-coral;
-    background: color.change($surface-light-100, $alpha: 0.1);
+    background: linear-gradient(135deg,
+        color.adjust($surface-dark-200, $lightness: 3%) 0%,
+        $surface-dark-200 100%);
+    box-shadow: 0 0 0 3px color.change($accent-coral, $alpha: 0.2),
+      0 4px 12px color.change(#000, $alpha: 0.15);
   }
 
   &--active {
     border-color: $accent-teal;
-    background: color.change($surface-light-100, $alpha: 0.08);
+    background: linear-gradient(135deg,
+        color.adjust($surface-dark-200, $lightness: 2%) 0%,
+        $surface-dark-200 100%);
+    box-shadow: 0 0 0 3px color.change($accent-teal, $alpha: 0.15),
+      0 4px 12px color.change(#000, $alpha: 0.15);
   }
 
   &--select-mode {
@@ -226,12 +223,18 @@ function getDuration(): string {
   display: flex;
   align-items: center;
   gap: $space-xs;
-  padding: $space-2xs $space-sm;
-  background: color.change($surface-light-100, $alpha: 0.15);
-  color: $accent-teal-dark;
+  padding: $space-xs $space-sm;
+  background: linear-gradient(135deg,
+      color.change($accent-teal, $alpha: 0.2) 0%,
+      color.change($accent-teal, $alpha: 0.1) 100%);
+  color: $accent-teal-light;
   border-radius: $radius-full;
   font-size: $font-size-caption;
-  font-weight: $font-weight-semibold;
+  font-weight: $font-weight-bold;
+  border: 1px solid color.change($accent-teal, $alpha: 0.3);
+  box-shadow: 0 0 12px color.change($accent-teal, $alpha: 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .pulse-dot {
@@ -240,17 +243,22 @@ function getDuration(): string {
   background: $accent-teal;
   border-radius: $radius-full;
   animation: pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 8px color.change($accent-teal, $alpha: 0.6);
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
     transform: scale(1);
+    box-shadow: 0 0 8px color.change($accent-teal, $alpha: 0.6);
   }
+
   50% {
-    opacity: 0.6;
-    transform: scale(0.8);
+    opacity: 0.7;
+    transform: scale(0.85);
+    box-shadow: 0 0 4px color.change($accent-teal, $alpha: 0.3);
   }
 }
 

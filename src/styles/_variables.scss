@@ -46,6 +46,15 @@ $accent-gold-dark: #e09530;
 
 $accent-warning: #f59e0b;
 
+// Success/Error states
+$accent-success: #34d399;
+$accent-success-light: #6ee7b7;
+$accent-success-dark: #10b981;
+
+$accent-error: #f87171;
+$accent-error-light: #fca5a5;
+$accent-error-dark: #ef4444;
+
 // Gradient Definitions
 $gradient-coral: linear-gradient(
   135deg,
@@ -69,6 +78,50 @@ $gradient-light: linear-gradient(
   180deg,
   $surface-light-100 0%,
   $surface-light-300 100%
+);
+
+// Premium Gradients - More sophisticated color blends
+$gradient-aurora: linear-gradient(
+  135deg,
+  $accent-purple 0%,
+  $accent-blue 50%,
+  $accent-teal 100%
+);
+$gradient-twilight: linear-gradient(
+  135deg,
+  $surface-dark-400 0%,
+  $accent-purple-dark 50%,
+  $surface-dark-600 100%
+);
+$gradient-sunrise: linear-gradient(
+  135deg,
+  $accent-coral-light 0%,
+  $accent-coral 40%,
+  $accent-gold 100%
+);
+$gradient-frost: linear-gradient(
+  135deg,
+  $surface-light-100 0%,
+  $accent-blue-light 50%,
+  $surface-light-200 100%
+);
+$gradient-midnight: linear-gradient(
+  180deg,
+  $surface-dark-200 0%,
+  $surface-dark-500 50%,
+  $surface-dark-600 100%
+);
+
+// Glass overlay gradients
+$gradient-glass-light: linear-gradient(
+  135deg,
+  rgba(255, 255, 255, 0.25) 0%,
+  rgba(255, 255, 255, 0.1) 100%
+);
+$gradient-glass-dark: linear-gradient(
+  135deg,
+  rgba(30, 35, 55, 0.6) 0%,
+  rgba(20, 22, 42, 0.8) 100%
 );
 
 // Text Colors
@@ -260,8 +313,109 @@ $breakpoint-desktop: 1440px;
   -webkit-backdrop-filter: blur(20px);
 }
 
+@mixin glass-light-subtle {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
 @mixin glass-dark {
   background: rgba(30, 35, 55, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+}
+
+@mixin glass-dark-subtle {
+  background: rgba(30, 35, 55, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@mixin glass-frosted {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+// Card elevation system - Light mode
+@mixin card-elevated-light {
+  background: $surface-light-100;
+  box-shadow: $shadow-light-raised;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+@mixin card-elevated-light-sm {
+  background: $surface-light-100;
+  box-shadow: $shadow-light-raised-sm;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+// Card elevation system - Dark mode
+@mixin card-elevated-dark {
+  background: $surface-dark-300;
+  box-shadow: $shadow-dark-raised;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@mixin card-elevated-dark-sm {
+  background: $surface-dark-300;
+  box-shadow: $shadow-dark-raised-sm;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+// Text truncation helpers
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-truncate-lines($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Focus ring utilities
+@mixin focus-ring($color: $accent-blue) {
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px color.change($color, $alpha: 0.4);
+  }
+}
+
+@mixin focus-ring-inset($color: $accent-blue) {
+  &:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px color.change($color, $alpha: 0.6);
+  }
+}
+
+// Interactive states
+@mixin hover-lift($distance: -4px) {
+  transition: transform $transition-normal, box-shadow $transition-normal;
+
+  &:hover {
+    transform: translateY($distance);
+  }
+}
+
+@mixin press-effect {
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Gradient text
+@mixin gradient-text($gradient: $gradient-coral) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

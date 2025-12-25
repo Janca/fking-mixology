@@ -28,7 +28,7 @@ function goToUserData() {
       </div>
 
       <div class="app-footer__copy">
-        &copy; {{ currentYear }} Mixology Matcher
+        &copy; {{ currentYear }} fking mixology
       </div>
     </div>
   </footer>
@@ -40,28 +40,26 @@ function goToUserData() {
 
 .app-footer {
   margin-top: $space-3xl;
-  border-top: 1px solid color.change(#fff, $alpha: 0.05);
+  border-top: 1px solid color.change(#fff, $alpha: 0.08);
   padding-top: $space-xl;
-  padding-bottom: $space-lg;
+  padding-bottom: $space-xl;
   color: $text-light-muted;
-  opacity: 0.7;
   transition: opacity $transition-normal;
 
-  &:hover {
-    opacity: 1;
-  }
-
   @include mobile-only {
-    padding-left: $space-lg;
-    padding-right: $space-lg;
+    padding-left: $space-md;
+    padding-right: $space-md;
+    padding-bottom: $space-2xl;
   }
 
   &__content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: $space-md;
+    gap: $space-lg;
     text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   &__links {
@@ -69,61 +67,86 @@ function goToUserData() {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: $space-sm;
+    gap: $space-md $space-lg;
     font-size: $font-size-body-sm;
 
     a,
     .footer-link-btn {
       color: $text-light-secondary;
       text-decoration: none;
-      transition: color $transition-fast;
+      transition: all $transition-normal;
       background: none;
       border: none;
-      padding: 0;
+      padding: $space-xs $space-sm;
       font: inherit;
       cursor: pointer;
+      border-radius: $radius-sm;
+      position: relative;
+
+      // Animated underline
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: $gradient-gold;
+        transition: all $transition-normal;
+        transform: translateX(-50%);
+        border-radius: $radius-full;
+      }
 
       &:hover {
         color: $accent-gold;
-        text-decoration: underline;
-      }
-    }
 
-    .separator {
-      color: $text-light-muted;
-      opacity: 0.5;
+        &::after {
+          width: calc(100% - #{$space-sm});
+        }
+      }
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px color.change($accent-gold, $alpha: 0.4);
+      }
     }
   }
 
   &__disclaimer {
-    font-size: $font-size-tiny;
-    max-width: 400px;
-    padding: $space-xs $space-md;
-    background: color.change(#fff, $alpha: 0.03);
-    border-radius: $radius-md;
-    border: 1px solid color.change(#fff, $alpha: 0.05);
+    font-size: $font-size-caption;
+    max-width: 420px;
+    padding: $space-sm $space-md;
+    background: linear-gradient(135deg,
+        color.change(#fff, $alpha: 0.04) 0%,
+        color.change(#fff, $alpha: 0.02) 100%);
+    border-radius: $radius-lg;
+    border: 1px solid color.change(#fff, $alpha: 0.06);
+    backdrop-filter: blur(8px);
 
     p {
       display: flex;
       align-items: center;
-      justify-content: left;
-      text-align: left;
-      gap: $space-xs;
+      justify-content: center;
+      text-align: center;
+      gap: $space-sm;
       margin: 0;
-      line-height: 1.4;
+      line-height: 1.5;
+      color: $text-light-secondary;
     }
 
     .icon {
-      font-size: 14px;
-      font-weight: 800;
-      text-transform: uppercase;
+      font-size: 16px;
+      font-weight: 700;
       color: $accent-warning;
+      flex-shrink: 0;
     }
   }
 
   &__copy {
     font-size: $font-size-tiny;
-    opacity: 0.5;
+    color: $text-light-muted;
+    opacity: 0.6;
+    letter-spacing: 0.02em;
   }
 }
 </style>

@@ -15,15 +15,9 @@ const emit = defineEmits<{
 
 <template>
   <div class="category-tabs">
-    <button
-      v-for="category in categories"
-      :key="category.id"
-      class="category-tab"
-      :class="{
-        'category-tab--active': selectedCategory?.id === category.id,
-      }"
-      @click="emit('select', category)"
-    >
+    <button v-for="category in categories" :key="category.id" class="category-tab" :class="{
+      'category-tab--active': selectedCategory?.id === category.id,
+    }" @click="emit('select', category)">
       <AppEmoji class="category-tab__emoji">
         {{ getCategoryEmoji(category.name) }}
       </AppEmoji>
@@ -42,7 +36,7 @@ const emit = defineEmits<{
   gap: $space-sm;
   flex-wrap: wrap;
   max-width: 100%;
-  width: 800px;
+  width: 900px;
   margin: 0 auto;
   padding: 0 $space-md;
 
@@ -57,7 +51,7 @@ const emit = defineEmits<{
   gap: $space-xs;
   padding: $space-sm $space-lg;
   background: $surface-light-100;
-  border: none;
+  border: 1px solid color.change($surface-light-400, $alpha: 0.4);
   border-radius: $radius-full;
   font-family: $font-display;
   font-size: $font-size-body-sm;
@@ -65,30 +59,49 @@ const emit = defineEmits<{
   color: $text-dark-secondary;
   cursor: pointer;
   transition: all $transition-normal;
-  box-shadow: $shadow-light-raised-sm;
+  box-shadow: 0 2px 8px color.change(#000, $alpha: 0.04),
+    0 4px 16px color.change(#000, $alpha: 0.02);
 
   @include mobile-only {
-    padding: $space-xs $space-sm;
+    padding: $space-xs $space-md;
     font-size: $font-size-caption;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: $shadow-light-raised;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 6px 20px color.change(#000, $alpha: 0.08),
+      0 12px 32px color.change(#000, $alpha: 0.04);
+    border-color: color.change($accent-coral, $alpha: 0.3);
   }
 
   &--active {
-    background: $gradient-coral;
+    background: linear-gradient(135deg,
+        $accent-coral 0%,
+        $accent-coral-dark 100%);
     color: white;
-    box-shadow: $glow-coral;
+    border-color: transparent;
+    box-shadow: 0 4px 16px color.change($accent-coral, $alpha: 0.35),
+      0 8px 24px color.change($accent-coral, $alpha: 0.2);
+    text-shadow: 0 1px 2px color.change(#000, $alpha: 0.15);
 
     &:hover {
-      box-shadow: 0 12px 40px color.change($surface-light-100, $alpha: 0.4);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 8px 24px color.change($accent-coral, $alpha: 0.45),
+        0 12px 32px color.change($accent-coral, $alpha: 0.25);
+    }
+
+    .category-tab__emoji {
+      transform: scale(1.1);
     }
   }
 
   &__emoji {
-    font-size: 1.1em;
+    font-size: 1.2em;
+    transition: transform $transition-normal;
+  }
+
+  &:hover &__emoji {
+    transform: scale(1.15);
   }
 }
 </style>

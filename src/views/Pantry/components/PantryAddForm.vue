@@ -74,7 +74,9 @@ async function addToPantry() {
 <template>
   <div class="add-form">
     <div class="add-form__glass">
-      <h2 class="add-form__title"><AppEmoji>➕</AppEmoji> Add Ingredient</h2>
+      <h2 class="add-form__title">
+        <AppEmoji>➕</AppEmoji> Add Ingredient
+      </h2>
 
       <!-- Ingredient Search -->
       <div class="form-group">
@@ -83,35 +85,21 @@ async function addToPantry() {
           <span class="selected-ingredient__name">
             {{ selectedIngredient.name }}
           </span>
-          <button
-            class="selected-ingredient__remove"
-            @click="selectedIngredient = null"
-          >
+          <button class="selected-ingredient__remove" @click="selectedIngredient = null">
             ✕
           </button>
         </div>
         <div v-else class="search-wrapper">
-          <AppInput
-            v-model="searchQuery"
-            placeholder="Search ingredients..."
-            variant="light"
-            size="md"
-            @input="handleSearch(searchQuery)"
-            @focus="handleFocus"
-            @blur="handleBlur"
-          >
+          <AppInput v-model="searchQuery" placeholder="Search ingredients..." variant="light" size="md"
+            @input="handleSearch(searchQuery)" @focus="handleFocus" @blur="handleBlur">
             <template #prefix>
               <AppEmoji>🔍</AppEmoji>
             </template>
           </AppInput>
           <Transition name="dropdown">
             <div v-if="showDropdown" class="search-dropdown">
-              <button
-                v-for="ingredient in searchResults"
-                :key="ingredient.id"
-                class="search-dropdown__item"
-                @mousedown.prevent="selectIngredient(ingredient)"
-              >
+              <button v-for="ingredient in searchResults" :key="ingredient.id" class="search-dropdown__item"
+                @mousedown.prevent="selectIngredient(ingredient)">
                 <span>{{ ingredient.name }}</span>
                 <span class="search-dropdown__add">+</span>
               </button>
@@ -124,16 +112,10 @@ async function addToPantry() {
       <div class="form-group">
         <label class="form-label">Quick Sizes</label>
         <div class="presets">
-          <button
-            v-for="preset in presets"
-            :key="preset.label"
-            class="preset-btn"
-            :class="{
-              'preset-btn--active':
-                addQuantity === preset.value && addUnit === preset.unit,
-            }"
-            @click="applyPreset(preset)"
-          >
+          <button v-for="preset in presets" :key="preset.label" class="preset-btn" :class="{
+            'preset-btn--active':
+              addQuantity === preset.value && addUnit === preset.unit,
+          }" @click="applyPreset(preset)">
             {{ preset.label }}
           </button>
         </div>
@@ -144,18 +126,10 @@ async function addToPantry() {
         <label class="form-label">Amount</label>
         <div class="quantity-row">
           <div class="quantity-input">
-            <button
-              class="quantity-btn"
-              @click="addQuantity = Math.max(10, addQuantity - 50)"
-            >
+            <button class="quantity-btn" @click="addQuantity = Math.max(10, addQuantity - 50)">
               −
             </button>
-            <input
-              v-model.number="addQuantity"
-              type="number"
-              min="1"
-              class="quantity-value"
-            />
+            <input v-model.number="addQuantity" type="number" min="1" class="quantity-value" />
             <button class="quantity-btn" @click="addQuantity += 50">+</button>
           </div>
           <select v-model="addUnit" class="unit-select">
@@ -167,13 +141,8 @@ async function addToPantry() {
       </div>
 
       <!-- Submit -->
-      <AppButton
-        variant="primary"
-        size="lg"
-        :disabled="!selectedIngredient"
-        class="add-form__submit"
-        @click="addToPantry"
-      >
+      <AppButton variant="primary" size="lg" :disabled="!selectedIngredient" class="add-form__submit"
+        @click="addToPantry">
         Add to Pantry
       </AppButton>
     </div>
@@ -186,17 +155,23 @@ async function addToPantry() {
 
 .add-form {
   &__glass {
-    background: color.change(white, $alpha: 0.8);
-    backdrop-filter: blur(20px);
-    border-radius: $radius-xl;
-    padding: $space-lg;
-    box-shadow: 0 8px 32px color.change(#000, $alpha: 0.08), inset 0 1px 0 color.change(white, $alpha: 0.9);
-    border: 1px solid color.change(white, $alpha: 0.6);
+    background: linear-gradient(135deg,
+        color.change(white, $alpha: 0.9) 0%,
+        color.change(white, $alpha: 0.75) 100%);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-radius: $radius-2xl;
+    padding: $space-xl;
+    box-shadow: 0 8px 32px color.change(#000, $alpha: 0.06),
+      0 2px 8px color.change(#000, $alpha: 0.04),
+      inset 0 1px 0 color.change(white, $alpha: 0.95);
+    border: 1px solid color.change(white, $alpha: 0.7);
     width: 100%;
     min-width: 0;
 
     @include mobile-only {
-      padding: $space-md;
+      padding: $space-lg;
+      border-radius: $radius-xl;
     }
   }
 
@@ -208,12 +183,13 @@ async function addToPantry() {
     font-size: $font-size-h3;
     font-weight: $font-weight-bold;
     color: $text-dark-primary;
-    margin-bottom: $space-lg;
+    margin-bottom: $space-xl;
+    letter-spacing: -0.02em;
   }
 
   &__submit {
     width: 100%;
-    margin-top: $space-md;
+    margin-top: $space-lg;
   }
 }
 
@@ -323,23 +299,36 @@ async function addToPantry() {
 }
 
 .preset-btn {
-  padding: $space-xs $space-sm;
-  background: $surface-light-200;
-  border: 1px solid transparent;
+  padding: $space-xs $space-md;
+  background: $surface-light-100;
+  border: 1px solid color.change($surface-light-400, $alpha: 0.5);
   border-radius: $radius-full;
   font-size: $font-size-caption;
-  font-weight: $font-weight-medium;
+  font-weight: $font-weight-semibold;
   color: $text-dark-secondary;
   cursor: pointer;
-  transition: all $transition-fast;
+  transition: all $transition-normal;
+  box-shadow: 0 1px 3px color.change(#000, $alpha: 0.04);
 
   &:hover {
-    background: $surface-light-300;
+    background: $surface-light-200;
+    border-color: color.change($accent-coral, $alpha: 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px color.change(#000, $alpha: 0.06);
   }
 
   &--active {
-    background: $accent-coral;
+    background: linear-gradient(135deg,
+        $accent-coral 0%,
+        $accent-coral-dark 100%);
     color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px color.change($accent-coral, $alpha: 0.35);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px color.change($accent-coral, $alpha: 0.4);
+    }
   }
 }
 
@@ -400,6 +389,7 @@ async function addToPantry() {
     -webkit-appearance: none;
     appearance: none;
   }
+
   -moz-appearance: textfield;
   appearance: textfield;
 }

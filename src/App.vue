@@ -6,7 +6,6 @@ import { ref, onMounted } from "vue";
 import { RouterView } from "vue-router";
 import { useAppStore } from "@/stores/app";
 import { useAchievementsStore } from "@/stores/achievements";
-import { useMobileFullscreen } from "@/composables/useMobileFullscreen";
 import TheHeader from "@/components/layout/TheHeader.vue";
 import TheBottomNavigation from "@/components/layout/TheBottomNavigation.vue";
 import AppButton from "@/components/common/AppButton.vue";
@@ -14,7 +13,6 @@ import AppToastContainer from "@/components/common/AppToastContainer.vue";
 
 const appStore = useAppStore();
 const achievementsStore = useAchievementsStore();
-const { isMobileFullscreen } = useMobileFullscreen();
 const isTransitioning = ref(false);
 
 function onBeforeLeave() {
@@ -46,8 +44,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="app-root"
-    :class="{ 'app-root--transitioning': isTransitioning }">
+  <div class="app-root" :class="{ 'app-root--transitioning': isTransitioning }">
     <!-- Loading Screen -->
     <Transition name="fade">
       <div v-if="appStore.isLoading" class="loading-screen">

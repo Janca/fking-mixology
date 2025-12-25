@@ -6,12 +6,15 @@ import { ref, onMounted } from "vue";
 import { RouterView } from "vue-router";
 import { useAppStore } from "@/stores/app";
 import { useAchievementsStore } from "@/stores/achievements";
+import { useMobileFullscreen } from "@/composables/useMobileFullscreen";
 import TheHeader from "@/components/layout/TheHeader.vue";
+import TheBottomNavigation from "@/components/layout/TheBottomNavigation.vue";
 import AppButton from "@/components/common/AppButton.vue";
 import AppToastContainer from "@/components/common/AppToastContainer.vue";
 
 const appStore = useAppStore();
 const achievementsStore = useAchievementsStore();
+const { isMobileFullscreen } = useMobileFullscreen();
 const isTransitioning = ref(false);
 
 function onBeforeLeave() {
@@ -43,7 +46,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="app-root" :class="{ 'app-root--transitioning': isTransitioning }">
+  <div class="app-root"
+    :class="{ 'app-root--transitioning': isTransitioning }">
     <!-- Loading Screen -->
     <Transition name="fade">
       <div v-if="appStore.isLoading" class="loading-screen">
@@ -58,11 +62,7 @@ onMounted(async () => {
         <span class="error-screen__icon">🍸</span>
         <h2 class="error-screen__title">Oops!</h2>
         <p class="error-screen__message">{{ appStore.error }}</p>
-        <AppButton
-          class="error-screen__button"
-          variant="primary"
-          @click="appStore.initialize(true)"
-        >
+        <AppButton class="error-screen__button" variant="primary" @click="appStore.initialize(true)">
           Try Again
         </AppButton>
       </div>
@@ -72,17 +72,13 @@ onMounted(async () => {
     <template v-if="appStore.isReady">
       <TheHeader />
       <RouterView v-slot="{ Component }">
-        <Transition
-          name="page"
-          mode="out-in"
-          @before-leave="onBeforeLeave"
-          @after-enter="onAfterEnter"
-        >
+        <Transition name="page" mode="out-in" @before-leave="onBeforeLeave" @after-enter="onAfterEnter">
           <KeepAlive include="BrowseView,HomeView">
             <component :is="Component" />
           </KeepAlive>
         </Transition>
       </RouterView>
+      <TheBottomNavigation theme="glass" />
     </template>
 
     <AppToastContainer />
@@ -99,6 +95,15 @@ onMounted(async () => {
   flex-direction: column;
   background: transparent;
   overflow: hidden;
+
+  &--mobile-nav {
+    // Extend the dark background color to the bottom edges
+    // This fixes the "wave ending early" look by ensuring the gap created by padding is filled with the footer color
+    background-color: $surface-dark-400;
+
+    // Safety padding so content isn't covered by floating nav
+    padding-bottom: 120px;
+  }
 }
 
 // Page Transition

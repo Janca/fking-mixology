@@ -8,6 +8,9 @@
 import { useSlots, computed } from "vue";
 import AppEmoji from "@/components/common/AppEmoji.vue";
 import TheFooter from "@/components/layout/TheFooter.vue";
+import { useMobileFullscreen } from "@/composables/useMobileFullscreen";
+
+const { isMobileFullscreen } = useMobileFullscreen()
 
 const props = defineProps<{
   /** Optional class for the header section */
@@ -90,11 +93,13 @@ const hasHeaderSubtitleContent = computed(() => slots['header-subtitle'] || prop
 
     <!-- Dark Content Section -->
     <section class="wave-layout__content" :class="contentClass">
-      <slot></slot>
+      <slot name="default" />
 
       <slot name="footer">
         <TheFooter />
       </slot>
+
+      <div v-if="isMobileFullscreen" class="wave-layout__mobile-fullscreen-navigation-padding" />
     </section>
   </div>
 </template>
@@ -150,6 +155,10 @@ const hasHeaderSubtitleContent = computed(() => slots['header-subtitle'] || prop
     @include desktop-up {
       padding: $space-3xl $space-xl;
     }
+  }
+
+  &__mobile-fullscreen-navigation-padding {
+    height: 60px;
   }
 }
 

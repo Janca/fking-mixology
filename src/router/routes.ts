@@ -24,12 +24,14 @@ export const routes: RouteRecordRaw[] = [
       title: async (route: any) => {
         const slug = route.params.slug as string;
         if (!slug) return "Recipe";
+
         try {
           const cocktail = await db.cocktails
             .where("slug")
             .equals(slug)
             .first();
-          return cocktail ? toTitleCase(cocktail.name) : "Recipe Not Found";
+
+          return cocktail ? cocktail.name : "Recipe Not Found";
         } catch {
           return "Recipe";
         }

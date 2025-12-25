@@ -5,6 +5,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import { routes } from "./routes";
 
+import { setTitle } from "@/utils/documentUtils";
+
 export const router = createRouter({
   history: createWebHashHistory(),
   routes,
@@ -33,11 +35,22 @@ export const router = createRouter({
 });
 
 // Update document title on navigation
-router.beforeEach((to, _from, next) => {
-  const baseTitle = "Mixology Matcher";
-  const pageTitle = to.meta.title as string | undefined;
+router.beforeEach(async (to, _from, next) => {
+  let pageTitle: string | undefined;
 
-  document.title = pageTitle ? `${pageTitle} | ${baseTitle}` : baseTitle;
+  const titleMeta = to.meta.title;
+  if (typeof titleMeta === "function") {
+    try {
+      pageTitle = await titleMeta(to);
+    } catch (e) {
+      console.error("Error generating title:", e);
+      pageTitle = "Mixology Matcher";
+    }
+  } else {
+    pageTitle = titleMeta as string | undefined;
+  }
+
+  setTitle(pageTitle);
 
   next();
 });

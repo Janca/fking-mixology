@@ -17,6 +17,7 @@ import type { LedgerIngredientUsage } from "@/types";
 import WaveLayout from "@/components/layout/WaveLayout.vue";
 import type { CocktailWithDetails } from "@/types";
 
+
 // Components
 import CocktailHeader from "./components/CocktailHeader.vue";
 import CocktailPrepControls from "./components/CocktailPrepControls.vue";
@@ -181,51 +182,34 @@ watch(
     }
   }
 );
+
+
 </script>
 
 <template>
   <WaveLayout>
     <template #header>
-      <CocktailHeader
-        :cocktail="cocktail"
-        :is-loading="isLoading"
-        :error="error"
-        @go-home="handleGoHome"
-        @scroll-down="scrollToDetails"
-      />
+      <CocktailHeader :cocktail="cocktail" :is-loading="isLoading" :error="error" @go-home="handleGoHome"
+        @scroll-down="scrollToDetails" />
     </template>
 
     <!-- Dark Section - Recipe Content -->
     <div v-if="cocktail && !isLoading" ref="recipeZoneRef" class="recipe-zone">
       <!-- Controls -->
-      <CocktailPrepControls
-        :is-prep-mode="isPrepMode"
-        :scale="scale"
-        :progress-percentage="progressPercentage"
-        @toggle-prep-mode="togglePrepMode"
-        @update:scale="setScale"
-      />
+      <CocktailPrepControls :is-prep-mode="isPrepMode" :scale="scale" :progress-percentage="progressPercentage"
+        @toggle-prep-mode="togglePrepMode" @update:scale="setScale" />
 
       <!-- Ingredients -->
-      <CocktailIngredients
-        :ingredients="cocktail.ingredients"
-        :is-prep-mode="isPrepMode"
-        :scale="scale"
-        :completed-ingredient-ids="completedIngredientIds"
-        @toggle-ingredient="toggleIngredient"
-      />
+      <CocktailIngredients :ingredients="cocktail.ingredients" :is-prep-mode="isPrepMode" :scale="scale"
+        :completed-ingredient-ids="completedIngredientIds" @toggle-ingredient="toggleIngredient" />
 
       <!-- Method -->
       <CocktailMethod :method="cocktail.method" :garnish="cocktail.garnish" />
     </div>
 
     <!-- Completion Dialog -->
-    <CocktailCompletionDialog
-      :show="showCompleteDialog"
-      :is-completing="isCompleting"
-      @close="closeDialog"
-      @confirm="completeDrink"
-    />
+    <CocktailCompletionDialog :show="showCompleteDialog" :is-completing="isCompleting" @close="closeDialog"
+      @confirm="completeDrink" />
   </WaveLayout>
 </template>
 

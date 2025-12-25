@@ -3,6 +3,8 @@
  */
 
 import type { RouteRecordRaw } from "vue-router";
+import { db } from "@/services/database";
+import { toTitleCase } from "@/utils/stringUtils";
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -10,7 +12,7 @@ export const routes: RouteRecordRaw[] = [
     name: "home",
     component: () => import("@/views/Home"),
     meta: {
-      title: "Mixology Matcher",
+      title: "Match Ingredients",
     },
   },
   {
@@ -19,7 +21,19 @@ export const routes: RouteRecordRaw[] = [
     component: () => import("@/views/Cocktail"),
     props: true,
     meta: {
-      title: "Recipe",
+      title: async (route: any) => {
+        const slug = route.params.slug as string;
+        if (!slug) return "Recipe";
+        try {
+          const cocktail = await db.cocktails
+            .where("slug")
+            .equals(slug)
+            .first();
+          return cocktail ? toTitleCase(cocktail.name) : "Recipe Not Found";
+        } catch {
+          return "Recipe";
+        }
+      },
     },
   },
   {
@@ -27,7 +41,43 @@ export const routes: RouteRecordRaw[] = [
     name: "browse",
     component: () => import("@/views/Browse"),
     meta: {
-      title: "Browse Cocktails",
+      title: async (route: any) => {
+        const categorySlug = route.query.category as string;
+        if (!categorySlug || categorySlug === "all") return "Browse Drinks";
+        if (categorySlug === "favorites") return "Favorite Drinks";
+
+        try {
+          const category = await db.categories
+            .where("slug")
+            .equals(categorySlug)
+            .first();
+
+          if (category == null) {
+            return "Browse Drinks";
+          }
+
+          const name = category.name;
+
+          if (name.endsWith("Drink")) {
+            return `${toTitleCase(name)}s`;
+          }
+
+          if (name.endsWith("Cocktail") || name.endsWith("Liqueur")) {
+            return `${toTitleCase(name)}s`;
+          }
+
+          const special = ["Beer", "Shot"];
+          if (special.includes(name)) {
+            return `${toTitleCase(name)}s`;
+          }
+
+          return category
+            ? `${toTitleCase(category.name)} Drinks`
+            : "Browse Drinks";
+        } catch {
+          return "Browse Drinks";
+        }
+      },
     },
   },
   {
@@ -36,15 +86,6 @@ export const routes: RouteRecordRaw[] = [
     component: () => import("@/views/Pantry"),
     meta: {
       title: "Your Pantry",
-    },
-  },
-  {
-    path: "/category/:slug",
-    name: "category",
-    component: () => import("@/views/Category"),
-    props: true,
-    meta: {
-      title: "Category",
     },
   },
   {

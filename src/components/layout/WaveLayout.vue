@@ -5,53 +5,85 @@
  * an animated wave divider, and a dark content section.
  */
 
-defineProps<{
+import { useSlots, computed } from "vue";
+import AppEmoji from "@/components/common/AppEmoji.vue";
+import TheFooter from "@/components/layout/TheFooter.vue";
+
+const props = defineProps<{
   /** Optional class for the header section */
   headerClass?: string;
   /** Optional class for the content section */
   contentClass?: string;
+  /** Page title for default header */
+  title?: string;
+  /** Emoji icon for default header */
+  icon?: string;
+  /** Subtitle text for default header */
+  subtitle?: string;
 }>();
 
-import TheFooter from "@/components/layout/TheFooter.vue";
+const slots = useSlots();
+
+const hasHeaderTitleContent = computed(() => slots['header-icon'] || props.icon || slots['header-title'] || props.title)
+const hasHeaderSubtitleContent = computed(() => slots['header-subtitle'] || props.subtitle)
 </script>
 
 <template>
   <div class="wave-layout">
     <!-- Light Header Section -->
     <section class="wave-layout__header" :class="headerClass">
-      <slot name="header"></slot>
+      <!-- Default Page Header (when props provided and no slot override) -->
+      <!-- <div v-if="!slots.header && title" class="page-header">
+        <AppEmoji v-if="icon" class="page-header__emoji">{{ icon }}</AppEmoji>
+        <h1 class="page-header__title">{{ title }}</h1>
+        <p v-if="subtitle" class="page-header__subtitle">{{ subtitle }}</p>
+      </div> -->
+
+      <!-- Custom Header Slot -->
+      <slot name="header">
+        <div v-if="hasHeaderTitleContent || hasHeaderSubtitleContent || slots['header-content']" class="page-header">
+          <div v-if="hasHeaderTitleContent" class="page-header__section">
+            <div v-if="hasHeaderTitleContent" class="page-header__title-wrapper">
+              <slot name="header-icon">
+                <template v-if="slots['header-icon'] || icon">
+                  <AppEmoji v-if="icon" class="page-header__emoji" v-text="icon" />
+                </template>
+              </slot>
+              <template v-if="slots['header-title'] || title">
+                <span class="page-header__title">
+                  <slot name="header-title">
+                    <h1 v-text="title" />
+                  </slot>
+                </span>
+              </template>
+            </div>
+            <template v-if="hasHeaderSubtitleContent">
+              <p class="page-header__subtitle">
+                <slot name="header-subtitle">
+                  {{ subtitle }}
+                </slot>
+              </p>
+            </template>
+          </div>
+          <div v-if="slots['header-content']" class="page-header__section">
+            <slot name="header-content" />
+          </div>
+        </div>
+      </slot>
 
       <!-- Animated Layered Wave Divider -->
       <div class="wave-divider">
-        <svg
-          class="wave wave--back"
-          viewBox="0 0 4800 150"
-          preserveAspectRatio="none"
-        >
-          <path
-            class="wave__path wave__path--silver"
-            d="M0,75 Q300,120 600,75 T1200,75 T1800,75 T2400,75 T3000,75 T3600,75 T4200,75 T4800,75 L4800,150 L0,150 Z"
-          />
+        <svg class="wave wave--back" viewBox="0 0 4800 150" preserveAspectRatio="none">
+          <path class="wave__path wave__path--silver"
+            d="M0,75 Q300,120 600,75 T1200,75 T1800,75 T2400,75 T3000,75 T3600,75 T4200,75 T4800,75 L4800,150 L0,150 Z" />
         </svg>
-        <svg
-          class="wave wave--middle"
-          viewBox="0 0 4800 150"
-          preserveAspectRatio="none"
-        >
-          <path
-            class="wave__path wave__path--gray"
-            d="M0,85 Q300,115 600,85 T1200,85 T1800,85 T2400,85 T3000,85 T3600,85 T4200,85 T4800,85 L4800,150 L0,150 Z"
-          />
+        <svg class="wave wave--middle" viewBox="0 0 4800 150" preserveAspectRatio="none">
+          <path class="wave__path wave__path--gray"
+            d="M0,85 Q300,115 600,85 T1200,85 T1800,85 T2400,85 T3000,85 T3600,85 T4200,85 T4800,85 L4800,150 L0,150 Z" />
         </svg>
-        <svg
-          class="wave wave--front"
-          viewBox="0 0 4800 150"
-          preserveAspectRatio="none"
-        >
-          <path
-            class="wave__path wave__path--dark"
-            d="M0,100 Q300,130 600,100 T1200,100 T1800,100 T2400,100 T3000,100 T3600,100 T4200,100 T4800,100 L4800,150 L0,150 Z"
-          />
+        <svg class="wave wave--front" viewBox="0 0 4800 150" preserveAspectRatio="none">
+          <path class="wave__path wave__path--dark"
+            d="M0,100 Q300,130 600,100 T1200,100 T1800,100 T2400,100 T3000,100 T3600,100 T4200,100 T4800,100 L4800,150 L0,150 Z" />
         </svg>
       </div>
     </section>
@@ -81,12 +113,12 @@ import TheFooter from "@/components/layout/TheFooter.vue";
   &__header {
     position: relative;
     background: $surface-light-200;
-    padding: 80px $space-sm $space-xl;
-    padding-bottom: 200px; // Space for wave
+    padding: 120px $space-sm $space-xl;
+    padding-bottom: 120px; // Space for wave
 
     @include desktop-up {
       padding: 120px $space-xl $space-2xl;
-      padding-bottom: 240px;
+      padding-bottom: 200px;
     }
   }
 
@@ -105,6 +137,65 @@ import TheFooter from "@/components/layout/TheFooter.vue";
     @include desktop-up {
       padding: $space-3xl $space-xl;
     }
+  }
+}
+
+// Default Page Header
+.page-header {
+  display: flex;
+  flex-direction: column;
+
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto $space-xl;
+  padding: 0 $space-md;
+
+  gap: $space-2xl;
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 100%;
+    gap: $space-xs;
+    //margin-bottom: $space-lg;
+  }
+
+  &__title-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: $space-sm;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__emoji {
+    font-size: 3rem;
+    display: block;
+    animation: float-gentle 4s ease-in-out infinite;
+  }
+
+  &__title {
+    font-family: $font-display;
+
+    >h1 {
+      font-size: $font-size-display;
+      font-weight: $font-weight-extrabold;
+      color: $text-dark-primary;
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+
+    @include mobile-only {
+      >h1 {
+        font-size: $font-size-h1;
+      }
+    }
+  }
+
+  &__subtitle {
+    font-size: $font-size-body-lg;
+    color: $text-dark-muted;
   }
 }
 
@@ -169,6 +260,7 @@ import TheFooter from "@/components/layout/TheFooter.vue";
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
@@ -178,8 +270,21 @@ import TheFooter from "@/components/layout/TheFooter.vue";
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes float-gentle {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
   }
 }
 </style>

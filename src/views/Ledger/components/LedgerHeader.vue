@@ -17,47 +17,25 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="ledger-header">
-    <div class="header-content">
-      <div class="header-title-section">
-        <h1 class="header-title">
-          <AppEmoji class="title-icon">📒</AppEmoji>
-          <span class="title-text">Drink Ledger</span>
-        </h1>
-        <p class="header-subtitle">Track your cocktail sessions</p>
-      </div>
+  <div class="ledger-actions">
+    <!-- Select Mode Button (only in sessions view) -->
+    <button v-if="viewMode === 'sessions'" class="action-btn" :class="{ 'action-btn--active': isSelectMode }"
+      @click="emit('toggleSelect')">
+      {{ isSelectMode ? `Cancel (${selectedCount})` : "Select" }}
+    </button>
 
-      <div class="header-actions">
-        <!-- Select Mode Button (only in sessions view) -->
-        <button
-          v-if="viewMode === 'sessions'"
-          class="action-btn"
-          :class="{ 'action-btn--active': isSelectMode }"
-          @click="emit('toggleSelect')"
-        >
-          {{ isSelectMode ? `Cancel (${selectedCount})` : "Select" }}
-        </button>
-
-        <!-- View Toggle Pills -->
-        <div class="view-toggle">
-          <button
-            class="toggle-pill"
-            :class="{ 'toggle-pill--active': viewMode === 'sessions' }"
-            @click="emit('toggleView')"
-          >
-            <AppEmoji class="pill-icon">📋</AppEmoji>
-            Sessions
-          </button>
-          <button
-            class="toggle-pill"
-            :class="{ 'toggle-pill--active': viewMode === 'analytics' }"
-            @click="emit('toggleView')"
-          >
-            <AppEmoji class="pill-icon">📊</AppEmoji>
-            Analytics
-          </button>
-        </div>
-      </div>
+    <!-- View Toggle Pills -->
+    <div class="view-toggle">
+      <button class="toggle-pill" :class="{ 'toggle-pill--active': viewMode === 'sessions' }"
+        @click="emit('toggleView')">
+        <AppEmoji class="pill-icon">📋</AppEmoji>
+        Sessions
+      </button>
+      <button class="toggle-pill" :class="{ 'toggle-pill--active': viewMode === 'analytics' }"
+        @click="emit('toggleView')">
+        <AppEmoji class="pill-icon">📊</AppEmoji>
+        Analytics
+      </button>
     </div>
   </div>
 </template>
@@ -66,76 +44,16 @@ const emit = defineEmits<{
 @use "sass:color";
 @use "@/styles/variables" as *;
 
-.ledger-header {
-  padding: $space-2xl $space-lg $space-xl;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-
-  @include mobile-only {
-    padding: $space-xl $space-md $space-lg;
-  }
-}
-
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: $space-lg;
-  flex-wrap: wrap;
-
-  @include mobile-only {
-    flex-direction: column;
-    gap: $space-md;
-  }
-}
-
-.header-title-section {
-  flex: 1;
-}
-
-.header-title {
+.ledger-actions {
   display: flex;
   align-items: center;
-  gap: $space-sm;
-  font-size: $font-size-display;
-  font-family: $font-display;
-  font-weight: $font-weight-extrabold;
-  color: $text-dark-primary;
-  margin-bottom: $space-xs;
-
-  @include mobile-only {
-    font-size: $font-size-h1;
-  }
-}
-
-.title-icon {
-  font-size: 1.2em;
-}
-
-.title-text {
-  background: $gradient-sunset;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.header-subtitle {
-  font-size: $font-size-body-lg;
-  color: $text-dark-secondary;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
+  justify-content: center;
   gap: $space-md;
-  flex-shrink: 0;
-
-  @include mobile-only {
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0;
+  margin-left: auto;
+  padding: 0 $space-md;
 }
 
 .view-toggle {

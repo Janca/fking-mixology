@@ -25,3 +25,13 @@ export interface AchievementMetric {
   key: string; // e.g., "cocktails_viewed", "recipes_prepped"
   value: number;
 }
+
+/**
+ * Achievement with unlock status and progress
+ * Used in the achievements list view
+ */
+export interface AchievementStatus extends Achievement {
+  isUnlocked: boolean;
+  unlockedAt?: Date;
+  currentProgress: number;
+}

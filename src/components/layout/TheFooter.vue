@@ -13,21 +13,9 @@ function goToUserData() {
   <footer class="app-footer">
     <div class="app-footer__content">
       <div class="app-footer__links">
-        <a
-          href="https://github.com/Janca/fking-mixology"
-          target="_blank"
-          rel="noopener"
-          >GitHub</a
-        >
-        <span class="separator">•</span>
-        <a href="https://www.thecocktaildb.com/" target="_blank" rel="noopener"
-          >TheCocktailDB</a
-        >
-        <span class="separator">•</span>
-        <a href="https://antigravity.google" target="_blank" rel="noopener"
-          >Google Antigravity</a
-        >
-        <span class="separator">•</span>
+        <a href="https://github.com/Janca/fking-mixology" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.thecocktaildb.com/" target="_blank" rel="noopener">TheCocktailDB</a>
+        <a href="https://antigravity.google" target="_blank" rel="noopener">Google Antigravity</a>
         <button class="footer-link-btn" @click="goToUserData">User Data</button>
       </div>
 
@@ -61,6 +49,11 @@ function goToUserData() {
 
   &:hover {
     opacity: 1;
+  }
+
+  @include mobile-only {
+    padding-left: $space-lg;
+    padding-right: $space-lg;
   }
 
   &__content {

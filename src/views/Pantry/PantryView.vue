@@ -4,11 +4,10 @@
  * Left: Add form | Right: Inventory
  * Bottom: What you can make (in dark section)
  */
-import { onMounted, watch } from "vue";
+import { onMounted, watch, computed } from "vue";
 import { usePantryStore } from "@/stores/pantry";
 import { useCocktailsStore } from "@/stores/cocktails";
 import WaveLayout from "@/components/layout/WaveLayout.vue";
-import AppEmoji from "@/components/common/AppEmoji.vue";
 // Components
 import PantryAddForm from "./components/PantryAddForm.vue";
 import PantryInventory from "./components/PantryInventory.vue";
@@ -30,26 +29,15 @@ watch(
 onMounted(async () => {
   await pantryStore.loadItems();
 });
+
+const subtitle = computed(() => pantryStore.itemCount > 0
+  ? `${pantryStore.itemCount} ingredients • ${cocktailsStore.perfectMatches.length} drinks ready`
+  : 'Add ingredients to track your bar inventory')
 </script>
 
 <template>
-  <WaveLayout>
-    <template #header>
-      <!-- Page Title -->
-      <div class="pantry-header">
-        <AppEmoji class="pantry-header__emoji">🍾</AppEmoji>
-        <h1 class="pantry-header__title">Your Pantry</h1>
-        <p class="pantry-header__subtitle">
-          <template v-if="pantryStore.itemCount > 0">
-            {{ pantryStore.itemCount }} ingredients •
-            {{ cocktailsStore.perfectMatches.length }} drinks ready
-          </template>
-          <template v-else>
-            Add ingredients to track your bar inventory
-          </template>
-        </p>
-      </div>
-
+  <WaveLayout title="Your Pantry" icon="🍻" :subtitle="subtitle">
+    <template #header-content>
       <!-- Two Column Content -->
       <div class="pantry-columns">
         <!-- LEFT: Add Ingredient Form -->
@@ -68,33 +56,6 @@ onMounted(async () => {
 <style lang="scss" scoped>
 @use "sass:color";
 @use "@/styles/variables" as *;
-
-.pantry-header {
-  text-align: center;
-  margin-bottom: $space-xl;
-
-  &__emoji {
-    font-size: 3rem;
-    margin-bottom: $space-sm;
-  }
-
-  &__title {
-    font-family: $font-display;
-    font-size: $font-size-h1;
-    font-weight: $font-weight-extrabold;
-    color: $text-dark-primary;
-    margin-bottom: $space-2xs;
-
-    @include mobile-only {
-      font-size: $font-size-h2;
-    }
-  }
-
-  &__subtitle {
-    font-size: $font-size-body;
-    color: $text-dark-muted;
-  }
-}
 
 .pantry-columns {
   display: grid;

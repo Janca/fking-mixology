@@ -132,23 +132,16 @@ async function selectCategory(category: Category, updateUrl = true) {
 </script>
 
 <template>
-  <WaveLayout>
-    <template #header>
-      <!-- Header with Search -->
+  <WaveLayout title="Recipe Book" icon="📖" subtitle="Explore our collection of recipes">
+    <template #header-content>
+      <!-- Search -->
       <BrowseHeader v-model="searchQuery" />
 
       <!-- Category Tabs -->
-      <BrowseCategoryTabs
-        :categories="categories"
-        :selected-category="selectedCategory"
-        @select="selectCategory"
-      />
+      <BrowseCategoryTabs :categories="categories" :selected-category="selectedCategory" @select="selectCategory" />
     </template>
 
     <!-- Content slot (Dark zone) -->
-    <BrowseCocktailGrid
-      :cocktails="filteredCocktails"
-      :is-loading="isLoading"
-    />
+    <BrowseCocktailGrid :cocktails="filteredCocktails" :is-loading="isLoading" />
   </WaveLayout>
 </template>

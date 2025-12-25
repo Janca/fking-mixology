@@ -119,47 +119,29 @@ onMounted(loadData);
 </script>
 
 <template>
-  <WaveLayout>
-    <template #header>
-      <LedgerHeader
-        :view-mode="viewMode"
-        :is-select-mode="isSelectMode"
-        :selected-count="selectedSessionIds.length"
+  <WaveLayout title="Drink Ledger" icon="📒" subtitle="Track your cocktail sessions">
+    <template #header-content>
+      <LedgerHeader :view-mode="viewMode" :is-select-mode="isSelectMode" :selected-count="selectedSessionIds.length"
         @toggle-view="
           viewMode = viewMode === 'sessions' ? 'analytics' : 'sessions'
-        "
-        @toggle-select="toggleSelectMode"
-        @open-merge="showMergeDialog = true"
-      />
+          " @toggle-select="toggleSelectMode" @open-merge="showMergeDialog = true" />
     </template>
 
     <div class="ledger-content">
       <!-- Analytics View -->
       <Transition name="fade-slide" mode="out-in">
-        <LedgerGlobalStats
-          v-if="viewMode === 'analytics' && globalStats"
-          key="analytics"
-          :stats="globalStats"
-          :is-loading="isLoadingStats"
-        />
+        <LedgerGlobalStats v-if="viewMode === 'analytics' && globalStats" key="analytics" :stats="globalStats"
+          :is-loading="isLoadingStats" />
 
         <!-- Sessions List View -->
         <div v-else-if="hasSessions" key="sessions" class="sessions-list">
           <TransitionGroup name="session-list" tag="div" class="sessions-grid">
-            <LedgerSessionCard
-              v-for="session in ledgerStore.sortedSessions"
-              :key="session.id"
-              :session="session"
-              :is-select-mode="isSelectMode"
-              :is-selected="selectedSessionIds.includes(session.id!)"
-              :is-active="ledgerStore.activeSession?.id === session.id"
-              @select="toggleSessionSelection(session.id!)"
-              @rename="openRenameDialog(session)"
-              @delete="openDeleteDialog(session)"
-              @resume="handleResume(session.id!)"
-              @end="handleEnd(session.id!)"
-              @view="$router.push(`/ledger/${session.id}`)"
-            />
+            <LedgerSessionCard v-for="session in ledgerStore.sortedSessions" :key="session.id" :session="session"
+              :is-select-mode="isSelectMode" :is-selected="selectedSessionIds.includes(session.id!)"
+              :is-active="ledgerStore.activeSession?.id === session.id" @select="toggleSessionSelection(session.id!)"
+              @rename="openRenameDialog(session)" @delete="openDeleteDialog(session)"
+              @resume="handleResume(session.id!)" @end="handleEnd(session.id!)"
+              @view="$router.push(`/ledger/${session.id}`)" />
           </TransitionGroup>
         </div>
 
@@ -171,38 +153,21 @@ onMounted(loadData);
     <!-- Floating Action for Merge (when selecting) -->
     <Transition name="pop-up">
       <div v-if="isSelectMode && canMerge" class="merge-fab">
-        <AppButton
-          variant="teal"
-          size="lg"
-          rounded
-          @click="showMergeDialog = true"
-        >
+        <AppButton variant="teal" size="lg" rounded @click="showMergeDialog = true">
           Merge {{ selectedSessionIds.length }} Sessions
         </AppButton>
       </div>
     </Transition>
 
     <!-- Dialogs -->
-    <LedgerMergeDialog
-      :show="showMergeDialog"
-      :session-count="selectedSessionIds.length"
-      @close="showMergeDialog = false"
-      @confirm="handleMerge"
-    />
+    <LedgerMergeDialog :show="showMergeDialog" :session-count="selectedSessionIds.length"
+      @close="showMergeDialog = false" @confirm="handleMerge" />
 
-    <LedgerRenameDialog
-      :show="showRenameDialog"
-      :session="sessionToRename"
-      @close="showRenameDialog = false"
-      @confirm="handleRename"
-    />
+    <LedgerRenameDialog :show="showRenameDialog" :session="sessionToRename" @close="showRenameDialog = false"
+      @confirm="handleRename" />
 
-    <LedgerDeleteDialog
-      :show="showDeleteDialog"
-      :session="sessionToDelete"
-      @close="showDeleteDialog = false"
-      @confirm="handleDelete"
-    />
+    <LedgerDeleteDialog :show="showDeleteDialog" :session="sessionToDelete" @close="showDeleteDialog = false"
+      @confirm="handleDelete" />
   </WaveLayout>
 </template>
 
